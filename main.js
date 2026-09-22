@@ -23,6 +23,38 @@
     });
   });
 
+  /* Podgląd montażu: gra wyciszony, gdy jest na ekranie; przycisk włącza dźwięk. */
+  (function video() {
+    var v = $("#montaz-video"), btn = $(".svc-sound");
+    if (!v || !btn) return;
+    var onMute = $(".ic-mute", btn), onUnmute = $(".ic-unmute", btn);
+    var wanted = false; /* czy widz poprosił o dźwięk */
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) v.play().catch(function () {});
+          else v.pause();
+        });
+      }, { threshold: 0.4 }).observe(v);
+    } else {
+      v.setAttribute("preload", "auto");
+    }
+
+    btn.addEventListener("click", function () {
+      wanted = !wanted;
+      v.muted = !wanted;
+      btn.setAttribute("aria-pressed", String(wanted));
+      btn.setAttribute("aria-label", wanted ? "Wycisz podgląd" : "Włącz dźwięk podglądu");
+      onMute.hidden = wanted; onUnmute.hidden = !wanted;
+      if (wanted) v.play().catch(function () {});
+    });
+    /* Odtwarzacz sam wycisza, gdy przeglądarka blokuje dźwięk bez interakcji. */
+    v.addEventListener("volumechange", function () {
+      if (v.muted && wanted) { wanted = false; btn.setAttribute("aria-pressed", "false"); onMute.hidden = false; onUnmute.hidden = true; }
+    });
+  })();
+
   /* Dzieli tekst na słowa (<span class="w">), zostawiając znaczniki takie jak <em>. */
   function splitWords(el) {
     (function walk(node) {
@@ -82,9 +114,23 @@
         var target = id.length > 1 && $(id);
         if (!target) return;
         e.preventDefault();
-        if (lenis) lenis.scrollTo(target, { offset: id === "#start" ? 0 : -52, duration: 1.6, easing: function (t) { return 1 - Math.pow(1 - t, 4); } });
-        else target.scrollIntoView({ behavior: "smooth" });
         history.replaceState(null, "", id);
+        var off = id === "#start" ? 0 : -52;
+        var ease = function (t) { return 1 - Math.pow(1 - t, 4); };
+        if (!lenis) { target.scrollIntoView({ behavior: "smooth" }); return; }
+        ST.refresh(); /* pin realizacji w bok musi mieć ostateczną wysokość, zanim policzymy cel */
+        lenis.scrollTo(target, { offset: off, duration: 1.6, easing: ease });
+        /* Cel przy pinowanej sekcji (realizacje) potrafi się przesunąć w trakcie
+           animacji, gdy pin się właśnie uaktywnia — po dojechaniu domierzamy
+           świeżo kilka razy, aż ustoi się dokładnie na miejscu. */
+        var checks = 0;
+        (function settle() {
+          setTimeout(function () {
+            var want = target.getBoundingClientRect().top + window.scrollY - off;
+            if (Math.abs(window.scrollY - want) > 12) lenis.scrollTo(want, { immediate: true });
+            if (++checks < 4) settle();
+          }, 550);
+        })();
       });
     });
 
@@ -214,9 +260,12 @@
     });
 
     /* ---------- przeliczenie po czcionkach, obrazkach i zmianie rozmiaru ---------- */
+    /* Tylko czcionki — every element that affects layout already has its size
+       zapisany w CSS (aspect-ratio, clamp), więc odśwież po ich wczytaniu, a nie
+       po całym 'load' (obrazy/wideo): late refresh w trakcie animacji przewijania
+       potrafił przesunąć trwający scroll do #cennik o cały ekran. */
     var refresh = function () { fitGradients(); ST.refresh(); };
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
-    window.addEventListener("load", refresh);
     var t;
     window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(fitGradients, 150); });
   }
