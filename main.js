@@ -14,15 +14,6 @@
     });
   }
 
-  /* Blask pod kursorem na kartach cennika. */
-  $$(".plan").forEach(function (p) {
-    p.addEventListener("pointermove", function (e) {
-      var r = p.getBoundingClientRect();
-      p.style.setProperty("--mx", (e.clientX - r.left) + "px");
-      p.style.setProperty("--my", (e.clientY - r.top) + "px");
-    });
-  });
-
   /* Podgląd montażu: gra wyciszony, gdy jest na ekranie; przycisk włącza dźwięk. */
   (function video() {
     var v = $("#montaz-video"), btn = $(".svc-sound");
