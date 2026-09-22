@@ -275,9 +275,9 @@ html:not(.has-device) .step { min-height: 0; padding-block: 36px; }
 .svc-art-profile { background: none; box-shadow: none; display: grid; gap: 18px; }
 @media (min-width: 861px) { .svc-art-profile { grid-template-columns: auto minmax(0, 1fr); align-items: start; } }
 .pf-mock {
-  /* kolory zdjęte z prawdziwego profilu na Discordzie (jasny motyw, sam ustawił) */
-  --pf-bg-1: #f3e2f2; --pf-bg-2: #eeddee; --pf-ink: #241a26; --pf-ink-2: #5a4a5c;
-  --pf-name-1: #e2a8dd; --pf-name-2: #c56ec0; --pf-chip-bg: #d9c2d8; --pf-line: rgba(40, 20, 45, .12);
+  /* kolory zdjęte z aktualnego profilu na Discordzie (ciemny motyw, Nameplate Dark Roses) */
+  --pf-bg-1: #100c0d; --pf-bg-2: #060404; --pf-ink: #f3f1ef; --pf-ink-2: #a89f9c;
+  --pf-name-1: #d0996a; --pf-name-2: #97613a; --pf-chip-bg: #1c1c1d; --pf-line: rgba(255, 255, 255, .1);
   width: 100%; max-width: 300px; margin-inline: auto; border-radius: 18px; overflow: hidden;
   background: linear-gradient(190deg, var(--pf-bg-1), var(--pf-bg-2));
   box-shadow: 0 0 0 1px var(--line), 0 30px 60px -24px rgba(0, 0, 0, .7);
@@ -293,18 +293,22 @@ html:not(.has-device) .step { min-height: 0; padding-block: 36px; }
 .pf-clan { display: inline-flex; align-items: center; gap: 3px; font: 700 11px/1 var(--body); color: var(--pf-ink); background: var(--pf-chip-bg); padding: 3px 7px 3px 4px; border-radius: 999px; }
 .pf-clan img { width: 14px; height: 14px; }
 .pf-status { font-size: 13px; color: var(--pf-ink-2); margin-top: 3px; }
+.pf-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.pf-badges img { width: 22px; height: 22px; object-fit: contain; }
 .pf-about { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--pf-line); font-size: 13px; line-height: 1.5; color: var(--pf-ink); }
 .pf-about span { display: block; font: 700 10.5px/1 var(--body); letter-spacing: .06em; color: var(--pf-ink-2); margin-bottom: 6px; }
-.pf-extra { display: grid; gap: 14px; width: 100%; max-width: 300px; margin-inline: auto; }
+.pf-extra { display: grid; width: 100%; max-width: 300px; margin-inline: auto; }
 @media (min-width: 861px) { .pf-extra { max-width: none; } }
 .pf-extra-h { display: block; font: 700 11px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-.pf-deco-list, .pf-palette { padding: 14px 16px; border-radius: 16px; background: var(--surface-2); box-shadow: 0 0 0 1px var(--line); }
-.pf-deco-list ul { display: grid; gap: 6px; }
-.pf-deco-list li { position: relative; padding-left: 14px; font-size: 13.5px; color: var(--ink-2); line-height: 1.4; }
-.pf-deco-list li::before { content: ""; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 50%; background: var(--p2); }
-.pf-deco-list em { color: var(--ink-3); }
-.pf-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
-.pf-swatches span { width: 28px; height: 28px; border-radius: 9px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); cursor: default; }
+.pf-nameplate-look { padding: 14px 16px 16px; border-radius: 16px; background: var(--surface-2); box-shadow: 0 0 0 1px var(--line); }
+.pf-np-demo { position: relative; aspect-ratio: 15 / 7; border-radius: 10px; overflow: hidden; background: #060404; box-shadow: 0 0 0 1px var(--line); }
+.pf-np-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.pf-np-text { position: absolute; left: 14px; right: 14px; bottom: 10px; }
+.pf-np-name { font: 700 17px/1.2 var(--display); letter-spacing: -.02em; background: linear-gradient(100deg, #d0996a, #97613a); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 1px 12px rgba(0, 0, 0, .5); }
+.pf-np-handle { margin-top: 2px; font-size: 12.5px; color: #d8d2cd; text-shadow: 0 1px 8px rgba(0, 0, 0, .6); }
+.pf-np-caption { margin-top: 10px; font: 700 15px/1.2 var(--display); letter-spacing: -.01em; color: var(--ink); }
+.pf-np-caption em { color: var(--ink-2); font-weight: 500; }
+.pf-np-sub { margin-top: 6px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
 .svc-caption { grid-column: 1 / -1; font-size: 13px; color: var(--ink-3); text-align: center; }
 
 /* voice actorzy: fala dźwiękowa */
