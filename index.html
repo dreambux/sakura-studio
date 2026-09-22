@@ -28,11 +28,12 @@
 
 <nav class="nav" aria-label="Główna nawigacja">
   <div class="nav-in">
-    <a class="brand" href="#start" aria-label="Sakura Studio — na górę strony">
+    <button type="button" class="brand" id="logo-btn" aria-label="Panel administracyjny — kliknij, żeby podać kod">
       <img src="assets/logo-s.png" alt="" width="20" height="24">
       <span>Sakura Studio</span>
-    </a>
+    </button>
     <ul class="nav-links">
+      <li><a href="#ekipa">Ekipa</a></li>
       <li><a href="#uslugi">Usługi</a></li>
       <li><a href="#realizacje">Realizacje</a></li>
       <li><a href="#proces">Jak to działa</a></li>
@@ -69,6 +70,20 @@
 <!-- STATEMENT -->
 <section class="statement" aria-label="O nas">
   <p class="statement-text" data-split-words>Każde zlecenie robimy pod Twój serwer i&nbsp;Twoją markę — Twoje kolory, Twój styl, Twój głos. Bota, grafikę, montaż czy profil zamawiasz w&nbsp;<em>jednym miejscu</em>, u&nbsp;jednej ekipy.</p>
+</section>
+
+<!-- EKIPA -->
+<section class="team" id="ekipa">
+  <div class="sec-head wrap" data-reveal>
+    <p class="eyebrow">Ekipa</p>
+    <h2>Ludzie za&nbsp;Sakura Studio.</h2>
+    <p class="lead">Każdy ma tu własne miejsce — swoje prace, swój opis, swój Discord. Miejsca oznaczone „Wolne” czekają na kolejną osobę.</p>
+  </div>
+  <div class="team-grid wrap" id="team-grid" aria-live="polite">
+    <div class="team-card skel" aria-hidden="true"></div>
+    <div class="team-card skel" aria-hidden="true"></div>
+    <div class="team-card skel" aria-hidden="true"></div>
+  </div>
 </section>
 
 <!-- USŁUGI -->
@@ -442,6 +457,37 @@
 
 </main>
 
+<!-- MODAL: szczegóły / edycja osoby -->
+<div class="modal" id="person-modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel person-panel" role="dialog" aria-modal="true" aria-label="Profil osoby">
+    <button type="button" class="modal-close" data-close aria-label="Zamknij">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div id="person-content"></div>
+  </div>
+</div>
+
+<!-- MODAL: kod dostępu / panel administracyjny -->
+<div class="modal" id="code-modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel code-panel" role="dialog" aria-modal="true" aria-label="Panel administracyjny">
+    <button type="button" class="modal-close" data-close aria-label="Zamknij">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div id="code-content">
+      <p class="eyebrow">Panel administracyjny</p>
+      <h3>Podaj tymczasowy kod</h3>
+      <p class="code-sub">Kod od Sakura Studio odblokowuje edycję Twojego miejsca w&nbsp;ekipie.</p>
+      <form id="code-form" autocomplete="off">
+        <input type="text" id="code-input" name="code" placeholder="XXXX-XXXX-XXXX-XXXX" autocapitalize="characters" spellcheck="false" required>
+        <button type="submit" class="btn btn-primary">Zaloguj się</button>
+      </form>
+      <p class="code-msg" id="code-msg" hidden></p>
+    </div>
+  </div>
+</div>
+
 <footer class="foot wrap">
   <a class="brand" href="#start"><img src="assets/logo-s.png" alt="" width="18" height="21"><span>Sakura Studio</span></a>
   <p>© 2026 Sakura Studio. Sakura Studio nie jest powiązane z&nbsp;Discord Inc.</p>
@@ -451,5 +497,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js" defer></script>
 <script src="main.js" defer></script>
+<script src="team.js" defer></script>
 </body>
 </html>
