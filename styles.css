@@ -287,15 +287,31 @@ html:not(.has-device) .step { min-height: 0; padding-block: 36px; }
 .pf-avatar { position: absolute; inset: 8px; width: 62px; height: 62px; border-radius: 50%; box-shadow: 0 0 0 4px var(--pf-bg-1); object-fit: cover; }
 .pf-deco { position: absolute; inset: -6px; width: 90px; height: 90px; pointer-events: none; }
 .pf-nitro { position: absolute; top: 10px; right: 14px; width: 34px; height: auto; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, .6)); }
-.pf-name { display: flex; align-items: center; gap: 8px; font: 700 17px/1.2 var(--display); letter-spacing: -.02em; flex-wrap: wrap; }
+.pf-name { font: 700 17px/1.2 var(--display); letter-spacing: -.02em; }
 .pf-name-text { background: linear-gradient(100deg, var(--pf-name-1), var(--pf-name-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pf-handle { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; color: var(--pf-ink-2); margin-top: 2px; }
 .pf-clan { display: inline-flex; align-items: center; gap: 3px; font: 700 11px/1 var(--body); color: var(--pf-ink); background: var(--pf-chip-bg); padding: 3px 7px 3px 4px; border-radius: 999px; }
 .pf-clan img { width: 14px; height: 14px; }
-.pf-status { font-size: 13px; color: var(--pf-ink-2); margin-top: 3px; }
+/* dymek statusu, jak w Discordzie: obok awatara, z „ogonkiem” skierowanym w jego stronę */
+.pf-bubble {
+  position: absolute; top: -36px; left: 98px; z-index: 2; display: flex; align-items: center; gap: 5px;
+  max-width: 150px; padding: 7px 10px; border-radius: 13px 13px 13px 4px;
+  background: #2a2427; color: var(--pf-ink); font-size: 12px; line-height: 1.3;
+  box-shadow: 0 8px 18px -4px rgba(0, 0, 0, .55), 0 0 0 1px var(--pf-line);
+}
+.pf-bubble span { font-size: 12px; }
 .pf-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.pf-badges img { width: 22px; height: 22px; object-fit: contain; }
+.pf-badges img { width: 22px; height: 22px; object-fit: contain; border-radius: 50%; }
 .pf-about { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--pf-line); font-size: 13px; line-height: 1.5; color: var(--pf-ink); }
 .pf-about span { display: block; font: 700 10.5px/1 var(--body); letter-spacing: .06em; color: var(--pf-ink-2); margin-bottom: 6px; }
+.pf-roles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.pf-role { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--pf-ink); background: var(--pf-chip-bg); padding: 5px 10px; border-radius: 999px; }
+.pf-role::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--rc); flex: none; }
+.pf-editbtn {
+  display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 14px;
+  padding: 9px; border: 0; border-radius: 8px; background: #3a3438; color: var(--pf-ink);
+  font: 600 13px/1 var(--body); cursor: default;
+}
 .pf-extra { display: grid; width: 100%; max-width: 300px; margin-inline: auto; }
 @media (min-width: 861px) { .pf-extra { max-width: none; } }
 .pf-extra-h { display: block; font: 700 11px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
