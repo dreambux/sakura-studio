@@ -274,20 +274,27 @@ html:not(.has-device) .step { min-height: 0; padding-block: 36px; }
 @media (min-width: 861px) { .svc-profile-row { grid-template-columns: minmax(0, .82fr) minmax(0, 1.28fr); } }
 .svc-art-profile { background: none; box-shadow: none; display: grid; gap: 18px; }
 @media (min-width: 861px) { .svc-art-profile { grid-template-columns: auto minmax(0, 1fr); align-items: start; } }
-.pf-mock { width: 100%; max-width: 300px; margin-inline: auto; border-radius: 18px; overflow: hidden; background: #111; box-shadow: 0 0 0 1px var(--line), 0 30px 60px -24px rgba(0, 0, 0, .7); }
+.pf-mock {
+  /* kolory zdjęte z prawdziwego profilu na Discordzie (jasny motyw, sam ustawił) */
+  --pf-bg-1: #f3e2f2; --pf-bg-2: #eeddee; --pf-ink: #241a26; --pf-ink-2: #5a4a5c;
+  --pf-name-1: #e2a8dd; --pf-name-2: #c56ec0; --pf-chip-bg: #d9c2d8; --pf-line: rgba(40, 20, 45, .12);
+  width: 100%; max-width: 300px; margin-inline: auto; border-radius: 18px; overflow: hidden;
+  background: linear-gradient(190deg, var(--pf-bg-1), var(--pf-bg-2));
+  box-shadow: 0 0 0 1px var(--line), 0 30px 60px -24px rgba(0, 0, 0, .7);
+}
 .pf-banner { width: 100%; aspect-ratio: 5 / 2; object-fit: cover; display: block; }
 .pf-body { position: relative; padding: 46px 18px 18px; }
 .pf-av-wrap { position: absolute; top: -46px; left: 14px; width: 78px; height: 78px; }
-.pf-avatar { position: absolute; inset: 8px; width: 62px; height: 62px; border-radius: 50%; box-shadow: 0 0 0 4px #111; object-fit: cover; }
+.pf-avatar { position: absolute; inset: 8px; width: 62px; height: 62px; border-radius: 50%; box-shadow: 0 0 0 4px var(--pf-bg-1); object-fit: cover; }
 .pf-deco { position: absolute; inset: -6px; width: 90px; height: 90px; pointer-events: none; }
 .pf-nitro { position: absolute; top: 12px; right: 16px; font: 700 10px/1 var(--display); letter-spacing: .04em; padding: 5px 9px; border-radius: 999px; background: var(--grad); color: #1a0a0e; }
 .pf-name { display: flex; align-items: center; gap: 8px; font: 700 17px/1.2 var(--display); letter-spacing: -.02em; flex-wrap: wrap; }
-.pf-name-text { background: linear-gradient(100deg, #f6cff6, #ab6da9); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.pf-clan { display: inline-flex; align-items: center; gap: 3px; font: 700 11px/1 var(--body); color: #f2d9f6; background: rgba(255, 255, 255, .07); padding: 3px 7px 3px 4px; border-radius: 999px; }
+.pf-name-text { background: linear-gradient(100deg, var(--pf-name-1), var(--pf-name-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pf-clan { display: inline-flex; align-items: center; gap: 3px; font: 700 11px/1 var(--body); color: var(--pf-ink); background: var(--pf-chip-bg); padding: 3px 7px 3px 4px; border-radius: 999px; }
 .pf-clan img { width: 14px; height: 14px; }
-.pf-status { font-size: 13px; color: #dbb8e8; margin-top: 3px; }
-.pf-about { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .08); font-size: 13px; line-height: 1.5; color: #dbdee1; }
-.pf-about span { display: block; font: 700 10.5px/1 var(--body); letter-spacing: .06em; color: #949ba4; margin-bottom: 6px; }
+.pf-status { font-size: 13px; color: var(--pf-ink-2); margin-top: 3px; }
+.pf-about { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--pf-line); font-size: 13px; line-height: 1.5; color: var(--pf-ink); }
+.pf-about span { display: block; font: 700 10.5px/1 var(--body); letter-spacing: .06em; color: var(--pf-ink-2); margin-bottom: 6px; }
 .pf-extra { display: grid; gap: 14px; width: 100%; max-width: 300px; margin-inline: auto; }
 @media (min-width: 861px) { .pf-extra { max-width: none; } }
 .pf-extra-h { display: block; font: 700 11px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
