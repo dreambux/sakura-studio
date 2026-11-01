@@ -1,0 +1,463 @@
+{
+ "drzewo_oliwne": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo oliwne: skrecony pien, srebrzysto-zielona korona",
+  "plik": "Rosliny.glb",
+  "max_tris": 1064,
+  "fx": []
+ },
+ "drzewo_oliwne_2": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo oliwne (wariant)",
+  "plik": "Rosliny.glb",
+  "max_tris": 1064,
+  "fx": []
+ },
+ "drzewo_oliwne_3": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo oliwne (wariant)",
+  "plik": "Rosliny.glb",
+  "max_tris": 1064,
+  "fx": []
+ },
+ "cyprys": {
+  "kategoria": "Rosliny",
+  "opis": "Cyprys: wysoki, smukly, ciemnozielony",
+  "plik": "Rosliny.glb",
+  "max_tris": 480,
+  "fx": []
+ },
+ "cyprys_2": {
+  "kategoria": "Rosliny",
+  "opis": "Cyprys nizszy",
+  "plik": "Rosliny.glb",
+  "max_tris": 480,
+  "fx": []
+ },
+ "sosna_parasolowa": {
+  "kategoria": "Rosliny",
+  "opis": "Sosna pinia: wysoki pien, plaska szeroka korona",
+  "plik": "Rosliny.glb",
+  "max_tris": 500,
+  "fx": []
+ },
+ "sosna_parasolowa_2": {
+  "kategoria": "Rosliny",
+  "opis": "Pinia (wariant)",
+  "plik": "Rosliny.glb",
+  "max_tris": 500,
+  "fx": []
+ },
+ "platan": {
+  "kategoria": "Rosliny",
+  "opis": "Platan: bujne liscie, gruby pien (gaje, place)",
+  "plik": "Rosliny.glb",
+  "max_tris": 640,
+  "fx": []
+ },
+ "drzewo_jesienne": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo w kolorach jesieni (Olimp, gaje)",
+  "plik": "Rosliny.glb",
+  "max_tris": 640,
+  "fx": []
+ },
+ "drzewo_kwitnace": {
+  "kategoria": "Rosliny",
+  "opis": "Kwitnace drzewo migdalowe (rozowe kwiaty)",
+  "plik": "Rosliny.glb",
+  "max_tris": 640,
+  "fx": []
+ },
+ "palma": {
+  "kategoria": "Rosliny",
+  "opis": "Palma daktylowa (port, wybrzeze)",
+  "plik": "Rosliny.glb",
+  "max_tris": 2664,
+  "fx": []
+ },
+ "drzewo_spalone": {
+  "kategoria": "Rosliny",
+  "opis": "Martwe, spalone drzewo (wulkan, cmentarz)",
+  "plik": "Rosliny.glb",
+  "max_tris": 1536,
+  "fx": []
+ },
+ "krzew": {
+  "kategoria": "Rosliny",
+  "opis": "Okragly krzew",
+  "plik": "Rosliny.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "krzew_oleander": {
+  "kategoria": "Rosliny",
+  "opis": "Oleander z rozowymi kwiatami",
+  "plik": "Rosliny.glb",
+  "max_tris": 1440,
+  "fx": []
+ },
+ "krzew_ciemny": {
+  "kategoria": "Rosliny",
+  "opis": "Ciemny krzew (bukszpan)",
+  "plik": "Rosliny.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "krzew_oliwny": {
+  "kategoria": "Rosliny",
+  "opis": "Niski krzew srebrzysty",
+  "plik": "Rosliny.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "lawenda": {
+  "kategoria": "Rosliny",
+  "opis": "Kepa lawendy",
+  "plik": "Rosliny.glb",
+  "max_tris": 1440,
+  "fx": []
+ },
+ "kepa_trawy": {
+  "kategoria": "Rosliny",
+  "opis": "Kepa wysokiej trawy (zdzbla)",
+  "plik": "Rosliny.glb",
+  "max_tris": 176,
+  "fx": []
+ },
+ "kepa_trawy_sucha": {
+  "kategoria": "Rosliny",
+  "opis": "Kepa suchej trawy",
+  "plik": "Rosliny.glb",
+  "max_tris": 176,
+  "fx": []
+ },
+ "trzcina": {
+  "kategoria": "Rosliny",
+  "opis": "Trzcina (brzeg wody)",
+  "plik": "Rosliny.glb",
+  "max_tris": 176,
+  "fx": []
+ },
+ "kwiaty": {
+  "kategoria": "Rosliny",
+  "opis": "Klomb kwiatow (maki, rumianki)",
+  "plik": "Rosliny.glb",
+  "max_tris": 704,
+  "fx": []
+ },
+ "opuncja": {
+  "kategoria": "Rosliny",
+  "opis": "Opuncja (kaktus wysp greckich)",
+  "plik": "Rosliny.glb",
+  "max_tris": 840,
+  "fx": []
+ },
+ "winorosl": {
+  "kategoria": "Rosliny",
+  "opis": "Pergola z winorosla i winogronami",
+  "plik": "Rosliny.glb",
+  "max_tris": 2880,
+  "fx": []
+ },
+ "glaz": {
+  "kategoria": "Skaly",
+  "opis": "Duzy glaz",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "glaz_2": {
+  "kategoria": "Skaly",
+  "opis": "Glaz plaski",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "glaz_mech": {
+  "kategoria": "Skaly",
+  "opis": "Glaz z mchem",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "glaz_cieply": {
+  "kategoria": "Skaly",
+  "opis": "Glaz piaskowcowy",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "glaz_bialy": {
+  "kategoria": "Skaly",
+  "opis": "Bialy wapien",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "skaly_grupa": {
+  "kategoria": "Skaly",
+  "opis": "Grupa skal (jak w TDS)",
+  "plik": "Skaly.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "skaly_grupa_mech": {
+  "kategoria": "Skaly",
+  "opis": "Grupa skal z mchem",
+  "plik": "Skaly.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "kamyki": {
+  "kategoria": "Skaly",
+  "opis": "Rozsypane kamyki",
+  "plik": "Skaly.glb",
+  "max_tris": 180,
+  "fx": []
+ },
+ "kamyki_cieple": {
+  "kategoria": "Skaly",
+  "opis": "Kamyki piaskowcowe",
+  "plik": "Skaly.glb",
+  "max_tris": 180,
+  "fx": []
+ },
+ "skala_wulkaniczna": {
+  "kategoria": "Skaly",
+  "opis": "Skala bazaltowa",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "skala_wulkaniczna_grupa": {
+  "kategoria": "Skaly",
+  "opis": "Grupa skal bazaltowych",
+  "plik": "Skaly.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "blok_klifu": {
+  "kategoria": "Skaly",
+  "opis": "Wielki blok klifu (tlo, brzegi)",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "blok_klifu_szary": {
+  "kategoria": "Skaly",
+  "opis": "Wielki szary blok klifu",
+  "plik": "Skaly.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "kolumny_bazaltowe": {
+  "kategoria": "Skaly",
+  "opis": "Kolumny bazaltowe (heksagonalne)",
+  "plik": "Skaly.glb",
+  "max_tris": 2296,
+  "fx": []
+ },
+ "luk_skalny": {
+  "kategoria": "Skaly",
+  "opis": "Skalny luk nad woda",
+  "plik": "Skaly.glb",
+  "max_tris": 956,
+  "fx": []
+ },
+ "jaskinia": {
+  "kategoria": "Skaly",
+  "opis": "Wejscie do jaskini (spawn wrogow)",
+  "plik": "Skaly.glb",
+  "max_tris": 640,
+  "fx": []
+ },
+ "kolumna_dorycka": {
+  "kategoria": "Architektura",
+  "opis": "Kolumna dorycka z zlobkowaniem (10 st.)",
+  "plik": "Architektura.glb",
+  "max_tris": 904,
+  "fx": []
+ },
+ "kolumna_jonska": {
+  "kategoria": "Architektura",
+  "opis": "Kolumna jonska z wolutami",
+  "plik": "Architektura.glb",
+  "max_tris": 1812,
+  "fx": []
+ },
+ "kolumna_minojska": {
+  "kategoria": "Architektura",
+  "opis": "Kolumna minojska (czerwona, zwezana w dol)",
+  "plik": "Architektura.glb",
+  "max_tris": 144,
+  "fx": []
+ },
+ "kolumna_zlamana": {
+  "kategoria": "Architektura",
+  "opis": "Zlamana kolumna (ruiny)",
+  "plik": "Architektura.glb",
+  "max_tris": 576,
+  "fx": []
+ },
+ "kolumna_zlamana_2": {
+  "kategoria": "Architektura",
+  "opis": "Krotki kikut kolumny",
+  "plik": "Architektura.glb",
+  "max_tris": 576,
+  "fx": []
+ },
+ "kolumna_przewrocona": {
+  "kategoria": "Architektura",
+  "opis": "Przewrocona kolumna w kawalkach",
+  "plik": "Architektura.glb",
+  "max_tris": 960,
+  "fx": []
+ },
+ "gruz_marmurowy": {
+  "kategoria": "Architektura",
+  "opis": "Gruz: bloki i odlamki marmuru",
+  "plik": "Architektura.glb",
+  "max_tris": 864,
+  "fx": []
+ },
+ "swiatynia_dorycka": {
+  "kategoria": "Architektura",
+  "opis": "Swiatynia dorycka (baza / centrum mapy)",
+  "plik": "Architektura.glb",
+  "max_tris": 18080,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     16.0,
+     2.5,
+     -22.0
+    ],
+    "size": 4,
+    "heat": 8
+   },
+   {
+    "kind": "Fire",
+    "pos": [
+     -16.0,
+     2.5,
+     -22.0
+    ],
+    "size": 4,
+    "heat": 8
+   }
+  ]
+ },
+ "swiatynia_jonska": {
+  "kategoria": "Architektura",
+  "opis": "Mala swiatynia jonska",
+  "plik": "Architektura.glb",
+  "max_tris": 22904,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     11.0,
+     2.5,
+     -14.5
+    ],
+    "size": 4,
+    "heat": 8
+   },
+   {
+    "kind": "Fire",
+    "pos": [
+     -11.0,
+     2.5,
+     -14.5
+    ],
+    "size": 4,
+    "heat": 8
+   }
+  ]
+ },
+ "swiatynia_ruiny": {
+  "kategoria": "Architektura",
+  "opis": "Ruiny swiatyni (kolumny zlamane)",
+  "plik": "Architektura.glb",
+  "max_tris": 15952,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     16.0,
+     2.5,
+     -19.5
+    ],
+    "size": 4,
+    "heat": 8
+   },
+   {
+    "kind": "Fire",
+    "pos": [
+     -16.0,
+     2.5,
+     -19.5
+    ],
+    "size": 4,
+    "heat": 8
+   }
+  ]
+ },
+ "tholos": {
+  "kategoria": "Architektura",
+  "opis": "Tholos - okragla swiatynia (Delfy)",
+  "plik": "Architektura.glb",
+  "max_tris": 8156,
+  "fx": []
+ },
+ "mur": {
+  "kategoria": "Architektura",
+  "opis": "Mur z ciosow (8 st.)",
+  "plik": "Architektura.glb",
+  "max_tris": 2160,
+  "fx": []
+ },
+ "mur_zniszczony": {
+  "kategoria": "Architektura",
+  "opis": "Zniszczony mur z lezacymi blokami",
+  "plik": "Architektura.glb",
+  "max_tris": 1728,
+  "fx": []
+ },
+ "mur_szary": {
+  "kategoria": "Architektura",
+  "opis": "Mur z szarego kamienia z mchem",
+  "plik": "Architektura.glb",
+  "max_tris": 2160,
+  "fx": []
+ },
+ "schody": {
+  "kategoria": "Architektura",
+  "opis": "Szerokie kamienne schody (6 st. wys.)",
+  "plik": "Architektura.glb",
+  "max_tris": 864,
+  "fx": []
+ },
+ "brama_luk": {
+  "kategoria": "Architektura",
+  "opis": "Kamienny luk / brama miejska",
+  "plik": "Architektura.glb",
+  "max_tris": 3092,
+  "fx": []
+ },
+ "brama_portal_zielony": {
+  "kategoria": "Architektura",
+  "opis": "Brama spawnu z zielonym portalem",
+  "plik": "Architektura.glb",
+  "max_tris": 3092,
+  "fx": [
+   {
+    "kind": "Portal",
+    "pos": [
+     -0.0,
+     5.4,
+     0.0
+    ],
+    "color": 

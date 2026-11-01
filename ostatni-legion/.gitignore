@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
 renders/_tmp/
+maps/katalog/_tmp/
 *.blend1
