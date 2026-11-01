@@ -160,6 +160,90 @@
   "max_tris": 2880,
   "fx": []
  },
+ "drzewo_cytrynowe": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo cytrynowe z owocami",
+  "plik": "Rosliny.glb",
+  "max_tris": 1400,
+  "fx": []
+ },
+ "granatowiec": {
+  "kategoria": "Rosliny",
+  "opis": "Granatowiec z czerwonymi owocami",
+  "plik": "Rosliny.glb",
+  "max_tris": 1400,
+  "fx": []
+ },
+ "drzewo_figowe": {
+  "kategoria": "Rosliny",
+  "opis": "Drzewo figowe",
+  "plik": "Rosliny.glb",
+  "max_tris": 1000,
+  "fx": []
+ },
+ "bukszpan_kula": {
+  "kategoria": "Rosliny",
+  "opis": "Strzyzony bukszpan - kula w donicy",
+  "plik": "Rosliny.glb",
+  "max_tris": 440,
+  "fx": []
+ },
+ "bukszpan_stozek": {
+  "kategoria": "Rosliny",
+  "opis": "Strzyzony bukszpan - stozek",
+  "plik": "Rosliny.glb",
+  "max_tris": 108,
+  "fx": []
+ },
+ "zywoplot": {
+  "kategoria": "Rosliny",
+  "opis": "Prosty zywoplot (8 st.)",
+  "plik": "Rosliny.glb",
+  "max_tris": 108,
+  "fx": []
+ },
+ "lilie_wodne": {
+  "kategoria": "Rosliny",
+  "opis": "Lilie wodne (na wode)",
+  "plik": "Rosliny.glb",
+  "max_tris": 480,
+  "fx": []
+ },
+ "asfodele": {
+  "kategoria": "Rosliny",
+  "opis": "Blade asfodele (laki Hadesu)",
+  "plik": "Rosliny.glb",
+  "max_tris": 3072,
+  "fx": []
+ },
+ "grzyby": {
+  "kategoria": "Rosliny",
+  "opis": "Grzyby (cien, las)",
+  "plik": "Rosliny.glb",
+  "max_tris": 384,
+  "fx": []
+ },
+ "pniak": {
+  "kategoria": "Rosliny",
+  "opis": "Pniak z siekiera",
+  "plik": "Rosliny.glb",
+  "max_tris": 108,
+  "fx": []
+ },
+ "klody": {
+  "kategoria": "Rosliny",
+  "opis": "Stos klod drewna",
+  "plik": "Rosliny.glb",
+  "max_tris": 396,
+  "fx": []
+ },
+ "powalone_drzewo": {
+  "kategoria": "Rosliny",
+  "opis": "Powalone drzewo z korzeniami",
+  "plik": "Rosliny.glb",
+  "max_tris": 304,
+  "fx": []
+ },
  "glaz": {
   "kategoria": "Skaly",
   "opis": "Duzy glaz",
@@ -270,6 +354,13 @@
   "opis": "Wejscie do jaskini (spawn wrogow)",
   "plik": "Skaly.glb",
   "max_tris": 640,
+  "fx": []
+ },
+ "skaly_morskie": {
+  "kategoria": "Skaly",
+  "opis": "Skaly morskie (wystaja z wody)",
+  "plik": "Skaly.glb",
+  "max_tris": 320,
   "fx": []
  },
  "kolumna_dorycka": {
@@ -460,4 +551,2045 @@
      5.4,
      0.0
     ],
-    "color": 
+    "color": [
+     60,
+     255,
+     120
+    ]
+   }
+  ]
+ },
+ "brama_portal_czerwony": {
+  "kategoria": "Architektura",
+  "opis": "Brama spawnu z czerwonym portalem",
+  "plik": "Architektura.glb",
+  "max_tris": 3092,
+  "fx": [
+   {
+    "kind": "Portal",
+    "pos": [
+     -0.0,
+     5.4,
+     0.0
+    ],
+    "color": [
+     255,
+     60,
+     50
+    ]
+   }
+  ]
+ },
+ "most_kamienny": {
+  "kategoria": "Architektura",
+  "opis": "Kamienny most lukowy (12 st.)",
+  "plik": "Architektura.glb",
+  "max_tris": 2772,
+  "fx": []
+ },
+ "studnia": {
+  "kategoria": "Architektura",
+  "opis": "Studnia z daszkiem",
+  "plik": "Architektura.glb",
+  "max_tris": 668,
+  "fx": []
+ },
+ "fontanna": {
+  "kategoria": "Architektura",
+  "opis": "Fontanna z delfinem (marmur)",
+  "plik": "Architektura.glb",
+  "max_tris": 524,
+  "fx": [
+   {
+    "kind": "Water",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ]
+   }
+  ]
+ },
+ "oltarz": {
+  "kategoria": "Architektura",
+  "opis": "Oltarz ofiarny z ogniem",
+  "plik": "Architektura.glb",
+  "max_tris": 228,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     2.7,
+     0.0
+    ],
+    "size": 3,
+    "heat": 6
+   }
+  ]
+ },
+ "postument": {
+  "kategoria": "Architektura",
+  "opis": "Pusty postument (pod posag/jednostke)",
+  "plik": "Architektura.glb",
+  "max_tris": 216,
+  "fx": []
+ },
+ "posag_wojownika": {
+  "kategoria": "Architektura",
+  "opis": "Marmurowy posag hoplity z wlocznia",
+  "plik": "Architektura.glb",
+  "max_tris": 1436,
+  "fx": []
+ },
+ "posag_zloty": {
+  "kategoria": "Architektura",
+  "opis": "Zloty posag bohatera (Olimp)",
+  "plik": "Architektura.glb",
+  "max_tris": 1556,
+  "fx": []
+ },
+ "posag_bogini": {
+  "kategoria": "Architektura",
+  "opis": "Posag bogini (Atena) w spokojnej pozie",
+  "plik": "Architektura.glb",
+  "max_tris": 1408,
+  "fx": []
+ },
+ "popiersie": {
+  "kategoria": "Architektura",
+  "opis": "Popiersie filozofa na kolumnie",
+  "plik": "Architektura.glb",
+  "max_tris": 956,
+  "fx": []
+ },
+ "herma": {
+  "kategoria": "Architektura",
+  "opis": "Herma (filar z glowa Hermesa)",
+  "plik": "Architektura.glb",
+  "max_tris": 772,
+  "fx": []
+ },
+ "stela_nagrobna": {
+  "kategoria": "Architektura",
+  "opis": "Stela nagrobna (cmentarz, nieumarli)",
+  "plik": "Architektura.glb",
+  "max_tris": 116,
+  "fx": []
+ },
+ "sarkofag": {
+  "kategoria": "Architektura",
+  "opis": "Kamienny sarkofag (uchylony)",
+  "plik": "Architektura.glb",
+  "max_tris": 216,
+  "fx": []
+ },
+ "dom_grecki": {
+  "kategoria": "Architektura",
+  "opis": "Bielony dom z dachem z dachowek",
+  "plik": "Architektura.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "dom_grecki_pietrowy": {
+  "kategoria": "Architektura",
+  "opis": "Pietrowy dom z balkonem",
+  "plik": "Architektura.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "dom_ochra": {
+  "kategoria": "Architektura",
+  "opis": "Dom w kolorze ochry",
+  "plik": "Architektura.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "dom_cykladzki": {
+  "kategoria": "Architektura",
+  "opis": "Bialy dom z niebieska kopula (wyspy)",
+  "plik": "Architektura.glb",
+  "max_tris": 648,
+  "fx": []
+ },
+ "wiatrak": {
+  "kategoria": "Architektura",
+  "opis": "Grecki wiatrak (Mykonos)",
+  "plik": "Architektura.glb",
+  "max_tris": 204,
+  "fx": []
+ },
+ "latarnia_morska": {
+  "kategoria": "Architektura",
+  "opis": "Latarnia morska (faros) z ogniem",
+  "plik": "Architektura.glb",
+  "max_tris": 1676,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     31.5,
+     0.0
+    ],
+    "size": 8,
+    "heat": 10
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     31.5,
+     0.0
+    ],
+    "range": 60,
+    "brightness": 4,
+    "color": [
+     255,
+     190,
+     110
+    ]
+   }
+  ]
+ },
+ "wieza_straznicza": {
+  "kategoria": "Architektura",
+  "opis": "Kamienna wieza straznicza z blankami",
+  "plik": "Architektura.glb",
+  "max_tris": 1264,
+  "fx": []
+ },
+ "koksownik": {
+  "kategoria": "Architektura",
+  "opis": "Koksownik (trojnog z ogniem)",
+  "plik": "Architektura.glb",
+  "max_tris": 900,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     3.4,
+     0.0
+    ],
+    "size": 3,
+    "heat": 6
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     3.8,
+     0.0
+    ],
+    "range": 18,
+    "brightness": 2,
+    "color": [
+     255,
+     160,
+     80
+    ]
+   }
+  ]
+ },
+ "pochodnia": {
+  "kategoria": "Architektura",
+  "opis": "Pochodnia na slupie",
+  "plik": "Architektura.glb",
+  "max_tris": 36,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     4.7,
+     0.0
+    ],
+    "size": 1.5,
+    "heat": 4
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ],
+    "range": 12,
+    "brightness": 1.5,
+    "color": [
+     255,
+     160,
+     80
+    ]
+   }
+  ]
+ },
+ "tron": {
+  "kategoria": "Architektura",
+  "opis": "Tron z gryfami (Knossos / Olimp)",
+  "plik": "Architektura.glb",
+  "max_tris": 324,
+  "fx": []
+ },
+ "trybuny_stadionu": {
+  "kategoria": "Architektura",
+  "opis": "Kamienne trybuny (segment teatru/stadionu)",
+  "plik": "Architektura.glb",
+  "max_tris": 972,
+  "fx": []
+ },
+ "kolumnada_stoa": {
+  "kategoria": "Architektura",
+  "opis": "Stoa - kolumnada z dachem (16 st.)",
+  "plik": "Architektura.glb",
+  "max_tris": 3028,
+  "fx": []
+ },
+ "akwedukt": {
+  "kategoria": "Architektura",
+  "opis": "Fragment akweduktu (luki)",
+  "plik": "Architektura.glb",
+  "max_tris": 2184,
+  "fx": []
+ },
+ "omfalos": {
+  "kategoria": "Architektura",
+  "opis": "Omfalos - pepek swiata z Delf",
+  "plik": "Architektura.glb",
+  "max_tris": 960,
+  "fx": []
+ },
+ "trojnog_delficki": {
+  "kategoria": "Architektura",
+  "opis": "Zloty trojnog Pytii nad szczelina z oparami",
+  "plik": "Architektura.glb",
+  "max_tris": 188,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     0.5,
+     0.0
+    ],
+    "size": 2,
+    "opacity": 0.35,
+    "color": [
+     200,
+     170,
+     255
+    ]
+   }
+  ]
+ },
+ "skarbczyk": {
+  "kategoria": "Architektura",
+  "opis": "Skarbczyk (maly budynek z kolumnami, Delfy)",
+  "plik": "Architektura.glb",
+  "max_tris": 2972,
+  "fx": []
+ },
+ "dyskobol": {
+  "kategoria": "Architektura",
+  "opis": "Posag dyskobola (Olimpia)",
+  "plik": "Architektura.glb",
+  "max_tris": 1632,
+  "fx": []
+ },
+ "kora_posag": {
+  "kategoria": "Architektura",
+  "opis": "Kora - posag dziewczyny w peplosie (malowany)",
+  "plik": "Architektura.glb",
+  "max_tris": 1316,
+  "fx": []
+ },
+ "posag_lwa": {
+  "kategoria": "Architektura",
+  "opis": "Marmurowy lew (Aleja Lwow, Delos)",
+  "plik": "Architektura.glb",
+  "max_tris": 936,
+  "fx": []
+ },
+ "sfinks_naksyjski": {
+  "kategoria": "Architektura",
+  "opis": "Sfinks Naksyjczykow na jonskiej kolumnie",
+  "plik": "Architektura.glb",
+  "max_tris": 1872,
+  "fx": []
+ },
+ "posag_konia": {
+  "kategoria": "Architektura",
+  "opis": "Brazowy posag konia na postumencie",
+  "plik": "Architektura.glb",
+  "max_tris": 1072,
+  "fx": []
+ },
+ "nike_skrzydlata": {
+  "kategoria": "Architektura",
+  "opis": "Nike skrzydlata na dziobie okretu (pomnik)",
+  "plik": "Architektura.glb",
+  "max_tris": 1452,
+  "fx": []
+ },
+ "posag_apollina": {
+  "kategoria": "Architektura",
+  "opis": "Posag Apollina z lira (brazowy)",
+  "plik": "Architektura.glb",
+  "max_tris": 1556,
+  "fx": []
+ },
+ "trirema": {
+  "kategoria": "Port",
+  "opis": "Grecka trirema bojowa (40 st.): taran z brazu, oko, 3 rzedy wiosel, zagiel",
+  "plik": "Port.glb",
+  "max_tris": 1776,
+  "fx": []
+ },
+ "trirema_biala": {
+  "kategoria": "Port",
+  "opis": "Trirema z bialym zaglem i niebieskimi tarczami",
+  "plik": "Port.glb",
+  "max_tris": 1776,
+  "fx": []
+ },
+ "trirema_czarna": {
+  "kategoria": "Port",
+  "opis": "Trirema wroga / widmowa (czarny zagiel)",
+  "plik": "Port.glb",
+  "max_tris": 1776,
+  "fx": []
+ },
+ "trirema_bez_zagla": {
+  "kategoria": "Port",
+  "opis": "Trirema zacumowana (zagiel zwiniety)",
+  "plik": "Port.glb",
+  "max_tris": 1776,
+  "fx": []
+ },
+ "wrak_statku": {
+  "kategoria": "Port",
+  "opis": "Wrak statku (przechylony, polamany)",
+  "plik": "Port.glb",
+  "max_tris": 864,
+  "fx": []
+ },
+ "lodz_rybacka": {
+  "kategoria": "Port",
+  "opis": "Mala lodz rybacka z wioslami",
+  "plik": "Port.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "pomost": {
+  "kategoria": "Port",
+  "opis": "Drewniany pomost (12 st.) na palach",
+  "plik": "Port.glb",
+  "max_tris": 1296,
+  "fx": []
+ },
+ "pacholek": {
+  "kategoria": "Port",
+  "opis": "Kamienny pacholek cumowniczy z lina",
+  "plik": "Port.glb",
+  "max_tris": 476,
+  "fx": []
+ },
+ "kotwica": {
+  "kategoria": "Port",
+  "opis": "Kamienno-brazowa kotwica",
+  "plik": "Port.glb",
+  "max_tris": 712,
+  "fx": []
+ },
+ "sieci_rybackie": {
+  "kategoria": "Port",
+  "opis": "Sieci rozwieszone na palach",
+  "plik": "Port.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "dzwig_portowy": {
+  "kategoria": "Port",
+  "opis": "Drewniany dzwig portowy z kolem bieznym",
+  "plik": "Port.glb",
+  "max_tris": 492,
+  "fx": []
+ },
+ "zwoj_liny": {
+  "kategoria": "Port",
+  "opis": "Zwoj liny",
+  "plik": "Port.glb",
+  "max_tris": 1440,
+  "fx": []
+ },
+ "muszle": {
+  "kategoria": "Port",
+  "opis": "Muszle i rozgwiazdy na piasku",
+  "plik": "Port.glb",
+  "max_tris": 348,
+  "fx": []
+ },
+ "chata_rybacka": {
+  "kategoria": "Port",
+  "opis": "Chata rybacka z suszonymi rybami",
+  "plik": "Port.glb",
+  "max_tris": 480,
+  "fx": []
+ },
+ "lodz_odwrocona": {
+  "kategoria": "Port",
+  "opis": "Odwrocona lodz na plazy",
+  "plik": "Port.glb",
+  "max_tris": 216,
+  "fx": []
+ },
+ "mewy": {
+  "kategoria": "Port",
+  "opis": "Mewy na palach",
+  "plik": "Port.glb",
+  "max_tris": 648,
+  "fx": []
+ },
+ "amfora": {
+  "kategoria": "Targ",
+  "opis": "Amfora malowana (czarny pas)",
+  "plik": "Targ.glb",
+  "max_tris": 1032,
+  "fx": []
+ },
+ "amfory_grupa": {
+  "kategoria": "Targ",
+  "opis": "Grupa amfor i dzbanow",
+  "plik": "Targ.glb",
+  "max_tris": 2400,
+  "fx": []
+ },
+ "pithos": {
+  "kategoria": "Targ",
+  "opis": "Wielki pithos na oliwe/zboze",
+  "plik": "Targ.glb",
+  "max_tris": 912,
+  "fx": []
+ },
+ "amfory_stojak": {
+  "kategoria": "Targ",
+  "opis": "Drewniany stojak z amforami (port)",
+  "plik": "Targ.glb",
+  "max_tris": 5160,
+  "fx": []
+ },
+ "skrzynia": {
+  "kategoria": "Targ",
+  "opis": "Drewniana skrzynia",
+  "plik": "Targ.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "skrzynie_stos": {
+  "kategoria": "Targ",
+  "opis": "Stos skrzyn",
+  "plik": "Targ.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "beczka": {
+  "kategoria": "Targ",
+  "opis": "Beczka z obreczami",
+  "plik": "Targ.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "beczki": {
+  "kategoria": "Targ",
+  "opis": "Grupa beczek",
+  "plik": "Targ.glb",
+  "max_tris": 480,
+  "fx": []
+ },
+ "worki": {
+  "kategoria": "Targ",
+  "opis": "Worki ze zbozem",
+  "plik": "Targ.glb",
+  "max_tris": 400,
+  "fx": []
+ },
+ "kosz_owocow": {
+  "kategoria": "Targ",
+  "opis": "Wiklinowy kosz z owocami (oliwki, winogrona, granaty)",
+  "plik": "Targ.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "stragan": {
+  "kategoria": "Targ",
+  "opis": "Stragan z pasiastym daszkiem",
+  "plik": "Targ.glb",
+  "max_tris": 1032,
+  "fx": []
+ },
+ "stragan_niebieski": {
+  "kategoria": "Targ",
+  "opis": "Stragan z niebieskim daszkiem",
+  "plik": "Targ.glb",
+  "max_tris": 1032,
+  "fx": []
+ },
+ "woz": {
+  "kategoria": "Targ",
+  "opis": "Drewniany woz z sianem",
+  "plik": "Targ.glb",
+  "max_tris": 720,
+  "fx": []
+ },
+ "rydwan": {
+  "kategoria": "Targ",
+  "opis": "Rydwan bojowy (dekoracja)",
+  "plik": "Targ.glb",
+  "max_tris": 672,
+  "fx": []
+ },
+ "stojak_broni": {
+  "kategoria": "Targ",
+  "opis": "Stojak z wloczniami i tarczami",
+  "plik": "Targ.glb",
+  "max_tris": 424,
+  "fx": []
+ },
+ "namiot_wojskowy": {
+  "kategoria": "Targ",
+  "opis": "Namiot wojskowy (oboz)",
+  "plik": "Targ.glb",
+  "max_tris": 32,
+  "fx": []
+ },
+ "ognisko": {
+  "kategoria": "Targ",
+  "opis": "Ognisko z kamieni",
+  "plik": "Targ.glb",
+  "max_tris": 160,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     0.6,
+     0.0
+    ],
+    "size": 2.5,
+    "heat": 5
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.2,
+     0.0
+    ],
+    "range": 14,
+    "brightness": 1.5,
+    "color": [
+     255,
+     150,
+     70
+    ]
+   }
+  ]
+ },
+ "lawka": {
+  "kategoria": "Targ",
+  "opis": "Kamienna lawka",
+  "plik": "Targ.glb",
+  "max_tris": 324,
+  "fx": []
+ },
+ "stol_uczta": {
+  "kategoria": "Targ",
+  "opis": "Stol z misami i dzbanem (uczta)",
+  "plik": "Targ.glb",
+  "max_tris": 336,
+  "fx": []
+ },
+ "lira": {
+  "kategoria": "Targ",
+  "opis": "Lira na postumencie (dekoracja Apolla)",
+  "plik": "Targ.glb",
+  "max_tris": 688,
+  "fx": []
+ },
+ "kraterowa_waza": {
+  "kategoria": "Targ",
+  "opis": "Wielki krater (waza) z brazu",
+  "plik": "Targ.glb",
+  "max_tris": 720,
+  "fx": []
+ },
+ "amfora_rozbita": {
+  "kategoria": "Targ",
+  "opis": "Rozbita amfora (skorupy)",
+  "plik": "Targ.glb",
+  "max_tris": 176,
+  "fx": []
+ },
+ "stragan_rybny": {
+  "kategoria": "Targ",
+  "opis": "Stragan rybny z lodem i koszami",
+  "plik": "Targ.glb",
+  "max_tris": 720,
+  "fx": []
+ },
+ "kram_garncarza": {
+  "kategoria": "Targ",
+  "opis": "Kram garncarza z kolem i amforami",
+  "plik": "Targ.glb",
+  "max_tris": 1368,
+  "fx": []
+ },
+ "kowadlo": {
+  "kategoria": "Wulkan",
+  "opis": "Kowadlo na pniu",
+  "plik": "Wulkan.glb",
+  "max_tris": 338,
+  "fx": []
+ },
+ "kuznia": {
+  "kategoria": "Wulkan",
+  "opis": "Kuznia Hefajstosa: piec z zarem, miech, kowadlo",
+  "plik": "Wulkan.glb",
+  "max_tris": 244,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     1.6,
+     -2.4
+    ],
+    "size": 5,
+    "heat": 9
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.8,
+     -3.0
+    ],
+    "range": 24,
+    "brightness": 3,
+    "color": [
+     255,
+     120,
+     40
+    ]
+   },
+   {
+    "kind": "Smoke",
+    "pos": [
+     -1.5,
+     10.2,
+     1.2
+    ],
+    "size": 4,
+    "opacity": 0.4
+   }
+  ]
+ },
+ "kociol_lawy": {
+  "kategoria": "Wulkan",
+  "opis": "Kociol z roztopionym brazem",
+  "plik": "Wulkan.glb",
+  "max_tris": 364,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     2.6,
+     0.0
+    ],
+    "range": 14,
+    "brightness": 2,
+    "color": [
+     255,
+     120,
+     40
+    ]
+   }
+  ]
+ },
+ "jeziorko_lawy": {
+  "kategoria": "Wulkan",
+  "opis": "Jeziorko lawy w bazaltowej obreczy (swieci)",
+  "plik": "Wulkan.glb",
+  "max_tris": 240,
+  "fx": [
+   {
+    "kind": "Embers",
+    "pos": [
+     -0.0,
+     0.5,
+     0.0
+    ],
+    "rate": 6
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.5,
+     0.0
+    ],
+    "range": 20,
+    "brightness": 3,
+    "color": [
+     255,
+     110,
+     30
+    ]
+   }
+  ]
+ },
+ "szczelina_lawy": {
+  "kategoria": "Wulkan",
+  "opis": "Pekniecie w ziemi z lawa (pas 12 st.)",
+  "plik": "Wulkan.glb",
+  "max_tris": 636,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.0,
+     0.0
+    ],
+    "range": 16,
+    "brightness": 2,
+    "color": [
+     255,
+     110,
+     30
+    ]
+   }
+  ]
+ },
+ "obsydian": {
+  "kategoria": "Wulkan",
+  "opis": "Krysztaly obsydianu",
+  "plik": "Wulkan.glb",
+  "max_tris": 112,
+  "fx": []
+ },
+ "dymiacy_otwor": {
+  "kategoria": "Wulkan",
+  "opis": "Fumarola - dymiacy otwor",
+  "plik": "Wulkan.glb",
+  "max_tris": 192,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     1.3,
+     0.0
+    ],
+    "size": 3,
+    "opacity": 0.5
+   }
+  ]
+ },
+ "talos": {
+  "kategoria": "Wulkan",
+  "opis": "Talos - olbrzymi brazowy automat (pomnik, 24 st.)",
+  "plik": "Wulkan.glb",
+  "max_tris": 1676,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     20.4,
+     -3.0
+    ],
+    "range": 30,
+    "brightness": 2,
+    "color": [
+     255,
+     120,
+     40
+    ]
+   }
+  ]
+ },
+ "wulkan_tlo": {
+  "kategoria": "Tla",
+  "opis": "Wulkan na tlo (z kraterem i lawa)",
+  "plik": "Tla.glb",
+  "max_tris": 1704,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     76.0,
+     0.0
+    ],
+    "range": 120,
+    "brightness": 5,
+    "color": [
+     255,
+     100,
+     30
+    ]
+   },
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     80.0,
+     0.0
+    ],
+    "size": 40,
+    "opacity": 0.6
+   }
+  ]
+ },
+ "szczyt_osniezony": {
+  "kategoria": "Tla",
+  "opis": "Osniezony szczyt (tlo Olimpu)",
+  "plik": "Tla.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "wyspa_tlo": {
+  "kategoria": "Tla",
+  "opis": "Odlegla skalista wyspa z drzewami (tlo morza)",
+  "plik": "Tla.glb",
+  "max_tris": 800,
+  "fx": []
+ },
+ "gory_tlo": {
+  "kategoria": "Tla",
+  "opis": "Pasmo gor na tlo (Kreta / Olimp)",
+  "plik": "Tla.glb",
+  "max_tris": 800,
+  "fx": []
+ },
+ "rogi_konsekracji": {
+  "kategoria": "Knossos",
+  "opis": "Rogi konsekracji (symbol minojski)",
+  "plik": "Knossos.glb",
+  "max_tris": 820,
+  "fx": []
+ },
+ "labrys_stojak": {
+  "kategoria": "Knossos",
+  "opis": "Swiety labrys na stojaku",
+  "plik": "Knossos.glb",
+  "max_tris": 160,
+  "fx": []
+ },
+ "mur_fresk": {
+  "kategoria": "Knossos",
+  "opis": "Sciana z freskiem (czerwony tynk, pas z rozetami)",
+  "plik": "Knossos.glb",
+  "max_tris": 360,
+  "fx": []
+ },
+ "posag_byka": {
+  "kategoria": "Knossos",
+  "opis": "Posag byka z brazu na postumencie",
+  "plik": "Knossos.glb",
+  "max_tris": 884,
+  "fx": []
+ },
+ "labirynt_sciana": {
+  "kategoria": "Knossos",
+  "opis": "Segment murow labiryntu (zywoplot w kamiennej ramie)",
+  "plik": "Knossos.glb",
+  "max_tris": 336,
+  "fx": []
+ },
+ "chmura": {
+  "kategoria": "Olimp",
+  "opis": "Puszysta chmura (morze chmur pod Olimpem)",
+  "plik": "Olimp.glb",
+  "max_tris": 560,
+  "fx": []
+ },
+ "chmura_duza": {
+  "kategoria": "Olimp",
+  "opis": "Duza chmura",
+  "plik": "Olimp.glb",
+  "max_tris": 560,
+  "fx": []
+ },
+ "orzel_zeusa": {
+  "kategoria": "Olimp",
+  "opis": "Zloty orzel Zeusa na kolumnie",
+  "plik": "Olimp.glb",
+  "max_tris": 664,
+  "fx": []
+ },
+ "piorun_pomnik": {
+  "kategoria": "Olimp",
+  "opis": "Swiecacy piorun Zeusa wbity w skale",
+  "plik": "Olimp.glb",
+  "max_tris": 128,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ],
+    "range": 22,
+    "brightness": 3,
+    "color": [
+     160,
+     200,
+     255
+    ]
+   },
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ],
+    "color": [
+     160,
+     200,
+     255
+    ]
+   }
+  ]
+ },
+ "zloty_tron_zeusa": {
+  "kategoria": "Olimp",
+  "opis": "Zloty tron Zeusa na schodach",
+  "plik": "Olimp.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "luk_teczy": {
+  "kategoria": "Olimp",
+  "opis": "Teczowy luk Iris (portal Olimpu)",
+  "plik": "Olimp.glb",
+  "max_tris": 956,
+  "fx": []
+ },
+ "zlote_wrota_olimpu": {
+  "kategoria": "Olimp",
+  "opis": "Zlote wrota Olimpu (wielka brama)",
+  "plik": "Olimp.glb",
+  "max_tris": 3348,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     12.0,
+     -3.0
+    ],
+    "range": 30,
+    "brightness": 2,
+    "color": [
+     255,
+     220,
+     140
+    ]
+   }
+  ]
+ },
+ "posag_pegaza": {
+  "kategoria": "Olimp",
+  "opis": "Posag Pegaza na postumencie",
+  "plik": "Olimp.glb",
+  "max_tris": 728,
+  "fx": []
+ },
+ "nagrobek": {
+  "kategoria": "Nekropolia",
+  "opis": "Nagrobek (przekrzywiony)",
+  "plik": "Nekropolia.glb",
+  "max_tris": 184,
+  "fx": []
+ },
+ "nagrobek_2": {
+  "kategoria": "Nekropolia",
+  "opis": "Nagrobek (wariant)",
+  "plik": "Nekropolia.glb",
+  "max_tris": 184,
+  "fx": []
+ },
+ "otwarty_grob": {
+  "kategoria": "Nekropolia",
+  "opis": "Rozkopany grob (stad wychodza zombie)",
+  "plik": "Nekropolia.glb",
+  "max_tris": 200,
+  "fx": [
+   {
+    "kind": "Mist",
+    "pos": [
+     -0.0,
+     0.5,
+     0.0
+    ],
+    "color": [
+     120,
+     255,
+     140
+    ]
+   }
+  ]
+ },
+ "kosci": {
+  "kategoria": "Nekropolia",
+  "opis": "Stos kosci i czaszek",
+  "plik": "Nekropolia.glb",
+  "max_tris": 704,
+  "fx": []
+ },
+ "trumna_zlamana": {
+  "kategoria": "Nekropolia",
+  "opis": "Rozbita drewniana trumna",
+  "plik": "Nekropolia.glb",
+  "max_tris": 216,
+  "fx": []
+ },
+ "mauzoleum": {
+  "kategoria": "Nekropolia",
+  "opis": "Grecki grobowiec z kolumnami (wejscie)",
+  "plik": "Nekropolia.glb",
+  "max_tris": 1500,
+  "fx": [
+   {
+    "kind": "Mist",
+    "pos": [
+     -0.0,
+     0.8,
+     -3.0
+    ],
+    "color": [
+     120,
+     255,
+     140
+    ]
+   }
+  ]
+ },
+ "trojzab_posejdona": {
+  "kategoria": "Unikaty",
+  "opis": "Trojzab Posejdona wbity w skale (swieci)",
+  "plik": "Unikaty.glb",
+  "max_tris": 288,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.3,
+     7.0,
+     0.0
+    ],
+    "range": 16,
+    "brightness": 2,
+    "color": [
+     90,
+     220,
+     255
+    ]
+   },
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -0.3,
+     7.0,
+     0.0
+    ],
+    "color": [
+     90,
+     220,
+     255
+    ]
+   }
+  ]
+ },
+ "fontanna_posejdona": {
+  "kategoria": "Unikaty",
+  "opis": "Wielka fontanna z posagiem Posejdona i konmi morskimi",
+  "plik": "Unikaty.glb",
+  "max_tris": 3124,
+  "fx": [
+   {
+    "kind": "Water",
+    "pos": [
+     -4.455,
+     3.4,
+     4.455
+    ]
+   },
+   {
+    "kind": "Water",
+    "pos": [
+     4.455,
+     3.4,
+     4.455
+    ]
+   },
+   {
+    "kind": "Water",
+    "pos": [
+     4.455,
+     3.4,
+     -4.455
+    ]
+   },
+   {
+    "kind": "Water",
+    "pos": [
+     -4.455,
+     3.4,
+     -4.455
+    ]
+   }
+  ]
+ },
+ "puszka_pandory": {
+  "kategoria": "Unikaty",
+  "opis": "Puszka Pandory (uchylona, fioletowy dym)",
+  "plik": "Unikaty.glb",
+  "max_tris": 216,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     3.0,
+     0.0
+    ],
+    "size": 2,
+    "opacity": 0.5,
+    "color": [
+     150,
+     60,
+     220
+    ]
+   }
+  ]
+ },
+ "zlote_runo": {
+  "kategoria": "Unikaty",
+  "opis": "Zlote runo na swietym debie (Argonauci)",
+  "plik": "Unikaty.glb",
+  "max_tris": 472,
+  "fx": [
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -2.8,
+     4.1,
+     0.2
+    ],
+    "color": [
+     255,
+     210,
+     90
+    ]
+   }
+  ]
+ },
+ "kon_trojanski": {
+  "kategoria": "Unikaty",
+  "opis": "Kon trojanski (drewniany, na kolkach)",
+  "plik": "Unikaty.glb",
+  "max_tris": 864,
+  "fx": []
+ },
+ "glowa_meduzy": {
+  "kategoria": "Unikaty",
+  "opis": "Glowa Meduzy na tarczy (Aegis) na postumencie",
+  "plik": "Unikaty.glb",
+  "max_tris": 360,
+  "fx": []
+ },
+ "skamieniali_wojownicy": {
+  "kategoria": "Unikaty",
+  "opis": "Skamieniale ofiary Meduzy (szare posagi w pozach ucieczki)",
+  "plik": "Unikaty.glb",
+  "max_tris": 4788,
+  "fx": []
+ },
+ "skrzydla_ikara": {
+  "kategoria": "Unikaty",
+  "opis": "Polamane skrzydla Ikara z piorami na skale",
+  "plik": "Unikaty.glb",
+  "max_tris": 168,
+  "fx": []
+ },
+ "skala_prometeusza": {
+  "kategoria": "Unikaty",
+  "opis": "Skala Prometeusza: zerwane lancuchy i orzel",
+  "plik": "Unikaty.glb",
+  "max_tris": 1200,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     5.4,
+     -1.6
+    ],
+    "size": 1.2,
+    "heat": 4
+   }
+  ]
+ },
+ "glaz_syzyfa": {
+  "kategoria": "Unikaty",
+  "opis": "Glaz Syzyfa na zboczu (nigdy nie dotarl na szczyt)",
+  "plik": "Unikaty.glb",
+  "max_tris": 320,
+  "fx": []
+ },
+ "helm_hadesa": {
+  "kategoria": "Unikaty",
+  "opis": "Helm niewidzialnosci Hadesa na czarnym oltarzu",
+  "plik": "Unikaty.glb",
+  "max_tris": 156,
+  "fx": [
+   {
+    "kind": "Mist",
+    "pos": [
+     -0.0,
+     2.2,
+     0.0
+    ],
+    "color": [
+     120,
+     255,
+     160
+    ]
+   }
+  ]
+ },
+ "zlote_jablko": {
+  "kategoria": "Unikaty",
+  "opis": "Zlote jablko Eris z napisem \"Dla najpiekniejszej\"",
+  "plik": "Unikaty.glb",
+  "max_tris": 440,
+  "fx": [
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -0.0,
+     3.9,
+     0.0
+    ],
+    "color": [
+     255,
+     220,
+     100
+    ]
+   }
+  ]
+ },
+ "posag_cerbera": {
+  "kategoria": "Unikaty",
+  "opis": "Posag Cerbera - trzyglowy pies (straznik bramy)",
+  "plik": "Unikaty.glb",
+  "max_tris": 1396,
+  "fx": []
+ },
+ "sowa_ateny": {
+  "kategoria": "Unikaty",
+  "opis": "Sowa Ateny na galazce oliwnej (z brazu)",
+  "plik": "Unikaty.glb",
+  "max_tris": 344,
+  "fx": []
+ },
+ "sandaly_hermesa": {
+  "kategoria": "Unikaty",
+  "opis": "Skrzydlate sandaly Hermesa na poduszce",
+  "plik": "Unikaty.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "lodz_charona": {
+  "kategoria": "Unikaty",
+  "opis": "Lodz Charona z latarnia (mglista woda)",
+  "plik": "Unikaty.glb",
+  "max_tris": 1556,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     2.6,
+     -4.6
+    ],
+    "range": 14,
+    "brightness": 1.5,
+    "color": [
+     120,
+     255,
+     160
+    ]
+   },
+   {
+    "kind": "Mist",
+    "pos": [
+     -0.0,
+     0.6,
+     0.0
+    ],
+    "color": [
+     120,
+     255,
+     160
+    ]
+   }
+  ]
+ },
+ "zlota_jablon": {
+  "kategoria": "Unikaty",
+  "opis": "Zlota jablon Hesperyd (zlote jablka)",
+  "plik": "Unikaty.glb",
+  "max_tris": 2000,
+  "fx": [
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -0.0,
+     8.0,
+     0.0
+    ],
+    "color": [
+     255,
+     210,
+     90
+    ]
+   }
+  ]
+ },
+ "skrzynia_skarbow": {
+  "kategoria": "Unikaty",
+  "opis": "Skrzynia ze zlotymi monetami (easter egg)",
+  "plik": "Unikaty.glb",
+  "max_tris": 560,
+  "fx": [
+   {
+    "kind": "Sparkles",
+    "pos": [
+     -0.0,
+     1.5,
+     0.0
+    ],
+    "color": [
+     255,
+     210,
+     90
+    ]
+   }
+  ]
+ },
+ "atlas": {
+  "kategoria": "Unikaty",
+  "opis": "Atlas dzwigajacy niebo (zloty globus)",
+  "plik": "Unikaty.glb",
+  "max_tris": 1556,
+  "fx": []
+ },
+ "maczuga_heraklesa": {
+  "kategoria": "Unikaty",
+  "opis": "Maczuga i skora lwa nemejskiego Heraklesa",
+  "plik": "Unikaty.glb",
+  "max_tris": 252,
+  "fx": []
+ },
+ "stog_siana": {
+  "kategoria": "Wies",
+  "opis": "Stog siana",
+  "plik": "Wies.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "pole_pszenicy": {
+  "kategoria": "Wies",
+  "opis": "Pole pszenicy (10x10)",
+  "plik": "Wies.glb",
+  "max_tris": 2268,
+  "fx": []
+ },
+ "ul_slomiany": {
+  "kategoria": "Wies",
+  "opis": "Slomiany ul na lawce",
+  "plik": "Wies.glb",
+  "max_tris": 324,
+  "fx": []
+ },
+ "plot_wiklinowy": {
+  "kategoria": "Wies",
+  "opis": "Plot z wikliny (6 st.)",
+  "plik": "Wies.glb",
+  "max_tris": 2864,
+  "fx": []
+ },
+ "plot_drewniany": {
+  "kategoria": "Wies",
+  "opis": "Plot drewniany z deszczulek (8 st.)",
+  "plik": "Wies.glb",
+  "max_tris": 540,
+  "fx": []
+ },
+ "drogowskaz": {
+  "kategoria": "Wies",
+  "opis": "Drogowskaz z tabliczkami (ATENY / SPARTA)",
+  "plik": "Wies.glb",
+  "max_tris": 108,
+  "fx": []
+ },
+ "kamien_milowy": {
+  "kategoria": "Wies",
+  "opis": "Kamien milowy (stela przydrozna)",
+  "plik": "Wies.glb",
+  "max_tris": 104,
+  "fx": []
+ },
+ "kapliczka": {
+  "kategoria": "Wies",
+  "opis": "Przydrozna kapliczka z lampka oliwna",
+  "plik": "Wies.glb",
+  "max_tris": 108,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.1,
+     -0.8
+    ],
+    "range": 8,
+    "brightness": 1,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   }
+  ]
+ },
+ "prasa_oliwna": {
+  "kategoria": "Wies",
+  "opis": "Kamienna prasa do oliwy z kolem",
+  "plik": "Wies.glb",
+  "max_tris": 200,
+  "fx": []
+ },
+ "zarna": {
+  "kategoria": "Wies",
+  "opis": "Zarna (kamien mlynski)",
+  "plik": "Wies.glb",
+  "max_tris": 152,
+  "fx": []
+ },
+ "piec_chlebowy": {
+  "kategoria": "Wies",
+  "opis": "Gliniany piec chlebowy",
+  "plik": "Wies.glb",
+  "max_tris": 192,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     2.6,
+     0.0
+    ],
+    "size": 1.5,
+    "opacity": 0.3
+   }
+  ]
+ },
+ "lampa_oliwna": {
+  "kategoria": "Wies",
+  "opis": "Lampa oliwna na wysokim stojaku (latarnia uliczna)",
+  "plik": "Wies.glb",
+  "max_tris": 168,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.3,
+     5.4,
+     0.0
+    ],
+    "range": 14,
+    "brightness": 1.4,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   }
+  ]
+ },
+ "sosna_osniezona": {
+  "kategoria": "Zima",
+  "opis": "Osniezona jodla",
+  "plik": "Zima.glb",
+  "max_tris": 260,
+  "fx": []
+ },
+ "sosna_osniezona_2": {
+  "kategoria": "Zima",
+  "opis": "Osniezona jodla (mniejsza)",
+  "plik": "Zima.glb",
+  "max_tris": 260,
+  "fx": []
+ },
+ "krysztaly_lodu": {
+  "kategoria": "Zima",
+  "opis": "Krysztaly lodu (swieca blado)",
+  "plik": "Zima.glb",
+  "max_tris": 80,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "range": 12,
+    "brightness": 1,
+    "color": [
+     170,
+     220,
+     255
+    ]
+   }
+  ]
+ },
+ "zamarzniety_posag": {
+  "kategoria": "Zima",
+  "opis": "Zamarzniety wojownik w bryle lodu",
+  "plik": "Zima.glb",
+  "max_tris": 1676,
+  "fx": []
+ },
+ "sople_skala": {
+  "kategoria": "Zima",
+  "opis": "Skala z soplami",
+  "plik": "Zima.glb",
+  "max_tris": 100,
+  "fx": []
+ },
+ "zaspa": {
+  "kategoria": "Zima",
+  "opis": "Zaspa sniezna",
+  "plik": "Zima.glb",
+  "max_tris": 80,
+  "fx": []
+ },
+ "koral": {
+  "kategoria": "Podwodne",
+  "opis": "Rafa koralowa (rozne kolory)",
+  "plik": "Podwodne.glb",
+  "max_tris": 1068,
+  "fx": []
+ },
+ "wodorosty": {
+  "kategoria": "Podwodne",
+  "opis": "Wodorosty (kepa)",
+  "plik": "Podwodne.glb",
+  "max_tris": 4760,
+  "fx": []
+ },
+ "zatopiony_posag": {
+  "kategoria": "Podwodne",
+  "opis": "Zatopiony posag w wodorostach i muszlach",
+  "plik": "Podwodne.glb",
+  "max_tris": 1556,
+  "fx": []
+ },
+ "babelki": {
+  "kategoria": "Podwodne",
+  "opis": "Zrodlo babelkow (marker efektu)",
+  "plik": "Podwodne.glb",
+  "max_tris": 600,
+  "fx": [
+   {
+    "kind": "Bubbles",
+    "pos": [
+     -0.0,
+     0.8,
+     0.0
+    ]
+   }
+  ]
+ },
+ "pochodnia_duchow": {
+  "kategoria": "Podziemia",
+  "opis": "Pochodnia z zielonym ogniem duchow",
+  "plik": "Podziemia.glb",
+  "max_tris": 64,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     4.7,
+     0.0
+    ],
+    "size": 2,
+    "heat": 4,
+    "color": [
+     100,
+     255,
+     150
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ],
+    "range": 16,
+    "brightness": 2,
+    "color": [
+     100,
+     255,
+     150
+    ]
+   }
+  ]
+ },
+ "brama_kosci": {
+  "kategoria": "Podziemia",
+  "opis": "Brama z kosci i czaszek (spawn w podziemiach)",
+  "plik": "Podziemia.glb",
+  "max_tris": 3108,
+  "fx": [
+   {
+    "kind": "Portal",
+    "pos": [
+     -0.0,
+     5.0,
+     0.0
+    ],
+    "color": [
+     90,
+     255,
+     140
+    ]
+   }
+  ]
+ },
+ "szkielet": {
+  "kategoria": "Podziemia",
+  "opis": "Lezacy szkielet wojownika z tarcza",
+  "plik": "Podziemia.glb",
+  "max_tris": 728,
+  "fx": []
+ },
+ "klatka": {
+  "kategoria": "Podziemia",
+  "opis": "Wiszaca zelazna klatka",
+  "plik": "Podziemia.glb",
+  "max_tris": 364,
+  "fx": []
+ },
+ "lancuchy_mur": {
+  "kategoria": "Podziemia",
+  "opis": "Mur z lancuchami i kajdanami",
+  "plik": "Podziemia.glb",
+  "max_tris": 1152,
+  "fx": []
+ },
+ "czaszka_na_palu": {
+  "kategoria": "Podziemia",
+  "opis": "Czaszka na palu (ostrzezenie)",
+  "plik": "Podziemia.glb",
+  "max_tris": 168,
+  "fx": []
+ },
+ "spalony_dom": {
+  "kategoria": "Podziemia",
+  "opis": "Ruiny spalonego domu",
+  "plik": "Podziemia.glb",
+  "max_tris": 648,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     2.0,
+     0.0
+    ],
+    "size": 3,
+    "opacity": 0.3
+   }
+  ]
+ },
+ "wieza_oblezenicza": {
+  "kategoria": "Wojsko",
+  "opis": "Drewniana wieza oblezenicza na kolach",
+  "plik": "Wojsko.glb",
+  "max_tris": 996,
+  "fx": []
+ },
+ "palisada": {
+  "kategoria": "Wojsko",
+  "opis": "Palisada z zaostrzonych pali (8 st.)",
+  "plik": "Wojsko.glb",
+  "max_tris": 364,
+  "fx": []
+ },
+ "mur_z_wieza": {
+  "kategoria": "Wojsko",
+  "opis": "Fragment murow miasta z wieza (Troja)",
+  "plik": "Wojsko.glb",
+  "max_tris": 2808,
+  "fx": []
+ },
+ "namiot_dowodcy": {
+  "kategoria": "Wojsko",
+  "opis": "Duzy namiot dowodcy z proporcami",
+  "plik": "Wojsko.glb",
+  "max_tris": 104,
+  "fx": []
+ },
+ "sztandar": {
+  "kategoria": "Wojsko",
+  "opis": "Sztandar z orlem na drzewcu",
+  "plik": "Wojsko.glb",
+  "max_tris": 180,
+  "fx": []
+ },
+ "trofeum": {
+  "kategoria": "Wojsko",
+  "opis": "Tropaion - zbroja wroga na palu (pomnik zwyciestwa)",
+  "plik": "Wojsko.glb",
+  "max_tris": 204,
+  "fx": []
+ },
+ "pole_bitwy": {
+  "kategoria": "Wojsko",
+  "opis": "Wlocznie wbite w ziemie i porzucone tarcze",
+  "plik": "Wojsko.glb",
+  "max_tris": 220,
+  "fx": []
+ },
+ "stos_tarcz": {
+  "kategoria": "Wojsko",
+  "opis": "Stos tarcz hoplitow",
+  "plik": "Wojsko.glb",
+  "max_tris": 576,
+  "fx": []
+ },
+ "katapulta": {
+  "kategoria": "Wojsko",
+  "opis": "Katapulta (dekoracja oblezenia)",
+  "plik": "Wojsko.glb",
+  "max_tris": 540,
+  "fx": []
+ },
+ "ogien_sygnalowy": {
+  "kategoria": "Wojsko",
+  "opis": "Wieza z ogniem sygnalowym (plonacy kosz)",
+  "plik": "Wojsko.glb",
+  "max_tris": 432,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -0.0,
+     9.4,
+     0.0
+    ],
+    "size": 6,
+    "heat": 10
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     10.0,
+     0.0
+    ],
+    "range": 40,
+    "brightness": 3,
+    "color": [
+     255,
+     150,
+     60
+    ]
+   }
+  ]
+ },
+ "glowa_posagu": {
+  "kategoria": "Ruiny",
+  "opis": "Gigantyczna marmurowa glowa posagu w trawie",
+  "plik": "Ruiny.glb",
+  "max_tris": 1100,
+  "fx": []
+ },
+ "dlon_posagu": {
+  "kategoria": "Ruiny",
+  "opis": "Gigantyczna dlon posagu wystajaca z ziemi",
+  "plik": "Ruiny.glb",
+  "max_tris": 648,
+  "fx": []
+ },
+ "kolumnada_ruin": {
+  "kategoria": "Ruiny",
+  "opis": "Rzad kolumn z resztka architrawu (ruiny 20 st.)",
+  "plik": "Ruiny.glb",
+  "max_tris": 2792,
+  "fx": []
+ },
+ "naiskos": {
+  "kategoria": "Ruiny",
+  "opis": "Naiskos - mala kapliczka z posazkiem",
+  "plik": "Ruiny.glb",
+  "max_tris": 2780,
+  "fx": []
+ },
+ "mur_z_bluszczem": {
+  "kategoria": "Ruiny",
+  "opis": "Mur porosniety bluszczem",
+  "plik": "Ruiny.glb",
+  "max_tris": 280,
+  "fx": []
+ },
+ "maski_teatralne": {
+  "kategoria": "Teatr",
+  "opis": "Maski komedii i tragedii na postumencie",
+  "plik": "Teatr.glb",
+  "max_tris": 792,
+  "fx": []
+ },
+ "girlanda": {
+  "kategoria": "Ozdoby",
+  "opis": "Girlanda z kwiatow miedzy slupami",
+  "plik": "Ozdoby.glb",
+  "max_tris": 1196,
+  "fx": []
+ },
+ "rusztowanie": {
+  "kategoria": "Ozdoby",
+  "opis": "Drewniane rusztowanie przy budowie (z blokami)",
+  "plik": "Ozdoby.glb",
+  "max_tris": 432,
+  "fx": []
+ },
+ "zegar_sloneczny": {
+  "kategoria": "Ozdoby",
+  "opis": "Zegar sloneczny na kolumnie",
+  "plik": "Ozdoby.glb",
+  "max_tris": 200,
+  "fx": []
+ },
+ "wiszace_lampy": {
+  "kategoria": "Ozdoby",
+  "opis": "Rzad wiszacych lampek oliwnych na linie",
+  "plik": "Ozdoby.glb",
+  "max_tris": 716,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     4.0,
+     4.056,
+     0.0
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     2.0,
+     3.789,
+     0.0
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     3.7,
+     0.0
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -2.0,
+     3.789,
+     0.0
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -4.0,
+     4.056,
+     0.0
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     170,
+     80
+    ]
+   }
+  ]
+ },
+ "donice_kwiatow": {
+  "kategoria": "Ozdoby",
+  "opis": "Donice z kwiatami (grupa)",
+  "plik": "Ozdoby.glb",
+  "max_tris": 384,
+  "fx": []
+ },
+ "urny": {
+  "kategoria": "Ozdoby",
+  "opis": "Marmurowe urny na cokolach (para)",
+  "plik": "Ozdoby.glb",
+  "max_tris": 696,
+  "fx": []
+ }
+}

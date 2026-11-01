@@ -21,6 +21,12 @@ _spec.loader.exec_module(C)
 
 D2R = math.pi / 180
 TEX_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'textures')
+TEX_DIR_JPG = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'textures_jpg')
+
+
+def tex_path(name):
+    p = os.path.join(TEX_DIR, name + '.png')
+    return p if os.path.exists(p) else os.path.join(TEX_DIR_JPG, name + '.jpg')
 
 REGISTRY = {}      # nazwa -> (kategoria, funkcja, opis)
 _MATS = {}
@@ -53,10 +59,10 @@ def T(tex, rough=0.85, metal=0.0, nrm=1.0):
     m = bpy.data.materials.new(key)
     nt, b = _nodes(m)
     ic = nt.nodes.new('ShaderNodeTexImage')
-    ic.image = bpy.data.images.load(os.path.join(TEX_DIR, f'{tex}_col.png'), check_existing=True)
+    ic.image = bpy.data.images.load(tex_path(f'{tex}_col'), check_existing=True)
     nt.links.new(ic.outputs['Color'], b.inputs['Base Color'])
     inm = nt.nodes.new('ShaderNodeTexImage')
-    inm.image = bpy.data.images.load(os.path.join(TEX_DIR, f'{tex}_nrm.png'), check_existing=True)
+    inm.image = bpy.data.images.load(tex_path(f'{tex}_nrm'), check_existing=True)
     inm.image.colorspace_settings.name = 'Non-Color'
     nm = nt.nodes.new('ShaderNodeNormalMap')
     nm.inputs['Strength'].default_value = nrm

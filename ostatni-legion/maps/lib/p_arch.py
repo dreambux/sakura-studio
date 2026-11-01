@@ -207,7 +207,7 @@ def temple(name, nx=6, ny=8, sp=5.0, h=10.0, style='doric', ruined=False, statue
 prop('swiatynia_dorycka', 'Architektura', 'Swiatynia dorycka (baza / centrum mapy)')(
     lambda: temple('swiatynia_dorycka', 6, 8, 5.0, 10.0, 'doric'))
 prop('swiatynia_jonska', 'Architektura', 'Mala swiatynia jonska')(
-    lambda: temple('swiatynia_jonska', 4, 5, 5.0, 9.0, 'ionic', seed=2))
+    lambda: temple('swiatynia_jonska', 4, 5, 5.0, 9.0, 'ionic', seed=2, segs=20))
 prop('swiatynia_ruiny', 'Architektura', 'Ruiny swiatyni (kolumny zlamane)')(
     lambda: temple('swiatynia_ruiny', 6, 7, 5.0, 10.0, 'doric', ruined=True, statue=True, seed=3))
 

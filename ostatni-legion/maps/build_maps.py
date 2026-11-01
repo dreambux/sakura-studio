@@ -1,7 +1,7 @@
 """Koncepty map: dla kazdej mapy render z gory (z opisem) + z boku, uklad w Luau/JSON, teren w GLB.
 
   python maps/build_maps.py                 (wszystkie 14)
-  python maps/build_maps.py -- AgoraAtenska (wybrane po nazwie)
+  python maps/build_maps.py -- agora troy  (wybrane po nazwie funkcji)
 """
 import os
 import sys
@@ -15,7 +15,7 @@ import bpy  # noqa: E402
 bpy.ops.wm.read_factory_settings(use_empty=True)
 
 from lib import props as P  # noqa: E402
-from lib import p_nature, p_arch, p_harbor, p_market, p_themes, p_unique, p_more  # noqa: E402,F401
+from lib import p_nature, p_arch, p_harbor, p_market, p_themes, p_unique, p_more, p_extra  # noqa: E402,F401
 from lib import mapscene  # noqa: E402
 from lib.m_maps14 import MAPS14  # noqa: E402
 
@@ -49,10 +49,14 @@ if __name__ == '__main__':
     sc = bpy.context.scene
     done = []
     for i, mk in enumerate(MAPS14, 1):
-        M, legend = mk()
-        if sel and M.name not in sel:
-            M.coll.hide_render = True
-            M.coll.hide_viewport = True
+        if sel and mk.__name__ not in sel:
+            continue
+        try:
+            M, legend = mk()
+        except Exception:
+            import traceback
+            traceback.print_exc()
+            print('BLAD mapy', mk.__name__)
             continue
         sc.cycles.samples = 16
         tag = f'{i:02d}_{M.name}'

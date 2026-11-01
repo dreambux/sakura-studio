@@ -62,7 +62,7 @@ def piraeus():
     M.place('kosz_owocow', -38, 12, 0.1, 0, 1.0)
     M.place('amfory_grupa', -28, 12, 0.1, 0, 1.0)
     M.place('posag_bogini', -16, 34, 0, 180, 0.8)
-    for x, y, r in ((-20, 70), (12, 70), (40, 68), (-48, 70), (78, 62), (-50, -14), (-30, -30), (-60, -40),
+    for x, y in ((-20, 70), (12, 70), (40, 68), (-48, 70), (78, 62), (-50, -14), (-30, -30), (-60, -40),
                     (90, 30), (88, 4)):
         M.place('dom_grecki' if (x + y) % 3 else 'dom_grecki_pietrowy', x, y, 0, M.rnd.choice((0, 90, 180, 270)), 0.9)
         M.block(x, y, 9)

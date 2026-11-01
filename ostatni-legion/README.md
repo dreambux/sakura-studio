@@ -150,3 +150,13 @@ Attachmentami `A` i `B`), `Hide`/`Show` (np. wyrzucone pilum, strzała na cięci
 | Attack2 | Łańcuch piorunów | poz. 2-3 | 48 | 14, 18, 22 |
 | Attack3 | Gniew Zeusa | poz. 4-5 | 72 | 26, 30, 34, 38, 42 |
 
+## Nowe: wsparcie, przeciwnicy, mapy
+
+- **Jednostki wsparcia** (`blender/units/afrodyta.py`, `centurion.py`, `hermes.py`): Afrodyta (morale: +obrażenia
+  i +szybkość ataku), Centurion (dowodzenie: +zasięg, Testudo), Hermes (szybkość: krótsze odnowienie, tańsze
+  ulepszenia). W `UnitData` mają sekcję `Extra.Support` z wartościami buffów na poziom (nie stackują się, liczy się najsilniejszy).
+- **Przeciwnicy** (`blender/units/nieumarli.py` + `wrog_*.py`): Zombie, Biegacz, Ukryty, Pancerny Legionista,
+  Tarczownik, Grubas, Nekromanta, Kopacz, Harpia, Zarazowiec, Berserker + bossowie Zombie Cyklop i Król Nekropolii.
+  Klipy: `Idle` = chód (pętla), `Attack1` = atak na bazę, `Attack2` = drgnięcie po trafieniu, `Attack3` = śmierć.
+- **Mapy**: zob. [maps/README.md](maps/README.md): biblioteka ~185 tekstur, ~250 modeli dekoracji, 14 konceptów map,
+  presety klimatu (`roblox/MapLighting.lua`) i `roblox/MapBuilder.lua`.

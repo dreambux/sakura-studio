@@ -3,3 +3,4 @@ __pycache__/
 renders/_tmp/
 maps/katalog/_tmp/
 *.blend1
+maps/textures/

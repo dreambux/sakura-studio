@@ -21,7 +21,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 
 from lib import props as P  # noqa: E402
 from lib import p_nature  # noqa: E402,F401
-for _m in ('p_arch', 'p_harbor', 'p_market', 'p_themes', 'p_unique', 'p_more'):
+for _m in ('p_arch', 'p_harbor', 'p_market', 'p_themes', 'p_unique', 'p_more', 'p_extra'):
     try:
         __import__('lib.' + _m)
     except ImportError:
