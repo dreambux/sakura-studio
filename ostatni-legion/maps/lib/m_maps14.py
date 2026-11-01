@@ -344,7 +344,7 @@ def hades():
     M.scatter(('asfodele', 'pochodnia_duchow', 'szkielet', 'kosci', 'nagrobek', 'nagrobek_2', 'otwarty_grob',
                'czaszka_na_palu', 'klatka', 'kolumny_bazaltowe', 'drzewo_spalone', 'lancuchy_mur', 'obsydian'), 90,
               (-115, -85, 115, 85), r=3.5, inside=in_ellipse(0, 0, 110, 82))
-    M.lighting(sun_rot=(70, 0, 0), sun_col=(0.5, 1.0, 0.7), sun_e=0.5, sky=(0.03, 0.06, 0.05), sky_e=0.6)
+    M.lighting(sun_rot=(55, 0, 20), sun_col=(0.75, 1.0, 0.85), sun_e=2.4, sky=(0.12, 0.2, 0.16), sky_e=1.1)
     return M, ['3 krotkie sciezki z kostnych bram, kazda przechodzi przez Styks - KOSZMAR',
                'Sciezki zbiegaja sie tuz przed palacem Hadesa',
                'Laki asfodeli, zielone ognie duchow, Cerber, lodz Charona',

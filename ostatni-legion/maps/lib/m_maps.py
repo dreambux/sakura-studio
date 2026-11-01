@@ -284,7 +284,7 @@ def hephaestus():
     for x, y, r in ((-150, -60, 30), (140, -110, -40), (-60, -160, 10), (180, 60, 100)):
         M.place('trirema_czarna', x, y, -2.5, r, 1.0)
     M.place('wrak_statku', 90, -120, -1.5, 30, 1.2)
-    M.lighting(sun_rot=(60, 0, -150), sun_col=(0.55, 0.62, 1.0), sun_e=0.6, sky=(0.05, 0.05, 0.12), sky_e=0.6)
+    M.lighting(sun_rot=(55, 0, -150), sun_col=(0.8, 0.8, 1.0), sun_e=2.4, sky=(0.16, 0.12, 0.18), sky_e=1.1)
     legend = ['3 krotkie sciezki (szczelina lawy, wrak, jaskinia) - KOSZMAR',
               'Sciezki zbiegaja sie tuz przed kuznia - malo czasu na reakcje',
               'Jeziorka lawy blokuja stawianie wiez (strefy zakazane)',
