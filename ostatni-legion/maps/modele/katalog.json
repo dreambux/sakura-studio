@@ -444,7 +444,7 @@
   "kategoria": "Architektura",
   "opis": "Mala swiatynia jonska",
   "plik": "Architektura.glb",
-  "max_tris": 22904,
+  "max_tris": 18872,
   "fx": [
    {
     "kind": "Fire",
