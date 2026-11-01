@@ -416,7 +416,7 @@
   "kategoria": "Architektura",
   "opis": "Swiatynia dorycka (baza / centrum mapy)",
   "plik": "Architektura.glb",
-  "max_tris": 18080,
+  "max_tris": 17964,
   "fx": [
    {
     "kind": "Fire",
@@ -444,7 +444,7 @@
   "kategoria": "Architektura",
   "opis": "Mala swiatynia jonska",
   "plik": "Architektura.glb",
-  "max_tris": 18872,
+  "max_tris": 17840,
   "fx": [
    {
     "kind": "Fire",
@@ -472,7 +472,7 @@
   "kategoria": "Architektura",
   "opis": "Ruiny swiatyni (kolumny zlamane)",
   "plik": "Architektura.glb",
-  "max_tris": 15952,
+  "max_tris": 14516,
   "fx": [
    {
     "kind": "Fire",
@@ -612,19 +612,34 @@
  },
  "oltarz": {
   "kategoria": "Architektura",
-  "opis": "Oltarz ofiarny z ogniem",
+  "opis": "Oltarz ofiarny: poduszki z wolutami, fryz tryglifow, rogi, ogien ofiarny",
   "plik": "Architektura.glb",
-  "max_tris": 228,
+  "max_tris": 7852,
   "fx": [
    {
     "kind": "Fire",
     "pos": [
      -0.0,
-     2.7,
+     3.0,
      0.0
     ],
     "size": 3,
     "heat": 6
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     3.6,
+     0.0
+    ],
+    "range": 16,
+    "brightness": 1.6,
+    "color": [
+     255,
+     160,
+     80
+    ]
    }
   ]
  },
@@ -637,37 +652,37 @@
  },
  "posag_wojownika": {
   "kategoria": "Architektura",
-  "opis": "Marmurowy posag hoplity z wlocznia",
+  "opis": "Marmurowy posag hoplity: helm koryncki, aspis, dory",
   "plik": "Architektura.glb",
-  "max_tris": 1436,
+  "max_tris": 12232,
   "fx": []
  },
  "posag_zloty": {
   "kategoria": "Architektura",
-  "opis": "Zloty posag bohatera (Olimp)",
+  "opis": "Zloty posag zwyciezcy z wiencem laurowym (Olimp)",
   "plik": "Architektura.glb",
-  "max_tris": 1556,
+  "max_tris": 14030,
   "fx": []
  },
  "posag_bogini": {
   "kategoria": "Architektura",
-  "opis": "Posag bogini (Atena) w spokojnej pozie",
+  "opis": "Posag Ateny: peplos, helm odsuniety na czolo, wlocznia i tarcza",
   "plik": "Architektura.glb",
-  "max_tris": 1408,
+  "max_tris": 14010,
   "fx": []
  },
  "popiersie": {
   "kategoria": "Architektura",
-  "opis": "Popiersie filozofa na kolumnie",
+  "opis": "Popiersie brodatego filozofa na kolumnie z inskrypcja",
   "plik": "Architektura.glb",
-  "max_tris": 956,
+  "max_tris": 3898,
   "fx": []
  },
  "herma": {
   "kategoria": "Architektura",
-  "opis": "Herma (filar z glowa Hermesa)",
+  "opis": "Herma: czworoboczny filar z brodata glowa Hermesa",
   "plik": "Architektura.glb",
-  "max_tris": 772,
+  "max_tris": 3102,
   "fx": []
  },
  "stela_nagrobna": {
@@ -686,30 +701,52 @@
  },
  "dom_grecki": {
   "kategoria": "Architektura",
-  "opis": "Bielony dom z dachem z dachowek",
+  "opis": "Dom z dziedzincem (Olint): pastas na slupach, dach z dachowek, brama",
   "plik": "Architektura.glb",
-  "max_tris": 432,
-  "fx": []
+  "max_tris": 11604,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     6.0,
+     6.6,
+     6.0
+    ],
+    "size": 0.6,
+    "opacity": 0.3
+   }
+  ]
  },
  "dom_grecki_pietrowy": {
   "kategoria": "Architektura",
-  "opis": "Pietrowy dom z balkonem",
+  "opis": "Pietrowy dom z dziedzincem, drewniana loggia na pietrze",
   "plik": "Architektura.glb",
-  "max_tris": 432,
-  "fx": []
+  "max_tris": 8356,
+  "fx": [
+   {
+    "kind": "Smoke",
+    "pos": [
+     6.0,
+     9.2,
+     6.0
+    ],
+    "size": 0.6,
+    "opacity": 0.3
+   }
+  ]
  },
  "dom_ochra": {
   "kategoria": "Architektura",
-  "opis": "Dom w kolorze ochry",
+  "opis": "Wiejski dom z cegly mulowej na kamiennym cokole, z pergola winorosli",
   "plik": "Architektura.glb",
-  "max_tris": 432,
+  "max_tris": 4384,
   "fx": []
  },
  "dom_cykladzki": {
   "kategoria": "Architektura",
-  "opis": "Bialy dom z niebieska kopula (wyspy)",
+  "opis": "Dom wyspiarski z Akrotiri (Thera): plaski dach, kamienne naroza, okna w ramach z belek",
   "plik": "Architektura.glb",
-  "max_tris": 648,
+  "max_tris": 3888,
   "fx": []
  },
  "wiatrak": {
@@ -723,7 +760,7 @@
   "kategoria": "Architektura",
   "opis": "Latarnia morska (faros) z ogniem",
   "plik": "Architektura.glb",
-  "max_tris": 1676,
+  "max_tris": 14516,
   "fx": [
    {
     "kind": "Fire",
@@ -754,16 +791,16 @@
  },
  "wieza_straznicza": {
   "kategoria": "Architektura",
-  "opis": "Kamienna wieza straznicza z blankami",
+  "opis": "Grecka wieza straznicza (pyrgos) z ciosow, z dachem z dachowek",
   "plik": "Architektura.glb",
-  "max_tris": 1264,
+  "max_tris": 4200,
   "fx": []
  },
  "koksownik": {
   "kategoria": "Architektura",
-  "opis": "Koksownik (trojnog z ogniem)",
+  "opis": "Koksownik z brazu: trojnog na lwich lapach, misa z zarem i plomieniem",
   "plik": "Architektura.glb",
-  "max_tris": 900,
+  "max_tris": 1920,
   "fx": [
    {
     "kind": "Fire",
@@ -794,9 +831,9 @@
  },
  "pochodnia": {
   "kategoria": "Architektura",
-  "opis": "Pochodnia na slupie",
+  "opis": "Pochodnia na slupie z brazowym koszem",
   "plik": "Architektura.glb",
-  "max_tris": 36,
+  "max_tris": 520,
   "fx": [
    {
     "kind": "Fire",
@@ -827,9 +864,9 @@
  },
  "tron": {
   "kategoria": "Architektura",
-  "opis": "Tron z gryfami (Knossos / Olimp)",
+  "opis": "Tron Minosa (Knossos): alabastrowy tron o falistym oparciu, freski z gryfami",
   "plik": "Architektura.glb",
-  "max_tris": 324,
+  "max_tris": 7524,
   "fx": []
  },
  "trybuny_stadionu": {
@@ -892,51 +929,51 @@
  },
  "dyskobol": {
   "kategoria": "Architektura",
-  "opis": "Posag dyskobola (Olimpia)",
+  "opis": "Dyskobol (rzut dyskiem, wg Myrona) na postumencie",
   "plik": "Architektura.glb",
-  "max_tris": 1632,
+  "max_tris": 11274,
   "fx": []
  },
  "kora_posag": {
   "kategoria": "Architektura",
-  "opis": "Kora - posag dziewczyny w peplosie (malowany)",
+  "opis": "Kora archaiczna: malowany peplos, warkocze, usmiech",
   "plik": "Architektura.glb",
-  "max_tris": 1316,
+  "max_tris": 13422,
   "fx": []
  },
  "posag_lwa": {
   "kategoria": "Architektura",
-  "opis": "Marmurowy lew (Aleja Lwow, Delos)",
+  "opis": "Marmurowy lew siedzacy na postumencie (typ lwa z Amfipolis i Cheronei)",
   "plik": "Architektura.glb",
-  "max_tris": 936,
+  "max_tris": 17932,
   "fx": []
  },
  "sfinks_naksyjski": {
   "kategoria": "Architektura",
-  "opis": "Sfinks Naksyjczykow na jonskiej kolumnie",
+  "opis": "Sfinks Naksyjczykow (Delfy): kobieca glowa, cialo lwicy, skrzydla, jonska kolumna",
   "plik": "Architektura.glb",
-  "max_tris": 1872,
+  "max_tris": 16662,
   "fx": []
  },
  "posag_konia": {
   "kategoria": "Architektura",
-  "opis": "Brazowy posag konia na postumencie",
+  "opis": "Brazowy kon z uniesiona noga (jak kon Seleny / z Artemizjonu)",
   "plik": "Architektura.glb",
-  "max_tris": 1072,
+  "max_tris": 7760,
   "fx": []
  },
  "nike_skrzydlata": {
   "kategoria": "Architektura",
-  "opis": "Nike skrzydlata na dziobie okretu (pomnik)",
+  "opis": "Nike z Samotraki: skrzydlata bogini na dziobie okretu",
   "plik": "Architektura.glb",
-  "max_tris": 1452,
+  "max_tris": 8404,
   "fx": []
  },
  "posag_apollina": {
   "kategoria": "Architektura",
-  "opis": "Posag Apollina z lira (brazowy)",
+  "opis": "Brazowy Apollo z lira (kitharoidos) w himationie",
   "plik": "Architektura.glb",
-  "max_tris": 1556,
+  "max_tris": 13898,
   "fx": []
  },
  "trirema": {
@@ -1067,9 +1104,9 @@
  },
  "pithos": {
   "kategoria": "Targ",
-  "opis": "Wielki pithos na oliwe/zboze",
+  "opis": "Pithos: wielki dzban zasobowy z reliefowymi pasami sznurowymi",
   "plik": "Targ.glb",
-  "max_tris": 912,
+  "max_tris": 9900,
   "fx": []
  },
  "amfory_stojak": {
@@ -1109,9 +1146,9 @@
  },
  "worki": {
   "kategoria": "Targ",
-  "opis": "Worki ze zbozem",
+  "opis": "Worki z juty ze zbozem (zawiazane, jeden rozsypany)",
   "plik": "Targ.glb",
-  "max_tris": 400,
+  "max_tris": 1440,
   "fx": []
  },
  "kosz_owocow": {
@@ -1151,23 +1188,23 @@
  },
  "stojak_broni": {
   "kategoria": "Targ",
-  "opis": "Stojak z wloczniami i tarczami",
+  "opis": "Stojak z bronia hoplitow: wlocznie dory, tarcze aspis, helmy korynckie, miecze xiphos",
   "plik": "Targ.glb",
-  "max_tris": 424,
+  "max_tris": 17788,
   "fx": []
  },
  "namiot_wojskowy": {
   "kategoria": "Targ",
-  "opis": "Namiot wojskowy (oboz)",
+  "opis": "Namiot wojskowy z plotna: kalenica na slupach, odchylona pola, liny i sledzie",
   "plik": "Targ.glb",
-  "max_tris": 32,
+  "max_tris": 456,
   "fx": []
  },
  "ognisko": {
   "kategoria": "Targ",
-  "opis": "Ognisko z kamieni",
+  "opis": "Ognisko w kregu kamieni z rozzarzonymi polanami i rozen",
   "plik": "Targ.glb",
-  "max_tris": 160,
+  "max_tris": 400,
   "fx": [
    {
     "kind": "Fire",
@@ -1176,22 +1213,22 @@
      0.6,
      0.0
     ],
-    "size": 2.5,
+    "size": 2,
     "heat": 5
    },
    {
     "kind": "Light",
     "pos": [
      -0.0,
-     1.2,
+     1.0,
      0.0
     ],
     "range": 14,
-    "brightness": 1.5,
+    "brightness": 1.6,
     "color": [
      255,
-     150,
-     70
+     160,
+     80
     ]
    }
   ]
@@ -1402,7 +1439,7 @@
   "kategoria": "Wulkan",
   "opis": "Talos - olbrzymi brazowy automat (pomnik, 24 st.)",
   "plik": "Wulkan.glb",
-  "max_tris": 1676,
+  "max_tris": 17900,
   "fx": [
    {
     "kind": "Light",
@@ -1498,9 +1535,9 @@
  },
  "posag_byka": {
   "kategoria": "Knossos",
-  "opis": "Posag byka z brazu na postumencie",
+  "opis": "Brazowy byk minojski z rogami w ksztalcie liry",
   "plik": "Knossos.glb",
-  "max_tris": 884,
+  "max_tris": 6432,
   "fx": []
  },
  "labirynt_sciana": {
@@ -1526,10 +1563,26 @@
  },
  "orzel_zeusa": {
   "kategoria": "Olimp",
-  "opis": "Zloty orzel Zeusa na kolumnie",
+  "opis": "Zloty orzel Zeusa z rozpostartymi skrzydlami na kolumnie doryckiej",
   "plik": "Olimp.glb",
-  "max_tris": 664,
-  "fx": []
+  "max_tris": 2888,
+  "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     8.6,
+     -0.3
+    ],
+    "range": 10,
+    "brightness": 1,
+    "color": [
+     255,
+     230,
+     150
+    ]
+   }
+  ]
  },
  "piorun_pomnik": {
   "kategoria": "Olimp",
@@ -1606,9 +1659,9 @@
  },
  "posag_pegaza": {
   "kategoria": "Olimp",
-  "opis": "Posag Pegaza na postumencie",
+  "opis": "Pegaz: bialy marmurowy skrzydlaty kon na postumencie ze zlotem",
   "plik": "Olimp.glb",
-  "max_tris": 728,
+  "max_tris": 8352,
   "fx": []
  },
  "nagrobek": {
@@ -1721,7 +1774,7 @@
   "kategoria": "Unikaty",
   "opis": "Wielka fontanna z posagiem Posejdona i konmi morskimi",
   "plik": "Unikaty.glb",
-  "max_tris": 3124,
+  "max_tris": 7704,
   "fx": [
    {
     "kind": "Water",
@@ -1759,16 +1812,31 @@
  },
  "puszka_pandory": {
   "kategoria": "Unikaty",
-  "opis": "Puszka Pandory (uchylona, fioletowy dym)",
+  "opis": "Puszka Pandory: zdobiona szkatula na lwich lapach, uchylona, fioletowa mgla",
   "plik": "Unikaty.glb",
-  "max_tris": 216,
+  "max_tris": 3180,
   "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     4.6,
+     -0.6
+    ],
+    "range": 12,
+    "brightness": 1.5,
+    "color": [
+     170,
+     80,
+     255
+    ]
+   },
    {
     "kind": "Smoke",
     "pos": [
      -0.0,
-     3.0,
-     0.0
+     4.7,
+     -0.6
     ],
     "size": 2,
     "opacity": 0.5,
@@ -1803,9 +1871,9 @@
  },
  "kon_trojanski": {
   "kategoria": "Unikaty",
-  "opis": "Kon trojanski (drewniany, na kolkach)",
+  "opis": "Kon trojanski: drewniany, z desek, na platformie z kolami, z ukryta klapa",
   "plik": "Unikaty.glb",
-  "max_tris": 864,
+  "max_tris": 9520,
   "fx": []
  },
  "glowa_meduzy": {
@@ -1819,7 +1887,7 @@
   "kategoria": "Unikaty",
   "opis": "Skamieniale ofiary Meduzy (szare posagi w pozach ucieczki)",
   "plik": "Unikaty.glb",
-  "max_tris": 4788,
+  "max_tris": 17678,
   "fx": []
  },
  "skrzydla_ikara": {
@@ -1856,15 +1924,60 @@
  },
  "helm_hadesa": {
   "kategoria": "Unikaty",
-  "opis": "Helm niewidzialnosci Hadesa na czarnym oltarzu",
+  "opis": "Helm niewidzialnosci Hadesa (koryncki, czarny braz) na oltarzu z ogniem dusz",
   "plik": "Unikaty.glb",
-  "max_tris": 156,
+  "max_tris": 9528,
   "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     2.4,
+     2.5,
+     0.0
+    ],
+    "size": 1.2,
+    "heat": 4,
+    "color": [
+     120,
+     255,
+     160
+    ]
+   },
+   {
+    "kind": "Fire",
+    "pos": [
+     -2.4,
+     2.5,
+     0.0
+    ],
+    "size": 1.2,
+    "heat": 4,
+    "color": [
+     120,
+     255,
+     160
+    ]
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     3.65,
+     0.0
+    ],
+    "range": 12,
+    "brightness": 1.2,
+    "color": [
+     120,
+     255,
+     160
+    ]
+   },
    {
     "kind": "Mist",
     "pos": [
      -0.0,
-     2.2,
+     2.75,
      0.0
     ],
     "color": [
@@ -1900,8 +2013,34 @@
   "kategoria": "Unikaty",
   "opis": "Posag Cerbera - trzyglowy pies (straznik bramy)",
   "plik": "Unikaty.glb",
-  "max_tris": 1396,
-  "fx": []
+  "max_tris": 13160,
+  "fx": [
+   {
+    "kind": "Fire",
+    "pos": [
+     -1.007,
+     7.2,
+     -1.611
+    ],
+    "size": 0.6,
+    "heat": 2
+   },
+   {
+    "kind": "Light",
+    "pos": [
+     -1.007,
+     7.2,
+     -1.611
+    ],
+    "range": 12,
+    "brightness": 1.5,
+    "color": [
+     255,
+     90,
+     40
+    ]
+   }
+  ]
  },
  "sowa_ateny": {
   "kategoria": "Unikaty",
@@ -1921,7 +2060,7 @@
   "kategoria": "Unikaty",
   "opis": "Lodz Charona z latarnia (mglista woda)",
   "plik": "Unikaty.glb",
-  "max_tris": 1556,
+  "max_tris": 5676,
   "fx": [
    {
     "kind": "Light",
@@ -1976,15 +2115,30 @@
  },
  "skrzynia_skarbow": {
   "kategoria": "Unikaty",
-  "opis": "Skrzynia ze zlotymi monetami (easter egg)",
+  "opis": "Otwarta skrzynia pelna zlotych monet, klejnotow i kosztownosci",
   "plik": "Unikaty.glb",
-  "max_tris": 560,
+  "max_tris": 16844,
   "fx": [
+   {
+    "kind": "Light",
+    "pos": [
+     -0.0,
+     1.8,
+     -0.3
+    ],
+    "range": 8,
+    "brightness": 0.8,
+    "color": [
+     255,
+     200,
+     110
+    ]
+   },
    {
     "kind": "Sparkles",
     "pos": [
      -0.0,
-     1.5,
+     1.6,
      0.0
     ],
     "color": [
@@ -1999,7 +2153,7 @@
   "kategoria": "Unikaty",
   "opis": "Atlas dzwigajacy niebo (zloty globus)",
   "plik": "Unikaty.glb",
-  "max_tris": 1556,
+  "max_tris": 5460,
   "fx": []
  },
  "maczuga_heraklesa": {
@@ -2018,9 +2172,9 @@
  },
  "pole_pszenicy": {
   "kategoria": "Wies",
-  "opis": "Pole pszenicy (10x10)",
+  "opis": "Pole dojrzalej pszenicy (gesty lan z klosami)",
   "plik": "Wies.glb",
-  "max_tris": 2268,
+  "max_tris": 15600,
   "fx": []
  },
  "ul_slomiany": {
@@ -2060,23 +2214,23 @@
  },
  "kapliczka": {
   "kategoria": "Wies",
-  "opis": "Przydrozna kapliczka z lampka oliwna",
+  "opis": "Przydrozny naiskos: kapliczka z dwiema kolumnami, posazek i dary",
   "plik": "Wies.glb",
-  "max_tris": 108,
+  "max_tris": 5560,
   "fx": [
    {
     "kind": "Light",
     "pos": [
-     -0.0,
-     1.1,
-     -0.8
+     -0.55,
+     0.9,
+     -0.55
     ],
-    "range": 8,
-    "brightness": 1,
+    "range": 6,
+    "brightness": 0.8,
     "color": [
      255,
      170,
-     80
+     90
     ]
    }
   ]
@@ -2177,7 +2331,7 @@
   "kategoria": "Zima",
   "opis": "Zamarzniety wojownik w bryle lodu",
   "plik": "Zima.glb",
-  "max_tris": 1676,
+  "max_tris": 14640,
   "fx": []
  },
  "sople_skala": {
@@ -2212,7 +2366,7 @@
   "kategoria": "Podwodne",
   "opis": "Zatopiony posag w wodorostach i muszlach",
   "plik": "Podwodne.glb",
-  "max_tris": 1556,
+  "max_tris": 5832,
   "fx": []
  },
  "babelki": {
@@ -2352,16 +2506,16 @@
  },
  "mur_z_wieza": {
   "kategoria": "Wojsko",
-  "opis": "Fragment murow miasta z wieza (Troja)",
+  "opis": "Mury miasta z wieza (typ z Messene): ciosy, strzelnice, dach z dachowek",
   "plik": "Wojsko.glb",
-  "max_tris": 2808,
+  "max_tris": 4508,
   "fx": []
  },
  "namiot_dowodcy": {
   "kategoria": "Wojsko",
-  "opis": "Duzy namiot dowodcy z proporcami",
+  "opis": "Namiot strategosa: prostokatny pawilon z portykiem na slupach, proporce, stol map",
   "plik": "Wojsko.glb",
-  "max_tris": 104,
+  "max_tris": 9088,
   "fx": []
  },
  "sztandar": {
@@ -2373,23 +2527,23 @@
  },
  "trofeum": {
   "kategoria": "Wojsko",
-  "opis": "Tropaion - zbroja wroga na palu (pomnik zwyciestwa)",
+  "opis": "Tropaion: zbroja pokonanego wroga na palu (helm, pancerz miesniowy, tarcza, wlocznie)",
   "plik": "Wojsko.glb",
-  "max_tris": 204,
+  "max_tris": 10276,
   "fx": []
  },
  "pole_bitwy": {
   "kategoria": "Wojsko",
-  "opis": "Wlocznie wbite w ziemie i porzucone tarcze",
+  "opis": "Pobojowisko: wlocznie wbite w ziemie, porzucone tarcze, helmy i miecze",
   "plik": "Wojsko.glb",
-  "max_tris": 220,
+  "max_tris": 16416,
   "fx": []
  },
  "stos_tarcz": {
   "kategoria": "Wojsko",
-  "opis": "Stos tarcz hoplitow",
+  "opis": "Stos tarcz hoplitow z malowanymi godlami i wlocznie",
   "plik": "Wojsko.glb",
-  "max_tris": 576,
+  "max_tris": 16128,
   "fx": []
  },
  "katapulta": {
@@ -2401,34 +2555,44 @@
  },
  "ogien_sygnalowy": {
   "kategoria": "Wojsko",
-  "opis": "Wieza z ogniem sygnalowym (plonacy kosz)",
+  "opis": "Wieza z ogniem sygnalowym: drewniane rusztowanie, kosz z plonacym drewnem",
   "plik": "Wojsko.glb",
-  "max_tris": 432,
+  "max_tris": 756,
   "fx": [
    {
     "kind": "Fire",
     "pos": [
      -0.0,
-     9.4,
+     7.0,
      0.0
     ],
-    "size": 6,
-    "heat": 10
+    "size": 4,
+    "heat": 8
    },
    {
     "kind": "Light",
     "pos": [
      -0.0,
-     10.0,
+     7.5,
      0.0
     ],
-    "range": 40,
-    "brightness": 3,
+    "range": 30,
+    "brightness": 2.5,
     "color": [
      255,
-     150,
-     60
+     160,
+     80
     ]
+   },
+   {
+    "kind": "Smoke",
+    "pos": [
+     -0.0,
+     8.5,
+     0.0
+    ],
+    "size": 3,
+    "opacity": 0.4
    }
   ]
  },
@@ -2457,7 +2621,7 @@
   "kategoria": "Ruiny",
   "opis": "Naiskos - mala kapliczka z posazkiem",
   "plik": "Ruiny.glb",
-  "max_tris": 2780,
+  "max_tris": 5666,
   "fx": []
  },
  "mur_z_bluszczem": {
@@ -2591,5 +2755,417 @@
   "plik": "Ozdoby.glb",
   "max_tris": 696,
   "fx": []
+ },
+ "platforma_okragla": {
+  "kategoria": "Platformy",
+  "opis": "Okragla skala z ubita ziemia (1-2 jednostki)",
+  "plik": "Platformy.glb",
+  "max_tris": 494,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.0,
+     3.35,
+     0.0
+    ],
+    "radius": 3.45,
+    "size": [
+     9.0,
+     9.0
+    ]
+   }
+  ]
+ },
+ "platforma_mala": {
+  "kategoria": "Platformy",
+  "opis": "Mala skala na 1 jednostke",
+  "plik": "Platformy.glb",
+  "max_tris": 490,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     0.001,
+     2.75,
+     0.0
+    ],
+    "radius": 1.77,
+    "size": [
+     5.6,
+     5.2
+    ]
+   }
+  ]
+ },
+ "platforma_owalna": {
+  "kategoria": "Platformy",
+  "opis": "Owalna skala z trawa i kwiatami",
+  "plik": "Platformy.glb",
+  "max_tris": 1800,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.008,
+     3.55,
+     0.004
+    ],
+    "radius": 4.0,
+    "size": [
+     16,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_fasolka": {
+  "kategoria": "Platformy",
+  "opis": "Skala w ksztalcie fasolki (obok zakretu sciezki)",
+  "plik": "Platformy.glb",
+  "max_tris": 589,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.005,
+     3.35,
+     -0.562
+    ],
+    "radius": 3.15,
+    "size": [
+     14,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_dluga": {
+  "kategoria": "Platformy",
+  "opis": "Dluga polka skalna wzdluz sciezki",
+  "plik": "Platformy.glb",
+  "max_tris": 686,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.014,
+     3.15,
+     -0.01
+    ],
+    "radius": 2.56,
+    "size": [
+     22.0,
+     6.4
+    ]
+   }
+  ]
+ },
+ "platforma_l": {
+  "kategoria": "Platformy",
+  "opis": "Skala w ksztalcie L (narozna)",
+  "plik": "Platformy.glb",
+  "max_tris": 635,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     1.052,
+     3.35,
+     -1.068
+    ],
+    "radius": 0.84,
+    "size": [
+     14,
+     14
+    ]
+   }
+  ]
+ },
+ "platforma_polksiezyc": {
+  "kategoria": "Platformy",
+  "opis": "Polksiezyc obejmujacy luk sciezki",
+  "plik": "Platformy.glb",
+  "max_tris": 2432,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.008,
+     3.35,
+     3.636
+    ],
+    "radius": 0.5,
+    "size": [
+     18,
+     16
+    ]
+   }
+  ]
+ },
+ "platforma_trojkatna": {
+  "kategoria": "Platformy",
+  "opis": "Trojkatna skala (rozwidlenie sciezek)",
+  "plik": "Platformy.glb",
+  "max_tris": 470,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.0,
+     3.35,
+     -0.001
+    ],
+    "radius": 2.46,
+    "size": [
+     12,
+     12
+    ]
+   }
+  ]
+ },
+ "platforma_wysoka": {
+  "kategoria": "Platformy",
+  "opis": "Wysoka iglica skalna ze schodami (snajperzy)",
+  "plik": "Platformy.glb",
+  "max_tris": 1624,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.0,
+     7.35,
+     -0.0
+    ],
+    "radius": 3.06,
+    "size": [
+     8.4,
+     8.0
+    ]
+   }
+  ]
+ },
+ "platforma_schody": {
+  "kategoria": "Platformy",
+  "opis": "Skala ze schodami z kamienia",
+  "plik": "Platformy.glb",
+  "max_tris": 976,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.001,
+     4.35,
+     -0.003
+    ],
+    "radius": 4.08,
+    "size": [
+     12,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_ruiny": {
+  "kategoria": "Platformy",
+  "opis": "Skala z ruinami (kikut kolumny, plyta stylobatu)",
+  "plik": "Platformy.glb",
+  "max_tris": 2342,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.002,
+     3.55,
+     -0.002
+    ],
+    "radius": 4.52,
+    "size": [
+     13.0,
+     11.0
+    ]
+   }
+  ]
+ },
+ "platforma_marmurowa": {
+  "kategoria": "Platformy",
+  "opis": "Skala z bruku marmurowych plyt (swiatynna)",
+  "plik": "Platformy.glb",
+  "max_tris": 756,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.002,
+     3.75,
+     -0.002
+    ],
+    "radius": 4.98,
+    "size": [
+     14,
+     12
+    ]
+   }
+  ]
+ },
+ "platforma_piaszczysta": {
+  "kategoria": "Platformy",
+  "opis": "Nadmorska skala z piaskiem",
+  "plik": "Platformy.glb",
+  "max_tris": 2160,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.008,
+     2.75,
+     -0.502
+    ],
+    "radius": 2.81,
+    "size": [
+     14.0,
+     9.0
+    ]
+   }
+  ]
+ },
+ "platforma_trawiasta": {
+  "kategoria": "Platformy",
+  "opis": "Zielona skala (gaj oliwny)",
+  "plik": "Platformy.glb",
+  "max_tris": 2882,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.0,
+     3.35,
+     0.0
+    ],
+    "radius": 4.79,
+    "size": [
+     12,
+     12
+    ]
+   }
+  ]
+ },
+ "platforma_wulkaniczna": {
+  "kategoria": "Platformy",
+  "opis": "Bazaltowa skala z zarem w szczelinach",
+  "plik": "Platformy.glb",
+  "max_tris": 578,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     0.003,
+     3.55,
+     0.001
+    ],
+    "radius": 3.96,
+    "size": [
+     12,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_sniezna": {
+  "kategoria": "Platformy",
+  "opis": "Osniezona skala (Boreasz)",
+  "plik": "Platformy.glb",
+  "max_tris": 558,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.003,
+     3.35,
+     -0.0
+    ],
+    "radius": 4.04,
+    "size": [
+     12,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_czerwona": {
+  "kategoria": "Platformy",
+  "opis": "Czerwona skala (Kreta, Knossos)",
+  "plik": "Platformy.glb",
+  "max_tris": 567,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.004,
+     3.35,
+     -0.575
+    ],
+    "radius": 3.49,
+    "size": [
+     13.0,
+     10.0
+    ]
+   }
+  ]
+ },
+ "platforma_podziemna": {
+  "kategoria": "Platformy",
+  "opis": "Ciemna skala z Hadesu",
+  "plik": "Platformy.glb",
+  "max_tris": 558,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.002,
+     3.35,
+     0.002
+    ],
+    "radius": 3.91,
+    "size": [
+     12,
+     10
+    ]
+   }
+  ]
+ },
+ "platforma_pietrowa": {
+  "kategoria": "Platformy",
+  "opis": "Dwupoziomowa skala ze schodami miedzy poziomami",
+  "plik": "Platformy.glb",
+  "max_tris": 1408,
+  "fx": [
+   {
+    "kind": "Stand",
+    "pos": [
+     -0.002,
+     2.95,
+     -0.79
+    ],
+    "radius": 4.56,
+    "size": [
+     18,
+     14
+    ]
+   },
+   {
+    "kind": "Stand",
+    "pos": [
+     -1.998,
+     5.9,
+     1.001
+    ],
+    "radius": 2.6,
+    "size": [
+     8.7,
+     7.4
+    ]
+   }
+  ]
  }
 }

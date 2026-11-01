@@ -14,7 +14,7 @@ Gęstość jest wszędzie taka sama: 128 px na stud.
 | `modele/katalog.json` | spis modeli: kategoria, opis, plik, liczba trójkątów, punkty efektów (ogień, światło, dym) |
 | `modele/dekoracje.blend` | wszystkie modele w jednym pliku Blendera |
 | `katalog/<Kategoria>.png` | miniatury wszystkich modeli |
-| `koncepty/` | 14 konceptów map: widok z góry z opisem (`_gora.png`), z boku (`_bok.png`), układ (`_uklad.lua/.json`), teren (`_teren.glb`) |
+| `koncepty/` | 15 konceptów map: widok z góry z opisem (`_gora.png`), z boku (`_bok.png`), układ (`_uklad.lua/.json`), teren (`_teren.glb`) |
 | `lib/` | kod: `tex.py` + `recipes.py` + `library.py` (tekstury), `props.py` + `p_*.py` (modele), `mapscene.py` + `m_maps*.py` (koncepty) |
 
 ## Budowanie
@@ -55,3 +55,33 @@ python maps/build_maps.py              # 14 konceptów (render z góry i z boku,
 | 12 | Lodowe Wrota Boreasza | TRUDNY | 2 spirale | śnieg, lód, zamarznięta rzeka |
 | 13 | Bramy Hadesu | KOSZMAR | 3 krótkie ścieżki przez Styks | podziemia, zielone ognie duchów |
 | 14 | Kuźnia Hefajstosa | KOSZMAR | 3 krótkie ścieżki zbiegające się przy bazie | wulkan nocą, lawa |
+| 15 | Brama Lwów | ŚREDNI | 1 wąż: miasto, most nad rzeką, gimnazjon | miasto z Olintu, rzeka, akropol, 14 platform skalnych |
+
+
+## Nowe: modele w wysokiej jakości i platformy pod jednostki
+
+`lib/p_hq.py` podmienia słabsze modele (te same nazwy, więc mapy działają bez zmian). Organiczne bryły
+(zwierzęta, posągi) są rzeźbione z szkieletu modyfikatorami Skin i Subdivision (`lib/sculpt.py`), a nie składane z pudełek.
+Wzorowane na zabytkach:
+
+- **Posągi ludzi:** postać o heroicznych proporcjach (7,5 głowy), z pozami: hoplita z hełmem korynckim, aspis i dory;
+  Atena w peplosie z hełmem zsuniętym na czoło; zwycięzca z wieńcem; dyskobol; Kora z polichromią; Apollo z lirą;
+  Nike z Samotraki na dziobie okrętu; popiersie filozofa; herma. `statue_fig` w starych modelach też używa nowej postaci.
+- **Zwierzęta:** lew siedzący (typ z Amfipolis i Cheronei) z grzywą z loków; Sfinks Naksyjczyków na wczesnej kolumnie
+  jońskiej z wolutami; koń z brązu z uniesioną nogą; Pegaz ze skrzydłami z warstw piór; byk minojski; orzeł Zeusa;
+  **Cerber**: trzy psie głowy z otwartymi paszczami, kłami, uszami i kolczastymi obrożami, z ogonem-wężem.
+- **Domy (typ z Olintu, V–IV w. p.n.e.):** kamienny cokół i ściany z cegły mułowej z tynkiem wapiennym; dziedziniec z bruku z
+  pastas (portyk na drewnianych słupach), cysterną, ołtarzem i amforami; dachy z płaskich dachówek z rzędami imbreksów
+  (każdy imbreks osobno) i antefiksami; końce belek pod okapem; drewniane drzwi z ćwiekami i małe okna z okiennicami.
+  Do tego dom piętrowy z loggią, wiejski dom z pergolą winorośli i dom wyspiarski z Akrotiri (płaski dach, kamienne narożniki,
+  okna w ramach z belek) zamiast nowożytnego domu z niebieską kopułą.
+- **Broń:** dory z liściastym grotem i sauroterem, xiphos z liściastą głownią, aspis z wypukłą czaszą, brązowym rantem i godłem
+  (lambda, gwiazda, maczuga, trójząb), hełm koryncki (otwory oczu, nosal, policzki, grzebień). Z tych części są stojak
+  z bronią, stos tarcz, tropaion i pobojowisko.
+- **Unikaty:** skrzynia skarbów z ~460 pojedynczymi monetami, klejnotami, perłami i pucharem; puszka Pandory na lwich łapach
+  z dwuspadowym wiekiem i fioletową mgłą; hełm Hadesa z ogniem dusz; koń trojański z desek na kołach.
+
+`lib/p_platforms.py`: **Platformy** (19 modeli). Są to duże skały z płaskim wierzchem, na których stają jednostki:
+fasetowany klif, gruba warstwa wierzchu (ziemia, trawa, piasek, marmurowy bruk, popiół, śnieg), głazy u podstawy, kępki
+trawy, kamienne schody, ruiny, wersja dwupoziomowa i wysoka iglica dla snajperów. Każda ma marker `Stand`
+(środek, wysokość i promień pola do stawiania) w `katalog.json`, więc skrypt gry wie, gdzie wolno postawić jednostkę.

@@ -15,9 +15,12 @@ import bpy  # noqa: E402
 bpy.ops.wm.read_factory_settings(use_empty=True)
 
 from lib import props as P  # noqa: E402
-from lib import p_nature, p_arch, p_harbor, p_market, p_themes, p_unique, p_more, p_extra  # noqa: E402,F401
+from lib import p_nature, p_arch, p_harbor, p_market, p_themes, p_unique, p_more, p_extra, p_hq, p_platforms  # noqa: E402,F401
 from lib import mapscene  # noqa: E402
 from lib.m_maps14 import MAPS14  # noqa: E402
+from lib.m_new import brama_lwow  # noqa: E402
+
+MAPS = MAPS14 + [brama_lwow]
 
 OUT = os.path.join(HERE, 'koncepty')
 
@@ -42,13 +45,14 @@ if __name__ == '__main__':
     sel = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
     os.makedirs(OUT, exist_ok=True)
     t0 = time.time()
-    for name, (cat, fn, desc) in P.REGISTRY.items():
-        fn()
-    mapscene.to_collections()
+    if not sel:
+        for name, (cat, fn, desc) in P.REGISTRY.items():
+            fn()
+        mapscene.to_collections()
     print('modele gotowe', len(P.REGISTRY), f'{time.time() - t0:.0f} s')
     sc = bpy.context.scene
     done = []
-    for i, mk in enumerate(MAPS14, 1):
+    for i, mk in enumerate(MAPS, 1):
         if sel and mk.__name__ not in sel:
             continue
         try:

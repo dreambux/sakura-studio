@@ -23,6 +23,18 @@ def link(ob):
     return ob
 
 
+def tmp_eval(ob):
+    """Ewaluacja (modyfikatory/krzywe) w osobnej, pustej scenie - szybko niezaleznie od liczby obiektow w glownej."""
+    sc = bpy.data.scenes.get('_TMP_EVAL') or bpy.data.scenes.new('_TMP_EVAL')
+    sc.collection.objects.link(ob)
+    vl = sc.view_layers[0]
+    vl.update()
+    dg = vl.depsgraph
+    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    sc.collection.objects.unlink(ob)
+    return me
+
+
 # ---------------------------------------------------------------- bmesh makers
 def bm_box(sx, sy, sz, bevel=0.0, segs=2):
     bm = bmesh.new()
@@ -138,9 +150,7 @@ def bm_tube(points, radius=0.05, radii=None, res=6, bevel_res=3, smooth=True,
     cu.bevel_resolution = bevel_res
     cu.use_fill_caps = caps
     ob = bpy.data.objects.new('tmp_tube', cu)
-    link(ob)
-    dg = bpy.context.evaluated_depsgraph_get()
-    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    me = tmp_eval(ob)
     bpy.data.objects.remove(ob)
     bpy.data.curves.remove(cu)
     bm = bmesh.new()
@@ -158,9 +168,7 @@ def bm_text(text, size=0.4, depth=0.03, bevel=0.006):
     cu.align_x = 'CENTER'
     cu.align_y = 'CENTER'
     ob = bpy.data.objects.new('tmp_txt', cu)
-    link(ob)
-    dg = bpy.context.evaluated_depsgraph_get()
-    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    me = tmp_eval(ob)
     bpy.data.objects.remove(ob)
     bpy.data.curves.remove(cu)
     bm = bmesh.new()

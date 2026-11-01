@@ -21,7 +21,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 
 from lib import props as P  # noqa: E402
 from lib import p_nature  # noqa: E402,F401
-for _m in ('p_arch', 'p_harbor', 'p_market', 'p_themes', 'p_unique', 'p_more', 'p_extra'):
+for _m in ('p_arch', 'p_harbor', 'p_market', 'p_themes', 'p_unique', 'p_more', 'p_extra', 'p_hq', 'p_platforms'):
     try:
         __import__('lib.' + _m)
     except ImportError:
@@ -135,27 +135,40 @@ def export_category(cat, names, path):
                                   if k not in ('fx',) and not k.startswith('_')}))
         tris = 0
         for mname, mes in groups.items():
-            bm = bmesh.new()
+            # Roblox: max ~20k trojkatow na MeshPart -> dziel grupe na kawalki po <= 18k
+            chunks, cur, cur_t = [], [], 0
             for me in mes:
-                bm.from_mesh(me)
-                bpy.data.meshes.remove(me)
-            for f in bm.faces:
-                f.material_index = 0
-            bmesh.ops.triangulate(bm, faces=bm.faces[:])
-            t = len(bm.faces)
-            tris = max(tris, t)
-            out = bpy.data.meshes.new(f'{n}__{mname}')
-            bm.to_mesh(out)
-            bm.free()
-            out.materials.clear()
-            out.materials.append(bpy.data.materials[mname])
-            out.transform(ROT180)
-            ob = bpy.data.objects.new(f'{n}__{mname[2:]}', out)
-            coll.objects.link(ob)
-            ob.parent = top
-            made.append(ob)
-            if t > 19000:
-                print('UWAGA:', n, mname, t, 'trojkatow')
+                t_me = sum(len(p.vertices) - 2 for p in me.polygons)
+                if cur and cur_t + t_me > 18000:
+                    chunks.append(cur)
+                    cur, cur_t = [], 0
+                cur.append(me)
+                cur_t += t_me
+            if cur:
+                chunks.append(cur)
+            for ci, chunk in enumerate(chunks):
+                bm = bmesh.new()
+                for me in chunk:
+                    bm.from_mesh(me)
+                    bpy.data.meshes.remove(me)
+                for f in bm.faces:
+                    f.material_index = 0
+                bmesh.ops.triangulate(bm, faces=bm.faces[:])
+                t = len(bm.faces)
+                tris = max(tris, t)
+                suffix = '' if ci == 0 else f'_{ci + 1}'
+                out = bpy.data.meshes.new(f'{n}__{mname}{suffix}')
+                bm.to_mesh(out)
+                bm.free()
+                out.materials.clear()
+                out.materials.append(bpy.data.materials[mname])
+                out.transform(ROT180)
+                ob = bpy.data.objects.new(f'{n}__{mname[2:]}{suffix}', out)
+                coll.objects.link(ob)
+                ob.parent = top
+                made.append(ob)
+                if t > 19000:
+                    print('UWAGA:', n, mname, t, 'trojkatow (jedna czesc)')
         report[n] = dict(max_tris=tris, fx=fx)
     for o in bpy.context.scene.objects:
         o.select_set(False)
@@ -179,7 +192,14 @@ def export_category(cat, names, path):
     return report
 
 
+def Image_size(names, cell):
+    from PIL import Image
+    return Image.open(os.path.join(CAT, '_tmp', f'{names[0]}.png')).size[0]
+
+
 def sheet(cat, names, out_png, cell=320, cols=6):
+    cell = Image_size(names, cell)
+    cols = min(cols, len(names))
     from PIL import Image, ImageDraw, ImageFont
     font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 16)
     fb = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 26)
@@ -226,7 +246,7 @@ if __name__ == '__main__':
     if '--no-render' not in flags:
         setup_render()
         for n, r in zip(names, roots):
-            thumb(r, os.path.join(CAT, '_tmp', f'{n}.png'))
+            thumb(r, os.path.join(CAT, '_tmp', f'{n}.png'), 640 if '--big' in flags else 320)
         for cat, ns in bycat.items():
             sheet(cat, ns, os.path.join(CAT, f'{cat}.png' if not sel else f'_podglad_{cat}.png'))
         print('katalog gotowy', f'{time.time() - t0:.0f} s')

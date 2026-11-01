@@ -176,7 +176,11 @@ class MapScene:
     def place(self, prop, x, y, z=0.0, rot=0.0, scale=1.0):
         col = bpy.data.collections.get('C_' + prop)
         if col is None:
-            raise KeyError(prop)
+            if prop not in P.REGISTRY:
+                raise KeyError(prop)
+            P.REGISTRY[prop][1]()      # budowa na zadanie (gdy budujemy tylko wybrane mapy)
+            to_collections()
+            col = bpy.data.collections.get('C_' + prop)
         e = bpy.data.objects.new(f'I_{prop}', None)
         e.instance_type = 'COLLECTION'
         e.instance_collection = col

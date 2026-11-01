@@ -174,7 +174,8 @@ def begin(name):
 def add(bm, mat, loc=(0, 0, 0), rot=(0, 0, 0), scale=(1, 1, 1), uv='box', tile=4.0, smooth=True, angle=40,
         name='part'):
     ob = C.make(bm, f"{_CUR['name']}.{name}", mat, loc=loc, rot=rot, scale=scale, smooth=smooth, angle=angle)
-    bpy.context.view_layer.update()
+    # matrix_world ustawione w make() - bez view_layer.update() (przy tysiacach obiektow to bylo O(n^2))
+    ob.matrix_world = Matrix.LocRotScale(Vector(loc), Euler([r * D2R for r in rot]), Vector(scale))
     if uv == 'box':
         uv_box(ob, tile)
     elif uv == 'cyl':
