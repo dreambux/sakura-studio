@@ -17,7 +17,7 @@ sys.path.insert(0, HERE)
 import bpy  # noqa: E402
 from lib import core, materials as M, export as E, render as RD  # noqa: E402
 
-UNITS = ['legionista', 'hoplita', 'lucznicza', 'balista', 'wyrocznia', 'meduza', 'minotaur', 'kaplan']
+UNITS = ['legionista', 'hoplita', 'lucznicza', 'balista', 'wyrocznia', 'meduza', 'minotaur', 'kaplan', 'afrodyta', 'centurion', 'hermes']
 
 
 def run(unit, do_render=True, quick=False):

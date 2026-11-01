@@ -59,6 +59,7 @@ def greave(rig, side, mat='bronze', trim='gold', z0=0.22, z1=1.22):
     prof = [(r * 0.92, 0), (r, h * 0.3), (r * 1.04, h * 0.65), (r * 0.98, h)]
     bm = C.bm_lathe(prof, segs=24, arc=200, a0=-190)
     C.bm_solidify(bm, 0.06)
+    bmesh_recalc(bm)
     mk(rig, bm, f'{j}.greave', mat, j, (x, 0.06, z0), scale=(1.0, 0.92, 1))
     mk(rig, C.bm_sphere(0.27, 16, 10), f'{j}.knee', mat, j, (x, -0.47, z1 + 0.08), scale=(1.1, 0.55, 1))
     for z in (z0 + 0.03, z1):

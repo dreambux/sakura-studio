@@ -315,7 +315,7 @@ class FX:
         self._light(a + d * 0.3, s.get('col', (1, 0.9, 0.3)), 150)
 
     def orb(self, s, f):
-        c = self.point(s, 'at', f)
+        c = self.point(s, 'at', f)  # 'at' moze byc nazwa attachmentu albo (x, y, z)
         t = (f - s['start']) / max(1, s['end'] - s['start'])
         k = math.sin(t * math.pi)
         r = s.get('r', 0.35) * (0.6 + 0.6 * k)
