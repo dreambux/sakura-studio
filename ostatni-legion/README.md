@@ -77,3 +77,76 @@ Jeśli wolisz zostać przy obecnym `StarterPlayerScripts.UnitAnimator` (garda w 
 Attachmentami `A` i `B`), `Hide`/`Show` (np. wyrzucone pilum, strzała na cięciwie, bełt w baliście).
 
 ## Klipy i klatki trafień
+
+### Legionista
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Pchnięcie pilum | poz. 0-1 | 36 | 12 |
+| Attack2 | Rzut pilum | poz. 2-3 | 46 | 15 |
+| Attack3 | Uderzenie tarczą + pchnięcie | poz. 4-5 | 52 | 10, 25 |
+
+### Hoplita Spartański
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Pchnięcie dory | poz. 0-1 | 32 | 10 |
+| Attack2 | Odepchnięcie tarczą | poz. 2-3 | 40 | 12 |
+| Attack3 | Falanga – potrójne pchnięcie | poz. 4-5 | 56 | 10, 20, 30 |
+
+### Łuczniczka Kreteńska
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Strzał | poz. 0-1 | 40 | 21 |
+| Attack2 | Potrójna salwa | poz. 2-3 | 46 | 24 |
+| Attack3 | Deszcz strzał | poz. 4-5 | 66 | 23, 48 |
+
+### Balista Skorpion
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Strzał bełtem | poz. 0-1 | 52 | 7 |
+| Attack2 | Bełt przebijający | poz. 2-3 | 72 | 22 |
+| Attack3 | Salwa (3 bełty) | poz. 4-5 | 76 | 7, 27, 47 |
+
+### Wyrocznia Delficka
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Wizja | poz. 0-1 | 42 | 16 |
+| Attack2 | Proroctwo | poz. 2-3 | 56 | 24 |
+| Attack3 | Opary Delf | poz. 4-5 | 60 | 30 |
+
+### Meduza
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Kamienne spojrzenie | poz. 0-1 | 44 | 16 |
+| Attack2 | Ukąszenie węży | poz. 2-3 | 36 | 11 |
+| Attack3 | Klątwa Gorgony | poz. 4-5 | 64 | 28 |
+
+### Minotaur
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Cios labrysem | poz. 0-1 | 46 | 17 |
+| Attack2 | Wir | poz. 2-3 | 50 | 17 |
+| Attack3 | Szarża | poz. 4-5 | 60 | 21 |
+
+### Kapłan Zeusa
+
+| Klip | Nazwa | Poziomy | Klatki | Trafienia (klatka) |
+|---|---|---|---|---|
+| Idle | Postój (pętla) | - | 60 | - |
+| Attack1 | Piorun | poz. 0-1 | 44 | 16 |
+| Attack2 | Łańcuch piorunów | poz. 2-3 | 48 | 14, 18, 22 |
+| Attack3 | Gniew Zeusa | poz. 4-5 | 72 | 26, 30, 34, 38, 42 |
+
