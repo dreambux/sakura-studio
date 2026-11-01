@@ -75,7 +75,7 @@ def build(out):
     K.mk(rig, C.bm_box(1.08, 1.08, 0.12, 0.03), 'Right Arm.wrist', 'gold', 'Right Arm', (-B['ax'], 0, 2.3))
 
     # ---- wlosy: czapa, tyl, warkocz, loki, zlota opaska z turkusem
-    K.hair_block(rig, 'hair_dark', hc, back=0.62, length=1.0)
+    K.hair_cap(rig, 'hair_dark', hc, length=1.0)
     braid = [(0, 0.66, hc + 0.1), (0, 0.78, hc - 0.4), (0.05, 0.85, hc - 0.9), (0.0, 0.92, hc - 1.4),
              (-0.05, 0.98, hc - 1.8)]
     K.mk(rig, C.bm_tube(braid, 0.13, radii=[1, 1, 0.9, 0.8, 0.6], res=6), 'Head.braid', 'hair_dark', 'Head', (0, 0, 0))
@@ -87,8 +87,8 @@ def build(out):
         lock = [(sx * 0.62, -0.25, hc + 0.3), (sx * 0.68, -0.32, hc + 0.0), (sx * 0.64, -0.2, hc - 0.3),
                 (sx * 0.70, -0.28, hc - 0.6)]
         K.mk(rig, C.bm_tube(lock, 0.07, radii=[1, 0.9, 0.8, 0.5], res=5), f'Head.lock{sx}', 'hair_dark', 'Head', (0, 0, 0))
-    K.mk(rig, C.bm_torus(0.665, 0.045, 40, 8), 'Head.headband', 'gold', 'Head', (0, 0, hc + 0.33))
-    K.mk(rig, C.bm_sphere(0.08, 12, 8), 'Head.gem', 'emerald', 'Head', (0, -0.7, hc + 0.36), scale=(1, 0.6, 1.2))
+    K.mk(rig, C.bm_torus(0.715, 0.045, 40, 8), 'Head.headband', 'gold', 'Head', (0, 0, hc + 0.31))
+    K.mk(rig, C.bm_sphere(0.08, 12, 8), 'Head.gem', 'emerald', 'Head', (0, -0.76, hc + 0.33), scale=(1, 0.6, 1.2))
     for sx in (-1, 1):
         K.mk(rig, C.bm_sphere(0.06, 10, 6), f'Head.earring{sx}', 'gold', 'Head', (sx * 0.62, -0.05, hc - 0.2))
 

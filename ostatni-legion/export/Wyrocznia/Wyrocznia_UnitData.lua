@@ -6,7 +6,7 @@ return {
 	Name = "Wyrocznia",
 	DisplayName = "Wyrocznia Delficka",
 	Fps = 30,
-	Bounds = {Min = {-2.715, -0.03, -3.9744}, Max = {2.05, 5.3398, 2.2}},
+	Bounds = {Min = {-2.715, -0.03, -3.9744}, Max = {2.05, 5.3884, 2.2}},
 	Joints = {
 		{Name = "HumanoidRootPart", Pivot = {0, 3, 0}},
 		{Name = "Torso", Parent = "HumanoidRootPart", Pivot = {0, 3, 0}},

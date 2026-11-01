@@ -53,7 +53,7 @@ def build(out):
         K.mk(rig, C.bm_box(1.08, 1.08, 0.14, 0.03), f'{j}.bracelet', 'gold', j, (x, 0, 2.3))
 
     # ---- wlosy, welon, wieniec
-    K.hair_block(rig, 'hair_dark', hc, back=0.6, length=1.3)
+    K.hair_cap(rig, 'hair_dark', hc, length=1.3)
     for sx in (-1, 1):
         lock = [(sx * 0.62, -0.2, hc + 0.3), (sx * 0.67, -0.25, hc - 0.2), (sx * 0.64, -0.15, hc - 0.7),
                 (sx * 0.72, -0.1, hc - 1.0)]
@@ -68,8 +68,8 @@ def build(out):
     C.bm_solidify(bm, 0.05)
     K.mk(rig, bm, 'Head.veil', 'violet_cloth', 'Head', (0, 0.05, hc), angle=None)
     K.mk(rig, C.bm_box(1.5, 0.1, 0.12, 0.04), 'Head.veilband', 'gold', 'Head', (0, 0.62, hc + 0.68), rot=(20, 0, 0))
-    K.laurel(rig, 'Head', (0, 0, hc + 0.36), R=0.68, n=9)
-    K.mk(rig, C.bm_sphere(0.09, 12, 8), 'Head.thirdeye', 'glow_violet', 'Head', (0, -0.72, hc + 0.36),
+    K.laurel(rig, 'Head', (0, 0, hc + 0.32), R=0.73, n=9)
+    K.mk(rig, C.bm_sphere(0.09, 12, 8), 'Head.thirdeye', 'glow_violet', 'Head', (0, -0.77, hc + 0.36),
          scale=(1, 0.6, 1.2))
 
     # ---- laska

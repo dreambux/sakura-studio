@@ -226,6 +226,31 @@ def hair_block(rig, mat, hc, back=0.62, top=0.66, length=1.1, width=1.32):
        (0, 0.42, hc + 0.55 - length / 2))
 
 
+def hair_cap(rig, mat, hc, rim=0.26, length=1.1, part=True):
+    """Wlosy kobiece: zaokraglona czapa schodzaca nisko na czolo (linia wlosow tuz nad brwiami),
+    grzywka z przedzialkiem i tyl. Twarz zostaje odslonieta, czolo male."""
+    n = 10
+    prof = []
+    for i in range(n + 1):
+        a = (math.pi / 2) * i / n
+        prof.append((0.70 * math.cos(a), 0.48 * math.sin(a)))
+    prof[-1] = (0.0, 0.48)
+    prof = [(0.0, -0.02), (0.70, -0.02)] + prof
+    bm = C.bm_lathe(prof, segs=40)
+    bmesh_recalc(bm)
+    mk(rig, bm, 'Head.hair_cap', mat, 'Head', (0, 0, hc + rim), angle=None)
+    # grzywka: dwa luki od przedzialka w dol na skronie
+    for sx in (-1, 1):
+        pts = [(sx * 0.04, -0.66, hc + rim + 0.16), (sx * 0.25, -0.69, hc + rim + 0.05),
+               (sx * 0.48, -0.60, hc + rim - 0.02), (sx * 0.64, -0.36, hc + rim - 0.12)]
+        mk(rig, C.bm_tube(pts, 0.085, radii=[0.7, 1.0, 1.0, 0.8], res=5), f'Head.fringe{sx}', mat, 'Head', (0, 0, 0))
+    if part:
+        mk(rig, C.bm_tube([(0, -0.62, hc + rim + 0.2), (0, -0.3, hc + rim + 0.46), (0, 0.1, hc + rim + 0.5)],
+                          0.03, res=4), 'Head.parting', mat, 'Head', (0, 0, 0))
+    mk(rig, C.bm_box(1.34, 0.44, length, 0.16), 'Head.hair_back', mat, 'Head',
+       (0, 0.42, hc + rim + 0.25 - length / 2))
+
+
 def laurel(rig, joint, center, R=0.64, mat='gold', leaf_mat=None, n=11, gap=60, tilt=0, scale_y=1.0):
     """Wieniec laurowy (zloty): listki wokol glowy, przerwa z przodu."""
     cx, cy, cz = center

@@ -6,7 +6,7 @@ return {
 	Name = "Luczniczka",
 	DisplayName = "Łuczniczka Kreteńska",
 	Fps = 30,
-	Bounds = {Min = {-2.0646, 0, -1.69}, Max = {2.04, 5.25, 1.69}},
+	Bounds = {Min = {-2.0646, 0, -1.69}, Max = {2.04, 5.3884, 1.69}},
 	Joints = {
 		{Name = "HumanoidRootPart", Pivot = {0, 3, 0}},
 		{Name = "Torso", Parent = "HumanoidRootPart", Pivot = {0, 3, 0}},
