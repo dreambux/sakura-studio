@@ -25,7 +25,8 @@ bp.PAL = [
     ('stripe', (196, 98, 36), (140, 62, 22)),
     ('cream', (255, 247, 230), (236, 214, 184)),
     ('pink', (255, 178, 196), (228, 118, 150)),
-    ('iris', (34, 108, 44), (178, 236, 96)),
+    ('iris', (60, 150, 60), (200, 250, 120)),
+    ('pupil', (20, 14, 26), (60, 40, 70)),
     ('black', (34, 24, 22), (10, 8, 8)),
     ('white', (255, 255, 255), (232, 238, 245)),
 ]
@@ -82,17 +83,31 @@ def build():
         put(inner, 'pink', PM, loc=(sx * 1.15 + sx * 0.02, -0.53, top - 0.12), rot=(-8, sx * -14, 0), lo=top, hi=top + 1.0,
             name='ear_inner')
 
-    # twarz: duze oczy (kopulki) z ciemna obwodka, zielona teczowka, zrenica i blyski
-    ez = Z0 + H * 0.47
+    # twarz: SLODKIE oczy (kawaii): wielka blyszczaca zrenica, teczowka jako jasny polksiezyc na dole,
+    # duzy i maly blysk, gwiazdka-iskierka, male rzesy w zewnetrznych kacikach
+    ez = Z0 + H * 0.45
     for sx in (-1, 1):
-        x = sx * 0.88
-        put(C.bm_sphere(0.78, 32, 16), 'black', PM, loc=(x, F + 0.06, ez), scale=(1.0, 0.28, 1.06), name='eye_rim')
-        put(C.bm_sphere(0.68, 32, 16), 'iris', PM, loc=(x, F - 0.0, ez), scale=(1.0, 0.33, 1.06), lo=ez - 0.7, hi=ez + 0.7,
-            name='iris')
-        put(C.bm_sphere(0.4, 24, 12), 'black', PM, loc=(x + sx * 0.04, F - 0.08, ez + 0.02), scale=(0.95, 0.3, 1.15),
-            name='pupil')
-        put(C.bm_sphere(0.2, 16, 8), 'white', PM, loc=(x - 0.2, F - 0.2, ez + 0.28), scale=(1, 0.35, 1), name='shine')
-        put(C.bm_sphere(0.1, 12, 6), 'white', PM, loc=(x + 0.22, F - 0.17, ez - 0.3), scale=(1, 0.35, 1), name='shine')
+        x = sx * 0.9
+        put(C.bm_sphere(0.8, 32, 16), 'black', PM, loc=(x, F + 0.06, ez), scale=(0.98, 0.28, 1.1), name='eye_rim')
+        put(C.bm_sphere(0.72, 32, 16), 'iris', PM, loc=(x, F, ez), scale=(0.98, 0.33, 1.1), lo=ez - 0.3, hi=ez + 0.8,
+            gamma=0.7, name='iris')
+        put(C.bm_sphere(0.62, 48, 24), 'pupil', PM, loc=(x, F - 0.1, ez + 0.1), scale=(0.97, 0.3, 1.05),
+            lo=ez - 0.5, hi=ez + 0.7, name='pupil')
+        put(C.bm_sphere(0.27, 20, 10), 'white', PM, loc=(x - 0.2 * sx - 0.02, F - 0.22, ez + 0.33), scale=(1.0, 0.35, 1.15),
+            name='shine_big')
+        put(C.bm_sphere(0.13, 16, 8), 'white', PM, loc=(x + 0.25 * sx, F - 0.2, ez - 0.2), scale=(1, 0.35, 1), name='shine')
+        star = []
+        for k in range(8):
+            a_ = math.pi / 2 + k * math.pi / 4
+            r = 0.17 if k % 2 == 0 else 0.05
+            star.append((math.cos(a_) * r, math.sin(a_) * r))
+        st = C.bm_extrude(star, 0.05, 0.0, 1)
+        C.bm_map(st, lambda c: (c.x, c.z, c.y))
+        put(st, 'white', PM, loc=(x + 0.12 * sx, F - 0.24, ez + 0.5), name='sparkle')
+        for k in range(2):   # rzesy
+            base = Vector((x + sx * (0.62 + 0.12 * k), F - 0.02, ez + 0.55 - 0.22 * k))
+            pts = [base, base + Vector((sx * 0.18, -0.04, 0.1)), base + Vector((sx * 0.3, -0.05, 0.22))]
+            put(tube(pts, 0.05, [1.0, 0.7, 0.2], 3), 'black', PM, name='lash')
     # bialy pyszczek, rozowy nosek, usta "w"
     mz = Z0 + H * 0.2
     put(C.bm_sphere(1.0, 28, 14), 'cream', PM, loc=(0, F + 0.12, mz), scale=(1.15, 0.2, 0.62), name='muzzle')
@@ -104,7 +119,7 @@ def build():
                Vector((sx * 0.34, F - 0.04, mz + 0.1))]
         put(tube(pts, 0.035, None, 4), 'black', PM, name='mouth')
     for sx in (-1, 1):   # rumience
-        put(C.bm_sphere(0.26, 16, 8), 'pink', PM, loc=(sx * 1.45, F + 0.03, mz + 0.35), scale=(1, 0.1, 0.6), name='blush')
+        put(C.bm_sphere(0.34, 16, 8), 'pink', PM, loc=(sx * 1.42, F + 0.02, mz + 0.42), scale=(1, 0.1, 0.62), name='blush')
     # biala piers pod pyszczkiem
     put(C.bm_sphere(0.9, 24, 12), 'cream', PM, loc=(0, F + 0.14, Z0 + 0.35), scale=(1.0, 0.18, 0.4), name='chest')
 

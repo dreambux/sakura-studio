@@ -23,9 +23,9 @@ Przebudowa: `python pets/build_pet.py` (moduł `bpy`).
 
 # Pet: Mruczek (Rzadki)
 
-Kot-sześcian: rudy pręgowany, duże zielone oczy z błyskami, biały pyszczek i pierś, różowy nosek, uszy z różowym środkiem,
+Kot-sześcian: rudy pręgowany, słodkie oczy kawaii (wielka błyszcząca źrenica, zielony półksiężyc tęczówki, duży i mały błysk, gwiazdka, rzęsy), biały pyszczek i pierś, różowy nosek, uszy z różowym środkiem,
 pręgi na czole, grzbiecie i bokach, puszysty ogon z kremowym końcem, cztery krótkie łapki z białymi skarpetkami.
-Jeden materiał (paleta), ok. 15,5 tys. trójkątów.
+Jeden materiał (paleta), ok. 19,8 tys. trójkątów w 2 częściach.
 
 Pliki: `export/Mruczek.glb`, `Mruczek_paleta.png`, `Mruczek_hero.png`, `Mruczek_widoki.png`, `Mruczek.blend`.
 Przebudowa: `python pets/build_cat.py`. W Robloxie: zaimportuj GLB, materiał SmoothPlastic, `Model:ScaleTo(0.45)`.
