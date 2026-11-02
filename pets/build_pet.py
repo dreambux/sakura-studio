@@ -25,6 +25,10 @@ from lib.sculpt import Skel, param_shell, merge, cone, aim_rot, apply_mods  # no
 
 C = P.C
 NAME = 'Eklipsa'
+RARITY = ('Sekret', (230, 120, 255))
+TARGET = (0.0, 0.6, 3.4)
+BG = ((92, 70, 170), (40, 120, 190))
+SHOTS = ((-18, 10, 21.0), (-70, 8, 23.0), (165, 12, 23.0), (40, 14, 23.0))
 OUT = os.path.join(HERE, 'export')
 D2R = math.pi / 180
 
@@ -454,10 +458,10 @@ def render(root, base):
     sc.collection.objects.link(cam)
     sc.camera = cam
     cd.lens = 50
-    target = Vector((0.0, 0.6, 3.4))
+    target = Vector(TARGET)
     from PIL import Image, ImageDraw, ImageFont
     shots = []
-    for k, (az, el, dist) in enumerate(((-18, 10, 21.0), (-70, 8, 23.0), (165, 12, 23.0), (40, 14, 23.0))):
+    for k, (az, el, dist) in enumerate(SHOTS):
         d = Vector((math.sin(az * D2R) * math.cos(el * D2R), -math.cos(az * D2R) * math.cos(el * D2R), math.sin(el * D2R)))
         cam.location = target + d * dist
         cam.rotation_euler = (target - cam.location).to_track_quat('-Z', 'Y').to_euler()
@@ -472,8 +476,8 @@ def render(root, base):
         import numpy as np
         h = size[1]
         y = np.linspace(0, 1, h)[:, None, None]
-        top = np.array((92, 70, 170)) * 1.0
-        bot = np.array((40, 120, 190)) * 1.0
+        top = np.array(BG[0]) * 1.0
+        bot = np.array(BG[1]) * 1.0
         img = top * (1 - y) + bot * y
         img = np.repeat(img, size[0], axis=1)
         return Image.fromarray(img.astype('uint8')).convert('RGBA')
@@ -484,7 +488,7 @@ def render(root, base):
     fb = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 54)
     fs = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 34)
     d.text((40, 30), NAME, font=fb, fill=(255, 255, 255), stroke_width=4, stroke_fill=(40, 20, 70))
-    d.text((44, 98), 'Sekret', font=fs, fill=(230, 120, 255), stroke_width=3, stroke_fill=(40, 20, 70))
+    d.text((44, 98), RARITY[0], font=fs, fill=RARITY[1], stroke_width=3, stroke_fill=(40, 20, 70))
     bgi.convert('RGB').save(f'{base}_hero.png')
     sheet = backdrop((560 * 3, 560))
     for i, p in enumerate(shots[1:]):

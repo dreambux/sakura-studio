@@ -20,3 +20,12 @@ Pliki w `export/`:
 4. Unoszenie i obrót (bobbing) zrób skryptem peta (np. sinus na wysokości).
 
 Przebudowa: `python pets/build_pet.py` (moduł `bpy`).
+
+# Pet: Mruczek (Rzadki)
+
+Kot-sześcian: rudy pręgowany, duże zielone oczy z błyskami, biały pyszczek i pierś, różowy nosek, uszy z różowym środkiem,
+pręgi na czole, grzbiecie i bokach, puszysty ogon z kremowym końcem, cztery krótkie łapki z białymi skarpetkami.
+Jeden materiał (paleta), ok. 15,5 tys. trójkątów.
+
+Pliki: `export/Mruczek.glb`, `Mruczek_paleta.png`, `Mruczek_hero.png`, `Mruczek_widoki.png`, `Mruczek.blend`.
+Przebudowa: `python pets/build_cat.py`. W Robloxie: zaimportuj GLB, materiał SmoothPlastic, `Model:ScaleTo(0.45)`.
