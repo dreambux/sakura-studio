@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sakura-voice-machine"
+version = "0.1.0"
+description = "Lokalny silnik głosów (klonowanie z nagrań znajomych, model VoxCPM2) wystawiony jako serwer MCP dla artefaktu Maszyna Głosów"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "mcp>=2.3,<3",
+  "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+# PyTorch instaluje się osobno (zależy od karty graficznej): zob. README i scripts/setup-windows.ps1.
+voxcpm = ["voxcpm==2.0.3"]
+dev = ["pytest>=8", "num2words"]
+
+[project.scripts]
+sakura-voice = "voice_machine.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

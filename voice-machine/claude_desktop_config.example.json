@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "sakura-voice": {
+      "command": "C:\\SCIEZKA\\DO\\voice-machine\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "voice_machine"],
+      "env": { "SVM_ENGINE": "voxcpm" }
+    }
+  }
+}
