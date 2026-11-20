@@ -3,7 +3,7 @@
     "sakura-voice": {
       "command": "C:\\SCIEZKA\\DO\\voice-machine\\.venv\\Scripts\\python.exe",
       "args": ["-m", "voice_machine"],
-      "env": { "SVM_ENGINE": "voxcpm" }
+      "env": { "SVM_ENGINE": "voxcpm", "SVM_DATA_DIR": "C:\\Users\\TWOJA_NAZWA\\SakuraVoiceMachine" }
     }
   }
 }

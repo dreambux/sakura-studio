@@ -78,7 +78,7 @@ Szuka pliku w `%APPDATA%\Claude`, a dla wersji ze sklepu Microsoft w katalogu pa
 (Ustawienia, Developer, Edit Config), że to ten sam plik.
 
 Ręcznie: w aplikacji Claude (komputerowej) otwórz Ustawienia, Developer, Edit Config. Wpis ma kształt z `claude_desktop_config.example.json`
-(przy instalacji ręcznej podstaw własną ścieżkę do `.venv\Scripts\python.exe`):
+(przy instalacji ręcznej podstaw własną ścieżkę do `.venv\Scripts\python.exe` i własną nazwę użytkownika w `SVM_DATA_DIR`):
 
 - jeśli plik nie ma klucza `mcpServers`, dopisz cały zapis z `claude-desktop-snippet.json` (albo z przykładu) obok innych kluczy;
 - jeśli już ma, skopiuj do niego tylko wpis `"sakura-voice": { ... }`.
@@ -115,6 +115,8 @@ Głosy trzymane są na dysku: `%USERPROFILE%\SakuraVoiceMachine\voices\` przy in
 bez skryptu domyślnie `%LOCALAPPDATA%\SakuraVoiceMachine`). Nagrania znajomych nie trafiają do repozytorium (jest `.gitignore`) i nie opuszczają komputera.
 Ruch sieciowy silnika to pobranie modelu z Hugging Face przy pierwszym uruchomieniu; kolejne starty korzystają z kopii na dysku i nie łączą się z internetem
 (jeśli kopia jest niekompletna, silnik dociąga brakujące pliki). Po nieudanym ładowaniu (np. zerwane pobieranie) odśwież stronę: silnik próbuje ponownie najwcześniej 30 s po błędzie.
+
+Gdy aplikacja Claude jest pakietem MSIX (wersja ze sklepu Microsoft), Windows przekierowuje nowe pliki serwera w `AppData` do ukrytego folderu pakietu: Eksplorator nie pokaże plików pod ścieżką z „Na dysku”, a odinstalowanie aplikacji usunie głosy. Skrypt wpisuje `SVM_DATA_DIR` poza `AppData`; przy instalacji ręcznej zrób to sam (przykład w `claude_desktop_config.example.json`).
 
 ## Jak działa polski tekst
 
@@ -187,6 +189,7 @@ ustaw `SVM_PRELOAD=0`: model załaduje się dopiero, gdy otworzysz stronę. Cał
 | Błąd `WinError 126` albo `1114` przy PyTorch | Zainstaluj „Visual C++ Redistributable x64” (https://aka.ms/vs/17/release/vc_redist.x64.exe). `WinError 1455`: zwiększ plik wymiany Windows. |
 | „Za mało pamięci karty graficznej” | Skróć tekst, zamknij inne programy korzystające z karty; model potrzebuje ok. 8 GB (zgłoszono działanie na 6 GB). |
 | Wpis w konfiguracji Claude nie działa | Wersja aplikacji ze sklepu Microsoft może czytać inny plik niż `%APPDATA%\Claude`. Użyj Ustawienia, Developer, Edit Config, żeby zobaczyć właściwy. |
+| „Na dysku: …” na stronie, a pliku nie ma w Eksploratorze | Pakiet MSIX przekierował `AppData`: szukaj w `%LOCALAPPDATA%\Packages\Claude_*\LocalCache\Local\SakuraVoiceMachine\`, a na stałe ustaw `SVM_DATA_DIR` poza `AppData`. |
 
 ## Testy
 
