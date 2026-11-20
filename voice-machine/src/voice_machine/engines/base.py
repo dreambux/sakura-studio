@@ -111,7 +111,7 @@ class Engine(Protocol):
 
     def synthesize(self, text: str, language: str, voice: VoiceRef, params: SynthParams) -> AudioClip: ...
 
-    def diagnose(self) -> list[tuple[str, str, bool]]:
+    def diagnose(self) -> list[tuple[str, str, bool | None]]:
         """Pary (etykieta, wartość, czy_ok) dla polecenia doctor."""
 
     def close(self) -> None: ...

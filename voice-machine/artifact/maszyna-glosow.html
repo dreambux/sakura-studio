@@ -12,9 +12,10 @@
   --surface-3: #211b1c;
   --line: rgba(255, 255, 255, .09);
   --line-2: rgba(255, 255, 255, .18);
+  --control-line: rgba(255, 255, 255, .4);
   --ink: #f5f5f7;
   --ink-2: #a8a8ad;
-  --ink-3: #77777c;
+  --ink-3: #8f8f94;
   --p1: #fde4e8;
   --p2: #f4a3ae;
   --p3: #e27383;
@@ -44,6 +45,7 @@ h1, h2, h3, p { margin: 0; }
 h1, h2, h3 { font-family: var(--display); text-wrap: balance; }
 :focus-visible { outline: 2px solid var(--p2); outline-offset: 2px; border-radius: 8px; }
 ::selection { background: rgba(244, 163, 174, .35); }
+[hidden] { display: none !important; }
 
 .shell { width: 100%; max-width: 1120px; margin-inline: auto; display: grid; gap: 18px; }
 
@@ -95,7 +97,7 @@ h1, h2, h3 { font-family: var(--display); text-wrap: balance; }
 .btn.icon { padding: 6px 9px; line-height: 1; }
 label.field { display: grid; gap: 6px; font-size: 13px; color: var(--ink-2); }
 label.field > span:first-child { font-weight: 600; }
-.input, textarea, select { width: 100%; background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 12px; padding: 10px 12px; color: var(--ink); }
+.input, textarea, select { width: 100%; background: var(--surface-2); border: 1px solid var(--control-line); border-radius: 12px; padding: 10px 12px; color: var(--ink); }
 .input::placeholder, textarea::placeholder { color: var(--ink-3); }
 textarea { min-height: 170px; resize: vertical; line-height: 1.55; font-size: 16px; }
 textarea.small { min-height: 84px; font-size: 14px; }
@@ -190,10 +192,11 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   <section class="card setup" id="setup" hidden aria-labelledby="setup-h">
     <h2 id="setup-h">Podłącz silnik na swoim komputerze</h2>
     <p id="setup-why" class="hint"></p>
+    <button class="btn small" id="setup-retry" type="button" style="margin-top:10px">Sprawdź ponownie</button>
     <div id="setup-steps">
     <ol>
-      <li><strong>Zainstaluj silnik jednym skryptem.</strong> W PowerShellu, w folderze <code>voice-machine</code> z repozytorium: <code>.\scripts\setup-windows.ps1 -TorchIndexUrl &lt;adres z pytorch.org&gt;</code>. Skrypt tworzy środowisko Pythona (3.10 do 3.12), instaluje PyTorch i model VoxCPM2, robi próbną syntezę (plik <code>doctor-smoke.wav</code>, posłuchaj go) i zapisuje gotowy blok konfiguracji z Twoimi ścieżkami. Jak wybrać adres PyTorch: <code>voice-machine/README.md</code>.</li>
-      <li><strong>Dodaj serwer do aplikacji Claude (komputerowej).</strong> Ustawienia, Developer, Edit Config: wklej zawartość <code>claude-desktop-snippet.json</code> do sekcji <code>mcpServers</code> (albo uruchom skrypt z <code>-InstallToClaudeConfig</code>, a dopisze wpis sam). Nazwa musi zostać <code>sakura-voice</code>.</li>
+      <li><strong>Zainstaluj silnik jednym skryptem.</strong> W PowerShellu, w folderze <code>voice-machine</code> z repozytorium: <code>powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup-windows.ps1 -TorchIndexUrl &lt;adres z pytorch.org&gt;</code> (przełącznik <code>-ExecutionPolicy Bypass</code> jest potrzebny, bo świeży Windows blokuje skrypty <code>.ps1</code> błędem „running scripts is disabled on this system”; działa tylko dla tego jednego uruchomienia). Skrypt tworzy środowisko Pythona (3.10 do 3.12), instaluje PyTorch i model VoxCPM2, robi próbną syntezę i próbę klonowania (pliki <code>doctor-smoke.wav</code> i <code>doctor-smoke-clone.wav</code>, posłuchaj ich) i zapisuje gotowy blok konfiguracji z Twoimi ścieżkami. Jak wybrać adres PyTorch: <code>voice-machine/README.md</code>.</li>
+      <li><strong>Dodaj serwer do aplikacji Claude (komputerowej).</strong> Najprościej: uruchom skrypt jeszcze raz z <code>-ConfigOnly -InstallToClaudeConfig</code> (dopisze wpis sam, z kopią zapasową). Ręcznie: Ustawienia, Developer, Edit Config. Jeśli plik nie ma klucza <code>mcpServers</code>, dopisz cały blok z <code>claude-desktop-snippet.json</code> (albo z pola poniżej); jeśli już ma, skopiuj do niego tylko wpis <code>"sakura-voice": { … }</code>. Nazwa musi zostać <code>sakura-voice</code>.</li>
       <li><strong>Zamknij aplikację Claude całkiem, uruchom ją ponownie</strong> i otwórz ten artefakt w niej. Przeglądarka nie widzi serwerów lokalnych.</li>
     </ol>
     <p class="hint" style="margin-top:10px">Blok konfiguracji ma taki kształt (skrypt wstawia prawdziwą ścieżkę do <code>python.exe</code>):</p>
@@ -207,7 +210,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   <main class="grid">
     <section class="card" aria-labelledby="voices-h">
       <h2 id="voices-h">Głosy</h2>
-      <div class="voice-groups" role="radiogroup" aria-label="Wybór głosu">
+      <div class="voice-groups" role="group" aria-label="Wybór głosu">
         <div id="voices-friends"></div>
 
         <div class="add-slot">
@@ -241,19 +244,19 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
         <div id="add-transcript-box" hidden>
           <label class="field" for="add-transcript"><span>Co mówi osoba na nagraniu? <span id="add-transcript-req" class="hint"></span></span>
             <textarea class="small" id="add-transcript" maxlength="600" placeholder="Wpisz słowo w słowo, bez dodatków"></textarea>
-            <span class="hint">Liczby i skróty rozwinę sam. Im dokładniejszy zapis, tym lepiej model łapie głos i tempo mówienia.</span>
+            <span class="hint">Im dokładniejszy zapis, tym lepiej model łapie głos i tempo mówienia. Dla nagrań po polsku liczby i skróty rozwinę sam; w innych językach wpisz je słowami.</span>
           </label>
         </div>
         <p class="hint" id="policy-note" hidden></p>
         <div class="notice">
-          <strong>Co daje najlepszy głos.</strong> <span id="tips-length">Najlepiej kilkanaście sekund</span> czystej, naturalnej mowy jednej osoby, bez muzyki, echa i szumu, nagrane jednym mikrofonem. Mówiona spokojnie i wyraźnie, w umiarkowanym tempie: użytkownicy modeli mierzyli, że szybka mowa pogarsza wynik, a sama długość nagrania prawie nic nie zmienia. Nie czyść nagrania agresywnymi odszumiaczami (zgłaszano po nich przekłamania w sklonowanym głosie) i unikaj wersji po kompresji z Discorda, jeśli masz oryginał.
+          <strong>Co daje najlepszy głos.</strong> <span id="tips-length">Najlepiej kilkanaście sekund</span> czystej, naturalnej mowy jednej osoby, bez muzyki, echa i szumu, nagranej jednym mikrofonem. Mów spokojnie i wyraźnie, w umiarkowanym tempie: użytkownicy modeli mierzyli, że szybka mowa pogarsza wynik, a sama długość nagrania prawie nic nie zmienia. Nie czyść nagrania agresywnymi odszumiaczami (zgłaszano po nich przekłamania w sklonowanym głosie) i unikaj wersji po kompresji z Discorda, jeśli masz oryginał. Gdy głos brzmi słabo, spróbuj innego fragmentu nagrania: ten sam człowiek potrafi wypaść bardzo różnie.
         </div>
         <label class="consent" for="add-consent">
           <input id="add-consent" type="checkbox">
           <span>Osoba, której głos dodaję, wie o tym i zgodziła się na użycie jej głosu w tym narzędziu.</span>
         </label>
         <p class="notice" id="add-msg" data-tone="" role="status" aria-live="polite" hidden></p>
-        <progress id="add-progress" max="1" value="0" hidden></progress>
+        <progress id="add-progress" aria-label="Postęp wysyłania nagrania" max="1" value="0" hidden></progress>
         <div class="panel-actions">
           <button class="btn primary" id="add-save" type="submit">Zapisz głos</button>
           <button class="btn" id="add-cancel" type="button">Anuluj</button>
@@ -308,7 +311,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
         <span class="hint" id="go-hint"></span>
       </div>
       <div class="status-line">
-        <progress id="progress" max="1" value="0" hidden></progress>
+        <progress id="progress" aria-label="Postęp generowania nagrania" max="1" value="0" hidden></progress>
         <p class="notice" id="msg" data-tone="" role="status" aria-live="polite" hidden></p>
       </div>
     </section>
@@ -317,7 +320,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   <section class="card results" aria-labelledby="res-h">
     <h2 id="res-h">Nagrania z tej sesji</h2>
     <ol id="results"></ol>
-    <p class="empty" id="results-empty">Tu pojawią się gotowe nagrania. Kopie plików WAV zapisują się też na dysku, w folderze danych silnika.</p>
+    <p class="empty" id="results-empty">Tu pojawią się gotowe nagrania.</p>
   </section>
 
   <footer>
@@ -416,6 +419,17 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     return new HostError('mcp', known, MCP_MESSAGES[known]);
   }
 
+  /* Sama połowa pary zastępczej UTF-16 (np. ucięty emoji z wklejonego tekstu) nie jest poprawnym JSON-em: serwer po cichu odrzuca takie
+     żądanie i strona czekałaby w nieskończoność. Zamieniamy ją na znak zastępczy przed wysłaniem. */
+  function wellFormed(value) {
+    if (typeof value === 'string') {
+      return typeof value.toWellFormed === 'function' ? value.toWellFormed() : value.replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '\uFFFD');
+    }
+    if (Array.isArray(value)) return value.map(wellFormed);
+    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, wellFormed(v)]));
+    return value;
+  }
+
   async function callHost(tool, input = {}, opts = {}) {
     if (!state.mcp) throw new HostError('mcp', 'not_granted', MCP_MESSAGES.not_granted);
     const options = { cache: false };
@@ -424,14 +438,14 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     }
     let res;
     try {
-      res = await state.mcp.callTool(HOST, tool, input, options);
+      res = await state.mcp.callTool(HOST, tool, wellFormed(input), options);
     } catch (e) {
       const err = toHostError(e);
       if (err.kind === 'mcp' && err.code === 'server_not_connected') { state.hostGone = true; renderAll(); }
       else if (err.kind === 'mcp' && DENIAL_CODES.includes(err.code)) { state.hostError = err; renderAll(); }
       throw err;
     }
-    if (state.hostError) { state.hostError = null; renderAll(); }
+    if (state.hostError || state.hostGone) { state.hostError = null; state.hostGone = false; renderAll(); }
     const payload = res && res.payload !== undefined ? res.payload : res && res.structuredContent;
     if (!payload || typeof payload !== 'object') throw new HostError('proto', 'E_PROTOCOL', 'Serwer odpowiedział w nieoczekiwanym formacie.');
     return payload;
@@ -440,7 +454,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   /* ---------- komunikaty ---------- */
   function setNotice(el, tone, text) {
     if (!text) { el.hidden = true; el.textContent = ''; return; }
-    el.hidden = false; el.dataset.tone = tone; el.textContent = text;
+    el.hidden = false; el.dataset.tone = tone;
+    if (el.textContent !== text) el.textContent = text; // identyczny tekst w strefie live nie jest ogłaszany drugi raz
   }
   const say = (tone, text) => setNotice($('#msg'), tone, text);
 
@@ -515,6 +530,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
 
   const engineReady = () => !!(state.status && state.status.engine.state === 'ready');
 
+  const plPlural = (n, one, few, many) => (n === 1 ? one : n % 10 >= 2 && n % 10 <= 4 && !(n % 100 >= 12 && n % 100 <= 14) ? few : many);
+
   /* ---------- zaznaczenie głosu ---------- */
   function pickDefaultSelection() {
     const saved = store.read().sel;
@@ -525,10 +542,13 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     if (first) state.sel = { kind: first.kind, id: first.id };
   }
 
+  /* Silnik VoxCPM2 nie ma głosów wbudowanych: "domyslny" to synteza bez nagrania wzorcowego, więc głos jest losowy. */
+  const BUILTIN_LABELS = { domyslny: { name: 'Domyślny (losowy głos modelu)', sub: 'bez nagrania wzorcowego: głos zmienia się z każdym nagraniem, a czasem nawet między zdaniami' } };
+
   function allVoices() {
     const out = [];
-    for (const v of state.voices) out.push({ kind: 'local', id: v.id, group: 'friends', name: v.name, sub: `${nf(v.duration_s, 0)} s, ${v.sample_count} ${v.sample_count === 1 ? 'plik' : 'pliki'}, ${langName(v.language)}`, lang: v.language, deletable: true, confirming: confirming === v.id });
-    if (engineReady()) for (const n of state.status.engine.builtin_voices) out.push({ kind: 'local', id: `builtin:${n}`, group: 'builtin', name: n, sub: 'głos wbudowany w model', lang: null });
+    for (const v of state.voices) out.push({ kind: 'local', id: v.id, group: 'friends', name: v.name, sub: `${nf(v.duration_s, 0)} s, ${v.sample_count} ${plPlural(v.sample_count, 'plik', 'pliki', 'plików')}, ${langName(v.language)}`, lang: v.language, deletable: true, confirming: confirming === v.id });
+    if (engineReady()) for (const n of state.status.engine.builtin_voices) { const b = BUILTIN_LABELS[n] || {}; out.push({ kind: 'local', id: `builtin:${n}`, group: 'builtin', name: b.name || n, sub: b.sub || 'głos wbudowany w model', lang: null }); }
     for (const n of state.claudeVoices) out.push({ kind: 'claude', id: n, group: 'claude', name: n, sub: 'głos platformy Claude', lang: null });
     return out;
   }
@@ -554,7 +574,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
 
   /* ---------- render ---------- */
   function renderAll() {
-    renderChips(); renderEngineNote(); renderSetup(); renderVoices(); renderComposer(); renderBusy();
+    renderChips(); renderEngineNote(); renderSetup(); renderVoices(); renderComposer(); renderBusy(); renderResultsHint();
   }
 
   function renderEngineNote() {
@@ -584,10 +604,11 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
       else { tone = 'warn'; text = 'Silnik lokalny: ładuje model…'; }
       if (state.status.app && state.status.app.protocol !== PROTOCOL) { tone = 'bad'; text = 'Silnik lokalny: niezgodna wersja serwera'; }
     }
-    chip.dataset.tone = tone; chip.textContent = text;
+    chip.dataset.tone = tone; if (chip.textContent !== text) chip.textContent = text;
     const c = $('#chip-claude');
     c.dataset.tone = !state.capsReady ? '' : state.tts ? 'good' : 'warn';
-    c.textContent = !state.capsReady ? 'Głosy Claude: sprawdzam…' : state.tts ? 'Głosy Claude: dostępne' : 'Głosy Claude: niedostępne w tym widoku';
+    const claudeText = !state.capsReady ? 'Głosy Claude: sprawdzam…' : state.tts ? 'Głosy Claude: dostępne' : 'Głosy Claude: niedostępne w tym widoku';
+    if (c.textContent !== claudeText) c.textContent = claudeText;
   }
 
   function renderSetup() {
@@ -596,6 +617,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const missing = state.capsReady && (!state.mcp || !state.hostTools || state.hostGone);
     box.hidden = !(missing || denied);
     if (box.hidden) return;
+    $('#setup-retry').hidden = !state.mcp;
     $('#setup-h').textContent = denied && !missing ? 'Zezwól tej stronie na serwer lokalny' : 'Podłącz silnik na swoim komputerze';
     $('#setup-steps').hidden = denied && !missing;
     $('#setup-why').textContent = denied && !missing
@@ -611,14 +633,25 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     if (items.length) body = items.map(renderVoiceRow);
     else if (key === 'friends') body = [h('p', { class: 'empty', text: 'Jeszcze nikogo nie dodano. Dodaj nagranie znajomego przyciskiem poniżej.' })];
     else if (key === 'builtin') body = [h('p', { class: 'empty', text: engineReady() ? 'Model nie zgłosił głosów wbudowanych.' : 'Pojawią się po załadowaniu modelu.' })];
-    else body = [h('p', { class: 'empty', text: state.capsReady ? 'Głosy Claude są niedostępne w tym widoku (potrzebna przeglądarka Chromium i zalogowane konto).' : 'Sprawdzam, które głosy są dostępne…' })];
+    else body = [h('p', { class: 'empty', text: state.capsReady ? 'W tym widoku Claude nie udostępnia swoich głosów (zależy to od przeglądarki albo od okna aplikacji).' : 'Sprawdzam, które głosy są dostępne…' })];
     return h('div', { class: 'group' }, h('h3', { text: title }), h('div', { class: 'voice-list' }, body));
   }
 
+  /* Przebudowa listy zrzuca fokus i gubi kliknięcie w toku, a status jest odpytywany co 1,5 s: przebudowujemy tylko przy zmianie treści. */
+  const listKeys = new Map();
+  function patchList(el, key, build) {
+    if (listKeys.get(el) === key) return;
+    listKeys.set(el, key);
+    const a = document.activeElement; const kept = a && a.name === 'voice' && el.contains(a) ? a.value : null;
+    el.replaceChildren(...build());
+    if (kept) [...el.querySelectorAll('input[name="voice"]')].find((r) => r.value === kept)?.focus({ preventScroll: true });
+  }
+
   function renderVoices() {
-    const all = allVoices();
-    $('#voices-friends').replaceChildren(buildGroup('friends', 'Znajomi', all));
-    $('#voices-other').replaceChildren(buildGroup('builtin', 'Wbudowane w model', all), buildGroup('claude', 'Głosy Claude', all));
+    const all = allVoices(); const rows = (g) => all.filter((v) => v.group === g);
+    patchList($('#voices-friends'), JSON.stringify(rows('friends')), () => [buildGroup('friends', 'Znajomi', all)]);
+    patchList($('#voices-other'), JSON.stringify([rows('builtin'), rows('claude'), engineReady(), state.capsReady]), () => [buildGroup('builtin', 'Wbudowane w model', all), buildGroup('claude', 'Głosy Claude', all)]);
+    for (const r of document.querySelectorAll('input[name="voice"]')) r.checked = !!state.sel && r.value === `${state.sel.kind}:${state.sel.id}`;
     renderAddEntry();
   }
 
@@ -626,8 +659,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
      a wszystko przed zapisem (nazwa, nagranie, kontrola jakości, zgoda) działa bez silnika. */
   function addGate() {
     if (!state.capsReady) return 'Sprawdzam, czy silnik lokalny jest podłączony…';
-    if (!state.mcp) return 'Ten widok nie ma dostępu do silnika lokalnego. Nagranie możesz już przygotować, ale zapis głosu wymaga aplikacji Claude na komputerze i uruchomionego silnika.';
-    if (!state.hostTools || state.hostGone) return 'Silnik lokalny nie jest podłączony, a to on uczy się głosu znajomego. Nagranie możesz już przygotować, a zapis ruszy po podłączeniu silnika.';
+    if (!state.mcp) return 'Ten widok nie ma dostępu do silnika lokalnego. Możesz już wybrać nagranie i sprawdzić jego jakość, ale zapisać głos da się dopiero w aplikacji Claude na komputerze, przy działającym silniku.';
+    if (!state.hostTools || state.hostGone) return 'Silnik lokalny nie jest podłączony, a to on uczy się głosu znajomego. Możesz już wybrać nagranie i sprawdzić jego jakość, ale zapis zadziała dopiero po podłączeniu silnika (kroki są wyżej). Po podłączeniu uruchom aplikację Claude ponownie i dodaj nagranie jeszcze raz.';
     if (state.hostError && !state.status) return state.hostError.message;
     const e = state.status && state.status.engine;
     if (!e) return 'Łączę się z silnikiem lokalnym…';
@@ -670,7 +703,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const radio = h('input', { type: 'radio', name: 'voice', value: `${v.kind}:${v.id}`, checked: selected, onchange: () => selectVoice(v) });
     if (selected) radio.checked = true;
     const actions = h('div', { class: 'actions' });
-    if (v.deletable) actions.append(h('button', { class: 'btn small icon', type: 'button', 'aria-label': `Usuń głos ${v.name}`, title: 'Usuń', text: '✕', onclick: (e) => { e.preventDefault(); confirming = v.id; renderVoices(); } }));
+    if (v.deletable) actions.append(h('button', { class: 'btn small icon', type: 'button', 'aria-label': `Usuń głos ${v.name}`, title: 'Usuń', text: '✕', onclick: (e) => { e.preventDefault(); confirming = v.id; renderVoices(); document.querySelector('.voice.confirming .btn:not(.danger)')?.focus(); } }));
     return h('label', { class: 'voice' }, radio,
       h('span', {}, h('span', { class: 'name', text: v.name }), v.kind === 'local' && v.group === 'friends' ? h('span', { class: 'badge', text: 'zgoda ✓' }) : null, h('br'), h('span', { class: 'sub', text: v.sub })),
       actions);
@@ -679,10 +712,10 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   let confirming = null;
   function renderConfirmRow(v) {
     return h('div', { class: 'voice confirming' },
-      h('span', {}, h('span', { class: 'name', text: `Usunąć głos „${v.name}”?` }), h('br'), h('span', { class: 'sub', text: 'Próbki znikną z dysku. Tej operacji nie da się cofnąć.' })),
+      h('span', {}, h('span', { class: 'name', text: `Usunąć głos „${v.name}”?` }), h('br'), h('span', { class: 'sub', text: `Próbki znikną z dysku.${state.status && state.status.storage && state.status.storage.outputs_dir ? ' Nagrania już wygenerowane tym głosem zostają w folderze outputs.' : ''} Tej operacji nie da się cofnąć.` })),
       h('span', { class: 'actions' },
         h('button', { class: 'btn small danger', type: 'button', text: 'Usuń', onclick: () => removeVoice(v) }),
-        h('button', { class: 'btn small', type: 'button', text: 'Anuluj', onclick: () => { confirming = null; renderVoices(); } })));
+        h('button', { class: 'btn small', type: 'button', text: 'Anuluj', onclick: () => { confirming = null; renderVoices(); [...document.querySelectorAll('input[name="voice"]')].find((r) => r.value === `${v.kind}:${v.id}`)?.focus(); } })));
   }
 
   function selectVoice(v) {
@@ -690,7 +723,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     state.selTouched = true;
     store.write({ sel: state.sel });
     if (v.lang) { const sel = $('#lang'); if ([...sel.options].some((o) => o.value === v.lang)) sel.value = v.lang; }
-    renderComposer(); renderBusy();
+    renderComposer(); renderBusy(); schedulePreview();
   }
 
   async function removeVoice(v) {
@@ -725,6 +758,12 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const c = (state.status && state.status.engine.capabilities) || { speed: true, temperature: true };
     const speedOk = !local || c.speed !== false; const tempOk = local && c.temperature !== false;
     $('#speed-field').hidden = !speedOk; $('#temp-field').hidden = !tempOk;
+    // Głosy Claude przyjmują tempo 0,7-1,5 i czytają tekst bez naszej normalizacji: suwak i pole normalizacji mówią prawdę o tym.
+    const claude = !!v && v.kind === 'claude'; const sp = $('#speed');
+    sp.min = claude ? '0.7' : '0.5'; sp.max = claude ? '1.5' : '2';
+    sp.value = String(Math.min(Number(sp.max), Math.max(Number(sp.min), Number(sp.value) || 1)));
+    const normBox = $('#normalize').closest('label'); if (normBox) normBox.hidden = claude;
+    syncOutputs();
     const missing = [!speedOk ? 'tempa' : '', local && !tempOk ? 'ekspresji' : ''].filter(Boolean);
     const note = $('#caps-note');
     note.hidden = missing.length === 0;
@@ -744,7 +783,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const v = currentVoice(); const lang = $('#lang').value; const el = $('#lang-hint');
     const mismatch = v && v.kind === 'local' && v.lang && lang && v.lang !== lang;
     el.hidden = !mismatch;
-    if (mismatch) el.textContent = `Ten głos nagrano po ${langName(v.lang).toLowerCase()}. Mowa w innym języku (${langName(lang).toLowerCase()}) może przejąć akcent z nagrania.`;
+    if (mismatch) el.textContent = `Ten głos nagrano w języku: ${langName(v.lang)}. Mowa w innym języku (${langName(lang)}) może przejąć akcent z nagrania.`;
   }
 
   function updateCount() {
@@ -754,6 +793,14 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     $('#count').dataset.over = String(n > max);
   }
 
+  /* Dlaczego Generuj jest zablokowane, gdy silnik nie jest gotowy: błąd i ładowanie to dwie różne sytuacje. */
+  function engineBlockedText() {
+    const e = state.status && state.status.engine;
+    if (state.hostError) return state.hostError.message;
+    if (e && e.state === 'error') return 'Silnik nie wystartował, powód jest u góry strony.';
+    return 'Silnik jeszcze się ładuje. Pierwsze uruchomienie pobiera model.';
+  }
+
   function renderBusy() {
     const v = currentVoice();
     const localSel = v && v.kind === 'local';
@@ -761,10 +808,14 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const busy = state.busy || state.claudeSpeaking;
     $('#go').disabled = busy || !v || blocked;
     $('#stop').hidden = !busy;
-    $('#go-hint').textContent = !v ? 'Wybierz głos.' : blocked && state.hostError ? state.hostError.message : blocked ? 'Silnik jeszcze się ładuje. Pierwsze uruchomienie pobiera model.' : '';
+    $('#go-hint').textContent = !v ? 'Wybierz głos.' : blocked ? engineBlockedText() : '';
     const gate = addGate();
     $('#add-save').disabled = addBusy || !!gate;
-    $('#add-save').textContent = gate ? 'Zapisz głos (po podłączeniu silnika)' : 'Zapisz głos';
+    const eng = state.status && state.status.engine;
+    $('#add-save').textContent = !gate ? 'Zapisz głos'
+      : eng && eng.state === 'error' ? 'Zapisz głos (silnik nie wystartował)'
+      : eng && eng.state !== 'ready' && state.hostTools && !state.hostGone ? 'Zapisz głos (po załadowaniu modelu)'
+      : 'Zapisz głos (najpierw podłącz silnik)';
   }
 
   /* ---------- podgląd „jak to zostanie przeczytane” ---------- */
@@ -776,7 +827,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   async function runPreview() {
     const box = $('#spoken-box');
     const text = $('#text').value.trim();
-    if (!text || !state.hostTools || !state.hostTools.has('preview_text') || state.hostGone || !state.status) { box.hidden = true; return; }
+    const cur = currentVoice();
+    if (!text || !state.hostTools || !state.hostTools.has('preview_text') || state.hostGone || !state.status || (cur && cur.kind === 'claude')) { box.hidden = true; return; }
     const seq = ++previewSeq;
     try {
       const r = await callHost('preview_text', { text, language: $('#lang').value || 'pl', normalize: $('#normalize').checked }, { timeoutMs: 15000 });
@@ -832,8 +884,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   }
 
   async function generateLocal(v, text) {
-    if (!engineReady()) return say('warn', 'Silnik jeszcze się ładuje.');
-    state.busy = true; renderBusy();
+    if (!engineReady()) return say('warn', engineBlockedText());
+    state.busy = true; state.cancelRequested = false; renderBusy();
     const bar = $('#progress'); bar.hidden = false; bar.removeAttribute('value');
     let started;
     try {
@@ -847,15 +899,23 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
       started = await callHost('speak', input);
       state.job = { id: started.job_id };
       if (started.spoken_text) { $('#spoken').textContent = started.spoken_text; $('#spoken-box').hidden = !started.changed; }
-      let snap;
+      let snap, misses = 0;
       for (;;) {
         await sleep(600);
-        snap = await callHost('job_status', { job_id: started.job_id }, { timeoutMs: 30000 });
+        try {
+          snap = await callHost('job_status', { job_id: started.job_id }, { timeoutMs: 30000 });
+          misses = 0;
+        } catch (e) {
+          /* Odczyt jest bezpieczny do powtórzenia: chwilowa awaria łącza nie może sprawić, że strona zapomni działające zadanie. */
+          if (e.kind !== 'mcp' || !['server_unavailable', 'upstream_error', 'cancelled'].includes(e.code) || ++misses > 3) throw e;
+          say('warn', 'Serwer lokalny chwilowo nie odpowiada, próbuję ponownie…');
+          await sleep(1000 + Math.random() * 1000);
+          continue;
+        }
         const total = Math.max(1, snap.chunks_total);
         bar.max = total; bar.value = snap.chunks_done;
-        say('', '');
         if (snap.status === 'queued') say('', `W kolejce (przed Tobą: ${snap.queue_position ?? 0}).`);
-        else if (snap.status === 'running') say('', `Generuję fragment ${Math.min(snap.chunks_done + 1, total)} z ${total}…`);
+        else if (snap.status === 'running') say('', state.cancelRequested ? 'Anuluję po bieżącym fragmencie…' : `Generuję fragment ${Math.min(snap.chunks_done + 1, total)} z ${total}…`);
         if (snap.status === 'done') break;
         if (snap.status === 'failed') throw new HostError('tool', snap.error ? snap.error.code : 'E_JOB_FAILED', snap.error ? snap.error.message : 'Generowanie nie powiodło się.');
         if (snap.status === 'cancelled') { say('warn', 'Anulowano generowanie.'); return; }
@@ -868,7 +928,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
       const err = toHostError(e);
       say(err.code === 'approval_required' ? 'warn' : 'bad', err.message);
     } finally {
-      state.busy = false; state.job = null; bar.hidden = true; bar.value = 0; renderBusy();
+      state.busy = false; state.job = null; state.cancelRequested = false; $('#stop').disabled = false; bar.hidden = true; bar.value = 0; renderBusy();
     }
   }
 
@@ -885,7 +945,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
 
   async function stopAll() {
     if (state.claudeSpeaking && state.tts) { try { await state.tts.stop(); } catch { /* nic */ } }
-    if (state.job) { try { await callHost('job_cancel', { job_id: state.job.id }); say('', 'Anuluję po bieżącym fragmencie…'); } catch (e) { say('bad', e.message); } }
+    if (state.job) { try { await callHost('job_cancel', { job_id: state.job.id }); state.cancelRequested = true; $('#stop').disabled = true; say('', 'Anuluję po bieżącym fragmencie…'); } catch (e) { say('bad', e.message); } }
   }
 
   /* ---------- base64 ---------- */
@@ -907,6 +967,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     return audioCtx;
   }
 
+  let currentPlayer = null; // naraz gra jedno nagranie: start nowego wstrzymuje poprzednie
+
   class ClipPlayer {
     constructor(bytes) {
       this.bytes = bytes; this.buffer = null; this.source = null;
@@ -924,6 +986,8 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
       const buffer = await this.load(); const ctx = getCtx();
       if (ctx.state === 'suspended') { try { await ctx.resume(); } catch { /* wymaga gestu */ } }
       this.stopSource();
+      if (currentPlayer && currentPlayer !== this) currentPlayer.pause();
+      currentPlayer = this;
       if (typeof from === 'number') this.offset = from;
       if (this.offset >= buffer.duration - 0.02) this.offset = 0;
       const src = ctx.createBufferSource(); src.buffer = buffer; src.connect(ctx.destination);
@@ -948,6 +1012,12 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     renderResults();
     const el = document.getElementById(item.id);
     if (el) { const play = el.querySelector('[data-play]'); if (play) play.click(); }
+  }
+
+  /* Zdanie o kopiach na dysku tylko wtedy, gdy silnik je naprawdę zapisuje (SVM_SAVE_OUTPUTS=0 je wyłącza). */
+  function renderResultsHint() {
+    const dir = state.status && state.status.storage && state.status.storage.outputs_dir;
+    $('#results-empty').textContent = `Tu pojawią się gotowe nagrania.${dir ? ' Kopie plików WAV zapisują się też na dysku, w folderze „outputs” silnika.' : ''}`;
   }
 
   function renderResults() {
@@ -986,8 +1056,9 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
   }
 
   async function saveZip(r) {
-    const stamp = r.at.toISOString().replace(/[-:T]/g, '').slice(0, 14);
-    const slug = r.voice.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'glos';
+    const d = r.at; const two = (n) => String(n).padStart(2, '0');
+    const stamp = `${d.getFullYear()}${two(d.getMonth() + 1)}${two(d.getDate())}${two(d.getHours())}${two(d.getMinutes())}${two(d.getSeconds())}`; // czas lokalny, jak na karcie nagrania
+    const slug = r.voice.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/ł/g, 'l').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'glos';
     const base = `glos-${slug}-${stamp}`;
     try {
       const blob = zipStore([{ name: `${base}.wav`, data: r.bytes }], r.at);
@@ -996,7 +1067,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     } catch (e) {
       const code = e && e.code;
       if (code === 'declined') say('', 'Anulowano zapis.');
-      else say('bad', 'Nie udało się zapisać pliku w tym widoku. Kopia WAV jest na dysku w folderze danych silnika.');
+      else say('bad', `Nie udało się zapisać pliku w tym widoku.${r.savedPath ? ` Kopia WAV jest na dysku: ${r.savedPath}` : ''}`);
     }
   }
 
@@ -1033,7 +1104,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
 
   /* ---------- dodawanie głosu ---------- */
   const add = { files: [] };   // { id, name, bytes, duration, peak, rms }
-  let addBusy = false;
+  let addBusy = false, addAbort = false;   // addAbort: Anuluj w trakcie wysyłania
 
   function openAdd() {
     $('#add-panel').hidden = false;
@@ -1081,7 +1152,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const lim = refLimits(); const msg = $('#add-msg');
     for (const file of Array.from(fileList)) {
       if (add.files.length >= lim.files) {
-        setNotice(msg, 'warn', lim.files === 1 ? 'Ten model używa jednego nagrania na głos. Usuń obecne, jeśli chcesz dodać inne.' : `Maksymalnie ${lim.files} plików na jeden głos.`);
+        setNotice(msg, 'warn', lim.files === 1 ? 'Ten model używa jednego nagrania na głos. Usuń obecne, jeśli chcesz dodać inne.' : `Maksymalnie ${lim.files} ${plPlural(lim.files, 'plik', 'pliki', 'plików')} na jeden głos.`);
         break;
       }
       try {
@@ -1134,7 +1205,7 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     const transcript = $('#add-transcript').value.trim();
     if (refPolicy().transcript === 'required' && !transcript) return setNotice(msg, 'warn', 'Ten model potrzebuje transkrypcji: wpisz słowo w słowo, co mówi osoba na nagraniu.');
     if (!$('#add-consent').checked) return setNotice(msg, 'warn', 'Zaznacz, że osoba wyraziła zgodę. Bez tego nie zapiszę głosu.');
-    addBusy = true; renderBusy();
+    addBusy = true; addAbort = false; renderBusy();
     const bar = $('#add-progress'); bar.hidden = false; bar.value = 0;
     setNotice(msg, '', 'Wysyłam nagrania do silnika…');
     let uploadId = null;
@@ -1145,14 +1216,17 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
       uploadId = begin.upload_id;
       const size = Math.max(1000, Math.min(begin.chunk_bytes, 600000));
       const totalBytes = add.files.reduce((n, f) => n + f.bytes.length, 0); let sent = 0;
+      const stop = () => { if (addAbort) throw new HostError('ui', 'cancelled', ''); };   // Anuluj: nic więcej nie wysyłaj ani nie zapisuj
       for (let i = 0; i < add.files.length; i++) {
         const bytes = add.files[i].bytes;
         for (let off = 0; off < bytes.length; off += size) {
+          stop();
           const part = bytes.subarray(off, off + size);
           await callHost('voice_upload_chunk', { upload_id: uploadId, file_index: i, offset: off, data_b64: b64encode(part) });
           sent += part.length; bar.max = totalBytes; bar.value = sent;
         }
       }
+      stop();
       const done = await callHost('voice_upload_commit', { upload_id: uploadId });
       uploadId = null;
       await refreshVoices();
@@ -1165,11 +1239,11 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
         silence: 'W nagraniu jest dużo ciszy. Lepiej, gdy mowa trwa niemal cały czas.',
       };
       const warn = (done.warnings || []).map((w) => notes[w]).filter(Boolean);
-      closeAdd(); renderAll();
+      closeAdd(); renderAll(); $('#add-open').focus({ preventScroll: true });
       say(warn.length ? 'warn' : 'good', `Zapisano głos „${done.voice.name}”.${warn.length ? ' ' + warn.join(' ') : ''}`);
     } catch (e) {
       const err = toHostError(e);
-      setNotice(msg, err.code === 'approval_required' ? 'warn' : 'bad', err.message);
+      if (!addAbort) setNotice(msg, err.code === 'approval_required' ? 'warn' : 'bad', err.message);
       if (uploadId) { try { await callHost('voice_upload_abort', { upload_id: uploadId }); } catch { /* sesja i tak wygaśnie */ } }
     } finally { addBusy = false; bar.hidden = true; renderBusy(); }
   }
@@ -1196,9 +1270,13 @@ footer { color: var(--ink-3); font-size: 12.5px; max-width: 78ch; }
     $('#normalize').addEventListener('change', () => { store.write({ normalize: $('#normalize').checked }); schedulePreview(); });
     $('#speed').addEventListener('input', () => { syncOutputs(); store.write({ speed: $('#speed').value }); });
     $('#temp').addEventListener('input', () => { syncOutputs(); store.write({ temp: $('#temp').value }); });
+    $('#setup-retry').addEventListener('click', async () => {
+      try { const l = await state.mcp.listTools(); const s = (l.servers || []).find((x) => x.server === HOST); if (s) state.hostTools = new Set((s.tools || []).map((t) => t.name)); } catch { /* bez zmian */ }
+      renderAll(); if (state.hostTools) pollStatus();
+    });
     $('#add-open').addEventListener('click', openAdd);
     $('#add-gate-setup').addEventListener('click', () => { const s = $('#setup'); if (!s.hidden) s.scrollIntoView({ block: 'start' }); });
-    $('#add-cancel').addEventListener('click', closeAdd);
+    $('#add-cancel').addEventListener('click', () => { if (addBusy) addAbort = true; closeAdd(); });
     $('#add-panel').addEventListener('submit', saveVoice);
     const drop = $('#drop'); const input = $('#add-files');
     drop.addEventListener('click', () => input.click());

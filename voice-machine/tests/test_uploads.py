@@ -33,9 +33,35 @@ def test_chunks_assemble_in_order() -> None:
     assert manager.add_chunk(uid, 0, 0, b"abcde") == 5
     assert manager.add_chunk(uid, 0, 5, b"fgh") == 8
     assert manager.add_chunk(uid, 1, 0, b"xyz") == 3
-    upload = manager.take(uid)
+    upload = manager.claim(uid)
     assert [bytes(b) for b in upload.buffers] == [b"abcdefgh", b"xyz"]
-    assert code_of(lambda: manager.take(uid)) == E_UPLOAD_NOT_FOUND
+    manager.release(uid, keep=False)
+    assert code_of(lambda: manager.claim(uid)) == E_UPLOAD_NOT_FOUND
+
+
+def test_claimed_session_is_frozen_and_cannot_be_claimed_twice() -> None:
+    manager = UploadManager(Limits(upload_chunk_bytes=10))
+    uid = manager.begin("Kuba", "pl", 1)
+    manager.add_chunk(uid, 0, 0, b"abc")
+    manager.claim(uid)
+    # Równoległy drugi zapis i kolejne kawałki są odrzucane, więc z jednej wysyłki nie powstaną dwa głosy.
+    assert code_of(lambda: manager.claim(uid)) == E_UPLOAD_NOT_FOUND
+    assert code_of(lambda: manager.add_chunk(uid, 0, 3, b"def")) == E_BAD_REQUEST
+
+
+def test_release_with_keep_reopens_the_session_for_a_retry() -> None:
+    clock = Clock()
+    manager = UploadManager(Limits(upload_chunk_bytes=10, upload_ttl_s=60), clock=clock)
+    uid = manager.begin("Kuba", "pl", 1)
+    manager.add_chunk(uid, 0, 0, b"abc")
+    manager.claim(uid)
+    clock.now += 50
+    manager.release(uid, keep=True)
+    clock.now += 50  # od zwolnienia minęło 50 s < 60 s: sesja żyje, bo release odświeża czas
+    again = manager.claim(uid)
+    assert bytes(again.buffers[0]) == b"abc"
+    manager.release(uid, keep=False)
+    manager.release(uid, keep=True)  # zwolnienie nieistniejącej sesji niczego nie psuje
 
 
 def test_retry_of_identical_chunk_is_idempotent_but_different_bytes_are_refused() -> None:

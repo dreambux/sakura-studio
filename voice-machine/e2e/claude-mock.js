@@ -16,7 +16,7 @@
       return { servers: [{ server: 'host:sakura-voice', authStatus: 'connected', tools: j.tools }] };
     },
     async callTool(server, tool, input, options) {
-      window.__hostCalls.push({ server, tool });
+      window.__hostCalls.push({ server, tool, input });
       if (cfg.noHost || server !== 'host:sakura-voice') throw { code: 'server_not_connected', message: 'no host', server };
       if (cfg.denyCalls) throw { code: 'not_in_manifest', message: 'denied', server };
       let res;

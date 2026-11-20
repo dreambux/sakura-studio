@@ -109,7 +109,7 @@ class FakeEngine:
         samples = (0.25 * np.sin(2 * np.pi * base * wobble * t) * envelope).astype(np.float32)
         return AudioClip(samples=samples, sample_rate=SAMPLE_RATE)
 
-    def diagnose(self) -> list[tuple[str, str, bool]]:
+    def diagnose(self) -> list[tuple[str, str, bool | None]]:
         return [("silnik", "testowy (tony, nie mowa)", True)]
 
     def close(self) -> None:

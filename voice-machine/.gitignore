@@ -11,3 +11,15 @@ data/
 outputs/
 voices/
 doctor-smoke.wav
+
+# Pliki, które instalator tworzy w tym folderze: zawierają ścieżki z nazwą użytkownika Windows, więc nie należą do repozytorium.
+claude-desktop-snippet.json
+claude_desktop_config.json*
+doctor-smoke-clone.wav
+
+# Żadnych nagrań, skąd by się nie wzięły: próbki głosów znajomych nie mogą trafić do historii repozytorium.
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.flac

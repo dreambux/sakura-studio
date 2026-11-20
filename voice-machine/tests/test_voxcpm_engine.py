@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import ast
 import base64
+import builtins
+import importlib.util
 import inspect
 import os
 import sys
@@ -35,12 +37,15 @@ class StubTtsModel:
 class StubVoxCPM:
     instances: list["StubVoxCPM"] = []
     fail_with: BaseException | None = None
+    fail_offline: BaseException | None = None  # rzucany tylko przy local_files_only=True (niepełna kopia na dysku)
+    generate_error: BaseException | None = None  # rzucany przez generate (np. brak pamięci karty)
     output: Any = None
 
     def __init__(self) -> None:
         self.tts_model = StubTtsModel()
         self.calls: list[dict[str, Any]] = []
         self.init_args: dict[str, Any] = {}
+        self.local_files_only = False
 
     @classmethod
     def from_pretrained(  # noqa: PLR0913 - kopia sygnatury z voxcpm/core.py:104-116
@@ -49,8 +54,11 @@ class StubVoxCPM:
     ):
         if cls.fail_with is not None:
             raise cls.fail_with
+        if local_files_only and cls.fail_offline is not None:
+            raise cls.fail_offline
         inst = cls()
         inst.init_args = {"hf_model_id": hf_model_id, "load_denoiser": load_denoiser, "optimize": optimize, "device": device}
+        inst.local_files_only = local_files_only
         cls.instances.append(inst)
         return inst
 
@@ -64,6 +72,9 @@ class StubVoxCPM:
     def generate(self, text, prompt_wav_path=None, prompt_text=None, reference_wav_path=None, cfg_value=2.0,
                  inference_timesteps=10, min_len=2, max_len=4096, normalize=False, denoise=False, retry_badcase=True,
                  retry_badcase_max_times=3, retry_badcase_ratio_threshold=6.0, streaming=False):
+        assert not streaming, "adapter nie używa strumieniowania (retry_badcase jest wtedy wyłączone w bibliotece)"
+        if StubVoxCPM.generate_error is not None:
+            raise StubVoxCPM.generate_error
         self.calls.append({
             "text": text, "prompt_wav_path": prompt_wav_path, "prompt_text": prompt_text,
             "reference_wav_path": reference_wav_path, "cfg_value": cfg_value, "inference_timesteps": inference_timesteps,
@@ -92,10 +103,14 @@ class StubTorch(types.ModuleType):
 
 
 @pytest.fixture
-def stub_libs(monkeypatch: pytest.MonkeyPatch):
+def stub_libs(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     StubVoxCPM.instances = []
     StubVoxCPM.fail_with = None
+    StubVoxCPM.fail_offline = None
+    StubVoxCPM.generate_error = None
     StubVoxCPM.output = None
+    # Pusta, własna pamięć podręczna HF: wynik testów nie zależy od tego, czy na tym komputerze leży prawdziwy model.
+    monkeypatch.setenv("HF_HUB_CACHE", str(tmp_path / "hf-cache"))
     torch = StubTorch()
     module = types.ModuleType("voxcpm")
     module.VoxCPM = StubVoxCPM  # type: ignore[attr-defined]
@@ -259,6 +274,179 @@ def test_implausible_sample_rate_is_rejected(tmp_path: Path, stub_libs, monkeypa
     assert engine.info().state is EngineState.ERROR and "częstotliwość" in (engine.info().error or "")
 
 
+def put_model_in_cache(root: Path, model: str = vx.MODEL_ID, snapshots: tuple[str, ...] = ("abc123",)) -> None:
+    base = root / "hf-cache" / f"models--{model.replace('/', '--')}" / "snapshots"
+    base.mkdir(parents=True)
+    for name in snapshots:
+        (base / name).mkdir()
+
+
+def test_a_model_already_on_disk_is_loaded_without_asking_the_network(tmp_path: Path, stub_libs) -> None:
+    put_model_in_cache(tmp_path)
+    engine = make_engine(tmp_path)
+    load(engine)
+    assert engine.info().state is EngineState.READY
+    assert StubVoxCPM.instances[0].local_files_only is True
+
+
+def test_without_a_cached_model_the_normal_online_load_is_used(tmp_path: Path, stub_libs) -> None:
+    engine = make_engine(tmp_path)
+    load(engine)
+    assert engine.info().state is EngineState.READY and StubVoxCPM.instances[0].local_files_only is False
+
+
+def test_an_incomplete_cache_falls_back_to_a_normal_load(tmp_path: Path, stub_libs) -> None:
+    put_model_in_cache(tmp_path)
+    StubVoxCPM.fail_offline = OSError("brakuje plików w pamięci podręcznej")
+    engine = make_engine(tmp_path)
+    load(engine)
+    assert engine.info().state is EngineState.READY, engine.info().error
+    assert len(StubVoxCPM.instances) == 1 and StubVoxCPM.instances[0].local_files_only is False
+
+
+def test_a_local_model_directory_is_passed_as_is_without_the_offline_probe(tmp_path: Path, stub_libs, monkeypatch: pytest.MonkeyPatch) -> None:
+    folder = tmp_path / "moj-model"
+    folder.mkdir()
+    monkeypatch.setenv("SVM_VOXCPM_MODEL", str(folder))
+    put_model_in_cache(tmp_path)  # nawet jeśli leży też kopia z internetu, katalog lokalny ma pierwszeństwo
+    engine = make_engine(tmp_path)
+    load(engine)
+    assert StubVoxCPM.instances[0].init_args["hf_model_id"] == str(folder)
+    assert StubVoxCPM.instances[0].local_files_only is False
+
+
+def test_cache_detection_rules(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("HF_HUB_CACHE", str(tmp_path / "hf-cache"))
+    assert vx.model_is_cached(vx.MODEL_ID) is False  # katalogu w ogóle nie ma
+    (tmp_path / "hf-cache" / "models--openbmb--VoxCPM2" / "snapshots").mkdir(parents=True)
+    assert vx.model_is_cached(vx.MODEL_ID) is False  # jest repozytorium, ale bez żadnej migawki
+    (tmp_path / "hf-cache" / "models--openbmb--VoxCPM2" / "snapshots" / "abc").mkdir()
+    assert vx.model_is_cached(vx.MODEL_ID) is True
+    assert vx.model_is_cached("inny/model") is False
+    monkeypatch.delenv("HF_HUB_CACHE")
+    monkeypatch.setenv("HF_HOME", str(tmp_path / "hf-home"))
+    assert vx.hf_hub_cache_dir() == tmp_path / "hf-home" / "hub"
+
+
+def test_a_failed_load_is_retried_only_after_the_cooldown(tmp_path: Path, stub_libs) -> None:
+    StubVoxCPM.fail_with = OSError("Max retries exceeded with url: /openbmb/VoxCPM2")
+    engine = make_engine(tmp_path)
+    load(engine)
+    assert engine.info().state is EngineState.ERROR and "Hugging Face" in (engine.info().error or "")
+    StubVoxCPM.fail_with = None
+    load(engine)  # za wcześnie: odstęp po błędzie jeszcze trwa
+    assert engine.info().state is EngineState.ERROR
+    engine._failed_at -= vx.RETRY_COOLDOWN_S + 1  # udajemy, że minęło pół minuty
+    load(engine)
+    assert engine.info().state is EngineState.READY and engine.info().error is None
+
+
+def test_the_service_polling_status_revives_a_failed_engine(tmp_path: Path, stub_libs) -> None:
+    StubVoxCPM.fail_with = OSError("getaddrinfo failed")
+    engine = make_engine(tmp_path)
+    service = Service(Settings(data_dir=tmp_path / "data", engine="voxcpm"), engine)
+    try:
+        engine.start_loading()
+        wait_until(lambda: engine.info().state is EngineState.ERROR)
+        StubVoxCPM.fail_with = None
+        assert service.status()["engine"]["state"] == "error"  # w odstępie nic się nie dzieje
+        engine._failed_at -= vx.RETRY_COOLDOWN_S + 1
+        service.status()
+        wait_until(lambda: engine.info().state is EngineState.READY)
+    finally:
+        service.close()
+
+
+@pytest.mark.parametrize(
+    "exc, expected",
+    [
+        (OSError("[WinError 126] The specified module could not be found. Error loading torch\\lib\\fbgemm.dll"), "Visual C++"),
+        (OSError("[WinError 1455] The paging file is too small for this operation to complete"), "plik stronicowania"),
+        (OSError("[WinError 1114] A dynamic link library (DLL) initialization routine failed"), "sterownik"),
+        (ValueError("KV cache is full"), "za długi"),
+        (FileNotFoundError("reference_wav_path does not exist: C:/x.wav"), "nagrania wzorcowego"),
+        (RuntimeError("CUDA out of memory. Tried to allocate 1.20 GiB"), "Skróć tekst"),
+        (ConnectionError("Connection reset by peer"), "Hugging Face"),
+    ],
+)
+def test_more_failures_are_explained_in_polish(exc: BaseException, expected: str) -> None:
+    assert expected in vx.explain_failure(exc)
+
+
+def test_a_bad_local_model_folder_is_not_blamed_on_the_internet() -> None:
+    message = vx.explain_failure(OSError("Can't load tokenizer for 'C:/model'. Make sure 'C:/model' is a correct model identifier listed on 'https://huggingface.co/models'"))
+    assert "sprawdź internet" not in message
+
+
+def test_synthesis_errors_are_explained_not_raw(tmp_path: Path, stub_libs) -> None:
+    engine = make_engine(tmp_path)
+    load(engine)
+    StubVoxCPM.generate_error = RuntimeError("CUDA out of memory. Tried to allocate 1.20 GiB. GPU 0 has a total capacity of 6.00 GiB")
+    with pytest.raises(VoiceMachineError) as exc:
+        engine.synthesize("Tekst.", "pl", BUILTIN, SynthParams())
+    assert exc.value.code == E_ENGINE_FAILED and "Za mało pamięci karty" in exc.value.message and "Skróć tekst" in exc.value.message
+
+
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("(Uwaga!) Dzień dobry wszystkim.", "Uwaga! Dzień dobry wszystkim."),
+        ("  (śmiech) No dobra, zaczynamy.", "śmiech No dobra, zaczynamy."),
+        ("（pełnoszerokie） Tekst", "pełnoszerokie Tekst"),
+        ("(bez zamknięcia tekst", "bez zamknięcia tekst"),
+        ("Dzień (dobry) wszystkim.", "Dzień (dobry) wszystkim."),
+        ("Zwykły tekst.", "Zwykły tekst."),
+    ],
+)
+def test_a_leading_bracket_is_never_taken_for_a_voice_description(text: str, expected: str) -> None:
+    assert vx.guard_control_prefix(text) == expected
+
+
+def test_the_guard_reaches_the_library_call(tmp_path: Path, stub_libs) -> None:
+    engine = make_engine(tmp_path)
+    load(engine)
+    engine.synthesize("(Uwaga!) Dzień dobry.", "pl", BUILTIN, SynthParams())
+    assert StubVoxCPM.instances[0].calls[0]["text"] == "Uwaga! Dzień dobry."
+
+
+def test_a_broken_torch_install_is_named_by_diagnose_and_by_the_load_error(tmp_path: Path, stub_libs, monkeypatch: pytest.MonkeyPatch) -> None:
+    real_import = builtins.__import__
+
+    def broken(name, *args, **kwargs):
+        if name == "torch":
+            raise OSError('[WinError 126] The specified module could not be found. Error loading "torch\\lib\\fbgemm.dll" or one of its dependencies.')
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", broken)
+    engine = make_engine(tmp_path)
+    rows = {label: (value, ok) for label, value, ok in engine.diagnose()}
+    assert rows["PyTorch"][1] is False and "Visual C++" in rows["PyTorch"][0]
+    load(engine)
+    assert engine.info().state is EngineState.ERROR and "Visual C++" in (engine.info().error or "")
+
+
+def test_a_missing_gpu_is_a_warning_and_a_6_gb_card_passes(tmp_path: Path, stub_libs) -> None:
+    stub_libs.cuda.is_available = lambda: False
+    rows = {label: ok for label, _value, ok in make_engine(tmp_path).diagnose()}
+    assert rows["karta CUDA"] is None  # ostrzeżenie, nie błąd: na procesorze da się pracować, tylko wolno
+    stub_libs.cuda.is_available = lambda: True
+    stub_libs.cuda.get_device_properties = lambda i: types.SimpleNamespace(name="Laptop GPU", total_memory=int(5.7 * 2**30))
+    assert {label: ok for label, _value, ok in make_engine(tmp_path).diagnose()}["karta CUDA"] is True
+    stub_libs.cuda.get_device_properties = lambda i: types.SimpleNamespace(name="Mała karta", total_memory=4 * 2**30)
+    assert {label: ok for label, _value, ok in make_engine(tmp_path).diagnose()}["karta CUDA"] is None
+
+
+def test_a_local_model_folder_is_reported_by_diagnose(tmp_path: Path, stub_libs, monkeypatch: pytest.MonkeyPatch) -> None:
+    folder = tmp_path / "moj-model"
+    folder.mkdir()
+    monkeypatch.setenv("SVM_VOXCPM_MODEL", str(folder))
+    row = next(r for r in make_engine(tmp_path).diagnose() if r[0] == "model na dysku")
+    assert row[2] is False and "config.json" in row[1]
+    (folder / "config.json").write_text("{}")
+    row = next(r for r in make_engine(tmp_path).diagnose() if r[0] == "model na dysku")
+    assert row[2] is True and "lokalny katalog" in row[1]
+
+
 def test_cpu_only_gets_a_visible_warning(tmp_path: Path, stub_libs, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(StubTtsModel, "device", "cpu")
     engine = make_engine(tmp_path)
@@ -275,7 +463,7 @@ def test_diagnose_reports_gpu_and_missing_pieces(tmp_path: Path, stub_libs, monk
     assert rows["PyTorch"] == ("9.9.9-stub", True)
     assert rows["karta CUDA"][1] is True and "Stub GPU" in rows["karta CUDA"][0] and "12.0 GB" in rows["karta CUDA"][0]
     assert rows["voxcpm"][1] is False and "pip install" in rows["voxcpm"][0]
-    assert "model w pamięci podręcznej" in rows
+    assert "model na dysku" in rows
     monkeypatch.setattr(vx.metadata, "version", lambda name: "9.9.9")
     rows = {label: (value, ok) for label, value, ok in make_engine(tmp_path).diagnose()}
     assert rows["voxcpm"][1] is True and "sprawdzono tylko z 2.0.3" in rows["voxcpm"][0]
@@ -307,8 +495,22 @@ def test_full_job_through_the_service_with_a_cloned_voice(tmp_path: Path, stub_l
 
 
 # --- kontrakt ze źródłami voxcpm 2.0.3 (opcjonalny) -------------------------------------------------------------------
-SOURCE_DIR = os.environ.get("SVM_VOXCPM_SOURCE_DIR")
-needs_source = pytest.mark.skipif(not SOURCE_DIR, reason="ustaw SVM_VOXCPM_SOURCE_DIR na katalog z rozpakowanym wheel voxcpm 2.0.3")
+def _find_source_dir() -> str | None:
+    """Katalog ze źródłami voxcpm: z SVM_VOXCPM_SOURCE_DIR, a bez niej z zainstalowanego pakietu (jeśli jest)."""
+    explicit = os.environ.get("SVM_VOXCPM_SOURCE_DIR")
+    if explicit:
+        return explicit
+    try:
+        spec = importlib.util.find_spec("voxcpm")
+    except (ImportError, ValueError):
+        return None
+    if spec and spec.submodule_search_locations:
+        return str(Path(list(spec.submodule_search_locations)[0]).parent)
+    return None
+
+
+SOURCE_DIR = _find_source_dir()
+needs_source = pytest.mark.skipif(not SOURCE_DIR, reason="ustaw SVM_VOXCPM_SOURCE_DIR na katalog z rozpakowanym wheel voxcpm 2.0.3 (albo zainstaluj voxcpm)")
 
 
 def _class_functions(path: Path, class_name: str) -> dict[str, ast.FunctionDef]:
@@ -352,3 +554,46 @@ def test_audio_rates_assumed_by_the_adapter_match_the_vae_config() -> None:
     cfg = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "AudioVAEConfig")
     values = {n.target.id: ast.literal_eval(n.value) for n in cfg.body if isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name) and n.value is not None}
     assert values["sample_rate"] == vx.REFERENCE_SAMPLE_RATE and values["out_sample_rate"] == vx.EXPECTED_OUTPUT_RATE
+
+
+def _assigned_self_attributes(func: ast.FunctionDef) -> set[str]:
+    out: set[str] = set()
+    for node in ast.walk(func):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name) and target.value.id == "self":
+                    out.add(target.attr)
+    return out
+
+
+@needs_source
+def test_the_pinned_version_is_the_one_whose_source_was_inspected() -> None:
+    dists = sorted(Path(SOURCE_DIR).glob("voxcpm-*.dist-info"))
+    assert dists, "obok źródeł nie ma voxcpm-*.dist-info: nie da się sprawdzić wersji"
+    assert dists[-1].name == f"voxcpm-{vx.PINNED_VERSION}.dist-info"
+
+
+@needs_source
+def test_attributes_and_calls_the_adapter_relies_on_exist_in_the_source() -> None:
+    core = ast.parse((Path(SOURCE_DIR) / "voxcpm" / "core.py").read_text(encoding="utf-8"))
+    cls = next(n for n in core.body if isinstance(n, ast.ClassDef) and n.name == "VoxCPM")
+    funcs = {f.name: f for f in cls.body if isinstance(f, ast.FunctionDef)}
+    # adapter czyta model.tts_model.sample_rate, więc __init__ musi tworzyć model VoxCPM2 w self.tts_model (druga gałąź to model 1.x)
+    v2_model = [
+        n for n in ast.walk(funcs["__init__"])
+        if isinstance(n, ast.Assign)
+        and any(isinstance(t, ast.Attribute) and t.attr == "tts_model" for t in n.targets)
+        and isinstance(n.value, ast.Call) and isinstance(n.value.func, ast.Attribute)
+        and isinstance(n.value.func.value, ast.Name) and n.value.func.value.id == "VoxCPM2Model"
+    ]
+    assert v2_model
+    # generate() ma przekazywać wywołanie do _generate(streaming=False), bo adapter używa tylko trybu nie-strumieniowego
+    forwards = [
+        n for n in ast.walk(funcs["generate"])
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "_generate"
+    ]
+    assert forwards and any(k.arg == "streaming" and isinstance(k.value, ast.Constant) and k.value.value is False for c in forwards for k in c.keywords)
+    model = ast.parse((Path(SOURCE_DIR) / "voxcpm" / "model" / "voxcpm2.py").read_text(encoding="utf-8"))
+    model_cls = next(n for n in model.body if isinstance(n, ast.ClassDef) and n.name == "VoxCPM2Model")
+    model_init = next(f for f in model_cls.body if isinstance(f, ast.FunctionDef) and f.name == "__init__")
+    assert "sample_rate" in _assigned_self_attributes(model_init)  # adapter czyta częstotliwość próbkowania wyjścia z modelu

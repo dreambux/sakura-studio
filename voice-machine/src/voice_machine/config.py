@@ -20,8 +20,10 @@ class Limits:
     max_ref_file_bytes: int = 32 * 1024 * 1024
     # Wejście narzędzia MCP w artefakcie ma limit 1 MiB (JSON z base64), stąd ~600 kB surowych bajtów.
     upload_chunk_bytes: int = 600_000
-    audio_chunk_bytes: int = 600_000
-    max_chunks_per_job: int = 60
+    # Wynik job_audio ma ten sam rząd wielkości (nie wiadomo, czy host ogranicza wyniki); 450 kB to 600 tys. znaków base64.
+    audio_chunk_bytes: int = 450_000
+    max_output_files: int = 300  # tyle najnowszych kopii WAV zostaje w outputs\ (0 = bez limitu)
+    max_chunks_per_job: int = 90  # 2000 znaków krótkich zdań (po ok. 24 znaki) daje ok. 83 fragmenty
     max_job_seconds: float = 900.0
     max_finished_jobs: int = 8
     job_ttl_s: float = 1800.0

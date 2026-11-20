@@ -139,6 +139,11 @@ class JobManager:
             self._cv.notify()
             return self._snapshot_locked(job)
 
+    def uses_voice(self, voice_id: str) -> bool:
+        """Czy któreś zadanie w kolejce albo w trakcie syntezy korzysta z tego głosu (wtedy nie wolno go usunąć)."""
+        with self._cv:
+            return any(j.status in _ACTIVE and j.voice.voice_id == voice_id for j in self._jobs.values())
+
     def snapshot(self, job_id: str) -> dict[str, Any]:
         with self._cv:
             return self._snapshot_locked(self._get_locked(job_id))

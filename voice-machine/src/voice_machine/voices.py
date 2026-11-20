@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import threading
+import time
 import unicodedata
 import uuid
 from collections.abc import Sequence
@@ -38,6 +39,18 @@ _LANGUAGE_RE = re.compile(r"^[a-z]{2,3}(-[a-z]{2,4})?$")
 
 def is_valid_voice_id(voice_id: str) -> bool:
     return isinstance(voice_id, str) and _VOICE_ID_RE.fullmatch(voice_id) is not None
+
+
+def replace_with_retry(src: Path, dst: Path, attempts: int = 6, delay_s: float = 0.15) -> None:
+    """os.replace z ponowieniami: na Windows antywirus albo indeksator potrafią na chwilę zablokować katalog (PermissionError)."""
+    for attempt in range(attempts):
+        try:
+            os.replace(src, dst)
+            return
+        except PermissionError:
+            if attempt == attempts - 1:
+                raise
+            time.sleep(delay_s * (attempt + 1))
 
 
 def clean_name(name: str) -> str:
@@ -222,13 +235,20 @@ class VoiceStore:
             for voice_id in self._ids():
                 try:
                     records.append(self._load(voice_id))
-                except (OSError, ValueError, KeyError, TypeError) as exc:
+                except (OSError, ValueError) as exc:
                     log.warning("skipping unreadable voice %s: %s", voice_id, exc)
             return sorted(records, key=lambda r: r.created_at)
 
     def _load(self, voice_id: str) -> VoiceRecord:
-        raw = json.loads((self._dir(voice_id) / "voice.json").read_text(encoding="utf-8"))
-        return _parse_record(raw, voice_id)
+        """Wczytuje voice.json. Każde uszkodzenie danych kończy się ValueError (albo OSError), żeby jeden zły plik
+        nie zasłonił pozostałych głosów: wołający łapią tylko te dwa typy."""
+        try:
+            raw = json.loads((self._dir(voice_id) / "voice.json").read_text(encoding="utf-8"))
+            return _parse_record(raw, voice_id)
+        except (OSError, ValueError):
+            raise
+        except Exception as exc:  # noqa: BLE001 - AttributeError, OverflowError, KeyError, VoiceMachineError z walidacji pól
+            raise ValueError(f"damaged voice record ({type(exc).__name__}: {exc})") from exc
 
     def get(self, voice_id: str) -> VoiceRecord:
         with self._lock:
@@ -237,7 +257,7 @@ class VoiceStore:
                 raise VoiceMachineError(E_VOICE_NOT_FOUND, "Nie ma takiego głosu.")
             try:
                 return self._load(voice_id)
-            except (OSError, ValueError, KeyError, TypeError) as exc:
+            except (OSError, ValueError) as exc:
                 log.warning("unreadable voice %s: %s", voice_id, exc)
                 raise VoiceMachineError(E_VOICE_NOT_FOUND, "Dane tego głosu są uszkodzone.") from exc
 
@@ -245,11 +265,6 @@ class VoiceStore:
         record = self.get(voice_id)
         base = self._dir(voice_id) / "samples"
         return tuple(base / s.file for s in record.samples)
-
-    def cache_dir(self, voice_id: str) -> Path:
-        directory = self._dir(voice_id) / "cache"
-        directory.mkdir(parents=True, exist_ok=True)
-        return directory
 
     def create(
         self,
@@ -302,7 +317,7 @@ class VoiceStore:
                 (tmp / "voice.json").write_text(
                     json.dumps(record.to_json(), ensure_ascii=False, indent=2), encoding="utf-8"
                 )
-                os.replace(tmp, self.root / voice_id)
+                replace_with_retry(tmp, self.root / voice_id)
             except BaseException:
                 shutil.rmtree(tmp, ignore_errors=True)
                 raise
@@ -314,5 +329,5 @@ class VoiceStore:
             if not directory.is_dir():
                 raise VoiceMachineError(E_VOICE_NOT_FOUND, "Nie ma takiego głosu.")
             trash = self.root / f".trash-{uuid.uuid4().hex}"
-            os.replace(directory, trash)
+            replace_with_retry(directory, trash)
             shutil.rmtree(trash, ignore_errors=True)

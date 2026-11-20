@@ -13,8 +13,10 @@ import logging
 import math
 import os
 import platform
+import re
 import sys
 import threading
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
@@ -58,9 +60,11 @@ REFERENCE_POLICY = ReferencePolicy(
     ),
 )
 CAPABILITIES = {"speed": False, "temperature": False, "seed": True}
+MIN_VRAM_GIB = 5.5  # tolerancyjny próg ostrzeżenia o pamięci karty (6 GB to ok. 5,7 GiB)
+RETRY_COOLDOWN_S = 30.0  # tyle czekamy po nieudanym ładowaniu, zanim kolejne wywołanie start_loading() spróbuje ponownie
 
 # Nazwy argumentów, które przekazujemy do biblioteki. Test kontraktowy porównuje je z sygnaturami w źródłach.
-FROM_PRETRAINED_KWARGS = ("load_denoiser", "optimize", "device")
+FROM_PRETRAINED_KWARGS = ("load_denoiser", "optimize", "device", "local_files_only")
 GENERATE_KWARGS = (
     "text", "cfg_value", "inference_timesteps", "normalize", "denoise",
     "prompt_wav_path", "prompt_text", "reference_wav_path",
@@ -105,6 +109,18 @@ class VoxCpmConfig:
         )
 
 
+_WINERROR_HINTS = {
+    "126": "Brakuje biblioteki systemowej: zainstaluj „Visual C++ Redistributable x64” (https://aka.ms/vs/17/release/vc_redist.x64.exe) i uruchom ponownie.",
+    "1114": "Nie udało się zainicjować biblioteki: zainstaluj „Visual C++ Redistributable x64” i zaktualizuj sterownik karty NVIDIA.",
+    "1455": "Za mały plik stronicowania Windows: zwiększ plik wymiany (Pamięć wirtualna w ustawieniach zaawansowanych systemu) albo zamknij inne programy.",
+}
+# Wyłącznie oznaki problemu z siecią. Gołe słowa "huggingface" i "resolve" pasowały też do błędu złego katalogu modelu.
+_NETWORK_MARKERS = (
+    "max retries", "getaddrinfo", "connection error", "connection refused", "connection reset", "name or service not known",
+    "temporary failure in name resolution", "timed out", "connecterror", "connecttimeout", "offlinemodeisenabled", "localentrynotfound",
+)
+
+
 def explain_failure(exc: BaseException) -> str:
     """Zamienia wyjątek z biblioteki na komunikat z podpowiedzią (po polsku, bez śladu stosu)."""
     if isinstance(exc, VoiceMachineError):
@@ -113,10 +129,50 @@ def explain_failure(exc: BaseException) -> str:
     text = f"{name}: {str(exc)[:300]}".strip()
     lowered = text.lower()
     if "out of memory" in lowered or "outofmemory" in lowered:
-        return f"Za mało pamięci karty graficznej (model potrzebuje około 8 GB wg autorów). {text}"
-    if any(key in lowered for key in ("max retries", "connection", "getaddrinfo", "huggingface", "offline", "resolve")):
+        return f"Za mało pamięci karty graficznej (model potrzebuje około 8 GB wg autorów). Skróć tekst albo zamknij inne programy korzystające z karty. {text}"
+    winerror = re.search(r"winerror (\d+)", lowered)
+    if winerror and winerror.group(1) in _WINERROR_HINTS:
+        return f"{_WINERROR_HINTS[winerror.group(1)]} ({text})"
+    if "kv cache is full" in lowered:
+        return f"Tekst razem z nagraniem wzorcowym jest za długi dla modelu. Skróć tekst albo użyj krótszego nagrania. {text}"
+    if isinstance(exc, FileNotFoundError) and "reference" in lowered:
+        return f"Nie znaleziono pliku nagrania wzorcowego (czy głos został usunięty?). {text}"
+    if isinstance(exc, (ConnectionError, TimeoutError)) or any(marker in lowered for marker in _NETWORK_MARKERS):
         return f"Nie udało się pobrać modelu z Hugging Face: sprawdź internet i dostęp do huggingface.co. {text}"
     return text
+
+
+_RE_LEADING_BRACKET_PAIR = re.compile(r"^\s*[(（]([^()（）]*)[)）]\s*")
+_RE_LEADING_BRACKET = re.compile(r"^\s*[(（]\s*")
+
+
+def guard_control_prefix(text: str) -> str:
+    """Tekst zaczynający się od nawiasu VoxCPM2 czyta jako opis głosu ("(młoda kobieta)Tekst"), a nie jako treść.
+    Zdejmujemy nawias i zostawiamy jego zawartość: "(Uwaga!) Dzień dobry" -> "Uwaga! Dzień dobry"."""
+    if _RE_LEADING_BRACKET_PAIR.match(text):
+        return _RE_LEADING_BRACKET_PAIR.sub(lambda m: f"{m.group(1).strip()} ", text, count=1).strip()
+    return _RE_LEADING_BRACKET.sub("", text, count=1)
+
+
+def hf_hub_cache_dir() -> Path:
+    """Katalog pamięci podręcznej Hugging Face (kolejność jak w bibliotece: HF_HUB_CACHE, HF_HOME/hub, ~/.cache/huggingface/hub)."""
+    explicit = os.environ.get("HF_HUB_CACHE")
+    if explicit:
+        return Path(explicit)
+    home = os.environ.get("HF_HOME")
+    return (Path(home) if home else Path.home() / ".cache" / "huggingface") / "hub"
+
+
+def model_is_cached(model: str) -> bool:
+    """Czy migawka modelu z Hugging Face leży już na dysku. Lokalny katalog modelu to inny przypadek (jego biblioteka
+    i tak używa bez sieci), więc tu daje false. Pomyłka w którąkolwiek stronę jest bezpieczna: patrz _load_model."""
+    if Path(model).is_dir():
+        return False
+    snapshots = hf_hub_cache_dir() / f"models--{model.replace('/', '--')}" / "snapshots"
+    try:
+        return any(entry.is_dir() for entry in snapshots.iterdir())
+    except OSError:
+        return False
 
 
 class VoxCpmEngine:
@@ -128,6 +184,7 @@ class VoxCpmEngine:
         self._state = EngineState.IDLE
         self._error: str | None = None
         self._thread: threading.Thread | None = None
+        self._failed_at = 0.0
         self._model: Any = None
         self._torch: Any = None
         self._rate: int | None = None
@@ -157,7 +214,12 @@ class VoxCpmEngine:
         )
 
     def start_loading(self) -> None:
+        """Rusza ładowanie modelu. Po nieudanym ładowaniu (np. zerwane pobieranie) próbuje znowu, ale najwcześniej po
+        RETRY_COOLDOWN_S sekundach, żeby odpytywanie stanu nie uruchamiało pobierania w pętli."""
         with self._lock:
+            if self._state is EngineState.ERROR and time.monotonic() - self._failed_at >= RETRY_COOLDOWN_S:
+                self._state = EngineState.IDLE
+                self._error = None
             if self._state is not EngineState.IDLE:
                 return
             self._state = EngineState.LOADING
@@ -172,6 +234,7 @@ class VoxCpmEngine:
             with self._lock:
                 self._state = EngineState.ERROR
                 self._error = explain_failure(exc)
+                self._failed_at = time.monotonic()
             return
         with self._lock:
             self._model, self._torch, self._rate, self._device = model, torch, rate, device
@@ -192,8 +255,19 @@ class VoxCpmEngine:
                 E_ENGINE_FAILED,
                 f'Brak zależności silnika ({exc}). Zainstaluj PyTorch (pytorch.org) i wykonaj: pip install -e ".[voxcpm]".',
             ) from exc
+        except OSError as exc:  # na Windows brak biblioteki DLL (VC++ Redistributable, plik stronicowania) to OSError, nie ImportError
+            raise VoiceMachineError(E_ENGINE_FAILED, f"Nie udało się wczytać PyTorch. {explain_failure(exc)}") from exc
         kwargs: dict[str, Any] = {"load_denoiser": False, "optimize": self._cfg.optimize, "device": self._settings.device}
-        model = VoxCPM.from_pretrained(self._cfg.model, **kwargs)
+        model = None
+        if model_is_cached(self._cfg.model):
+            # Model już leży na dysku: nie pytamy Hugging Face przy każdym starcie (działa bez internetu, a wersja modelu
+            # nie zmienia się sama po aktualizacji repozytorium). Bez tego biblioteka odpytuje sieć za każdym razem.
+            try:
+                model = VoxCPM.from_pretrained(self._cfg.model, local_files_only=True, **kwargs)
+            except Exception:  # noqa: BLE001 - niepełna kopia na dysku: dociągnij brakujące pliki zwykłym ładowaniem
+                log.warning("cached model snapshot could not be used offline; falling back to a normal load", exc_info=True)
+        if model is None:
+            model = VoxCPM.from_pretrained(self._cfg.model, **kwargs)
         rate = int(model.tts_model.sample_rate)
         if not 8_000 <= rate <= 96_000:
             raise VoiceMachineError(E_ENGINE_FAILED, f"Model zgłosił nieprawdopodobną częstotliwość próbkowania: {rate} Hz.")
@@ -230,12 +304,18 @@ class VoxCpmEngine:
                 kwargs.update(prompt_wav_path=reference, prompt_text=voice.transcript, reference_wav_path=reference)
             else:
                 kwargs["reference_wav_path"] = reference
-        with self._gen_lock:
-            if params.seed is not None:
-                torch.manual_seed(params.seed)
-                if torch.cuda.is_available():
-                    torch.cuda.manual_seed_all(params.seed)
-            wav = model.generate(text=text, **kwargs)
+        try:
+            with self._gen_lock:
+                if params.seed is not None:
+                    torch.manual_seed(params.seed)
+                    if torch.cuda.is_available():
+                        torch.cuda.manual_seed_all(params.seed)
+                wav = model.generate(text=guard_control_prefix(text), **kwargs)
+        except VoiceMachineError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - brak pamięci karty, błąd modelu: właściciel dostaje podpowiedź zamiast surowego wyjątku
+            log.exception("VoxCPM2 synthesis failed")
+            raise VoiceMachineError(E_ENGINE_FAILED, explain_failure(exc)) from exc
         audio = np.asarray(wav, dtype=np.float32).reshape(-1)
         if audio.size == 0 or not np.all(np.isfinite(audio)):
             raise VoiceMachineError(E_ENGINE_FAILED, "Model zwrócił puste lub nieprawidłowe audio.")
@@ -253,22 +333,42 @@ class VoxCpmEngine:
             out.append(("PyTorch", str(torch.__version__), True))
         except ImportError:
             out.append(("PyTorch", "brak: zainstaluj wersję z pytorch.org (CUDA dla karty NVIDIA)", False))
+        except OSError as exc:  # Windows: brakująca biblioteka DLL to OSError
+            out.append(("PyTorch", f"nie wczytuje się. {explain_failure(exc)}", False))
         if torch is not None:
             if torch.cuda.is_available():
                 props = torch.cuda.get_device_properties(0)
                 gigabytes = props.total_memory / 2**30
-                out.append(("karta CUDA", f"{props.name}, {gigabytes:.1f} GB (autorzy podają ok. 8 GB, zgłoszono działanie na 6 GB)", gigabytes >= 6.0))
+                # Karty "6 GB" zgłaszają zwykle nieco mniej niż 6 GiB, więc próg jest tolerancyjny (autorzy podają ok. 8 GB).
+                out.append(
+                    (
+                        "karta CUDA",
+                        f"{props.name}, {gigabytes:.1f} GB (autorzy podają ok. 8 GB, zgłoszono działanie na 6 GB)",
+                        True if gigabytes >= MIN_VRAM_GIB else None,
+                    )
+                )
             else:
-                out.append(("karta CUDA", "niedostępna: synteza na procesorze będzie bardzo wolna", False))
+                # To ostrzeżenie, nie błąd: na procesorze model działa, tylko bardzo wolno. Skrypt instalacyjny sam pilnuje,
+                # czy ktoś, kto wybrał wersję CUDA, faktycznie ją dostał.
+                out.append(("karta CUDA", "niedostępna: synteza na procesorze będzie bardzo wolna", None))
         try:
             version = metadata.version("voxcpm")
             note = "" if version == PINNED_VERSION else f" (adapter sprawdzono tylko z {PINNED_VERSION})"
             out.append(("voxcpm", version + note, True))
         except metadata.PackageNotFoundError:
             out.append(("voxcpm", f'brak: pip install -e ".[voxcpm]" (wersja {PINNED_VERSION})', False))
-        hub = Path(os.environ.get("HF_HUB_CACHE") or Path(os.environ.get("HF_HOME") or Path.home() / ".cache" / "huggingface") / "hub")
-        cached = (hub / "models--openbmb--VoxCPM2").is_dir()
-        out.append(("model w pamięci podręcznej", "jest" if cached else "brak, zostanie pobrany przy pierwszym uruchomieniu (kilka GB)", True))
+        if Path(self._cfg.model).is_dir():
+            has_config = (Path(self._cfg.model) / "config.json").is_file()
+            out.append(("model na dysku", f"lokalny katalog {self._cfg.model}" + ("" if has_config else " (brak config.json)"), has_config))
+        else:
+            cached = model_is_cached(self._cfg.model)
+            out.append(
+                (
+                    "model na dysku",
+                    "jest (kolejne starty nie łączą się z internetem)" if cached else "brak, zostanie pobrany przy pierwszym uruchomieniu (kilka GB)",
+                    True,
+                )
+            )
         return out
 
     def close(self) -> None:

@@ -3,20 +3,25 @@
 from __future__ import annotations
 
 import functools
+import json
+import logging
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
-from mcp.types import ToolAnnotations
+from mcp.types import CallToolResult, TextContent, ToolAnnotations
 
 from . import SERVER_NAME, __version__
-from .errors import VoiceMachineError
+from .errors import E_STORAGE, VoiceMachineError
 from .service import Service
 
+log = logging.getLogger("voice_machine.server")
+
 INSTRUCTIONS = (
-    "Lokalny silnik głosów Sakura Studio. Błędy mają postać '[KOD] opis'. "
+    "Lokalny silnik głosów Sakura Studio. Tekst błędu zawiera kod w nawiasach kwadratowych, np. '[E_NOT_READY] opis' "
+    "(klient może dopisać przed nim 'Error executing tool ...'). "
     "Mowa powstaje w zadaniach: speak -> job_status (odpytywanie) -> job_audio (kawałki WAV w base64). "
     "Próbki głosu wysyła się w kawałkach: voice_upload_begin -> voice_upload_chunk* -> voice_upload_commit."
 )
@@ -65,6 +70,13 @@ def build_server(service: Service, *, preload: bool = False) -> MCPServer:
                     return fn(*args, **kwargs)
                 except VoiceMachineError as exc:
                     raise ToolError(str(exc)) from None
+                except OSError as exc:
+                    # Dysk pełny, plik zablokowany przez antywirus, brak uprawnień: bez tego klient dostałby anonimowy błąd.
+                    log.exception("storage error in tool %s", fn.__name__)
+                    detail = exc.strerror or type(exc).__name__
+                    raise ToolError(
+                        str(VoiceMachineError(E_STORAGE, f"Nie udało się zapisać lub odczytać plików na dysku ({detail})."))
+                    ) from None
 
             server.tool(name=fn.__name__, title=title, annotations=annotations)(guarded)
             return fn
@@ -73,7 +85,8 @@ def build_server(service: Service, *, preload: bool = False) -> MCPServer:
 
     @tool(title="Stan silnika i limity", read_only=True)
     def status() -> dict[str, Any]:
-        """Stan silnika (idle/loading/ready/error), dostępne języki i głosy wbudowane, limity, katalogi danych."""
+        """Stan silnika (idle/loading/ready/error), dostępne języki i głosy wbudowane, limity, katalogi danych.
+        Przy uruchomieniu z --no-preload pierwsze wywołanie zaczyna ładować model."""
         return service.status()
 
     @tool(title="Lista głosów znajomych", read_only=True)
@@ -137,9 +150,12 @@ def build_server(service: Service, *, preload: bool = False) -> MCPServer:
         return service.job_status(job_id)
 
     @tool(title="Pobierz kawałek nagrania", read_only=True)
-    def job_audio(job_id: str, index: int) -> dict[str, Any]:
-        """Kawałek pliku WAV (base64) gotowego zadania; count mówi, ile kawałków trzeba pobrać."""
-        return service.job_audio(job_id, index)
+    def job_audio(job_id: str, index: int) -> CallToolResult:
+        """Kawałek pliku WAV (base64) gotowego zadania; count mówi, ile kawałków trzeba pobrać.
+        Dane są tylko w structuredContent (tekst niesie samo podsumowanie), żeby base64 nie leciało dwa razy."""
+        chunk = service.job_audio(job_id, index)
+        summary = {key: value for key, value in chunk.items() if key != "data_b64"}
+        return CallToolResult(content=[TextContent(type="text", text=json.dumps(summary))], structured_content=chunk)
 
     @tool(title="Anuluj zadanie")
     def job_cancel(job_id: str) -> dict[str, Any]:

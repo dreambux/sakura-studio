@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import base64
 import binascii
+import logging
+import threading
 import unicodedata
 from pathlib import Path
 from typing import Any
@@ -21,6 +23,7 @@ from .errors import (
     E_TEXT_EMPTY,
     E_TEXT_TOO_LONG,
     E_TRANSCRIPT_REQUIRED,
+    E_VOICE_BUSY,
     E_VOICE_LIMIT,
     E_VOICE_NOT_FOUND,
     VoiceMachineError,
@@ -29,9 +32,11 @@ from .jobs import JobManager, is_finite_number
 from .normalize_pl import normalize_for_speech
 from .outputs import OutputStore
 from .textsplit import split_text
-from .uploads import UploadManager
+from .uploads import Upload, UploadManager
 from .voices import (
+    MAX_TRANSCRIPT_CHARS,
     PreparedSample,
+    VoiceRecord,
     VoiceStore,
     clean_language,
     clean_name,
@@ -39,6 +44,8 @@ from .voices import (
     is_valid_voice_id,
 )
 from .wavio import MAX_SAMPLE_RATE, encode_wav_pcm16, parse_wav, reference_flags, sha256_hex
+
+log = logging.getLogger("voice_machine.service")
 
 BUILTIN_PREFIX = "builtin:"
 MAX_SEED = 2**31 - 1
@@ -51,13 +58,30 @@ class Service:
         self.engine = engine
         self.voices = VoiceStore(settings.voices_dir)
         self.uploads = UploadManager(self.limits)
-        self.outputs = OutputStore(settings.outputs_dir) if settings.save_outputs else None
+        self.outputs = OutputStore(settings.outputs_dir, self.limits.max_output_files) if settings.save_outputs else None
         self.jobs = JobManager(engine, self.outputs, self.limits)
+        # Chroni parę "sprawdź, czy głos jest używany + usuń" przed równoległym "znajdź głos + zakolejkuj zadanie".
+        self._voice_lock = threading.Lock()
         self.jobs.start()
 
     def close(self) -> None:
         self.jobs.close()
         self.engine.close()
+
+    def _ensure_loading(self) -> None:
+        """Przy --no-preload model ładuje się przy pierwszym użyciu (status, dodawanie głosu, synteza). Po błędzie ładowania
+        silnik sam decyduje, czy już można spróbować ponownie (odstęp), więc zwykłe odpytywanie stanu go "naprawia". Idempotentne."""
+        if self.engine.info().state in (EngineState.IDLE, EngineState.ERROR):
+            self.engine.start_loading()
+
+    @staticmethod
+    def _normalized(text: str, language: str) -> str:
+        """Normalizacja tekstu do czytania. Gdyby reguła kiedyś rzuciła wyjątek, czytamy tekst bez rozwijania zamiast padać."""
+        try:
+            return normalize_for_speech(text, language)
+        except Exception:  # noqa: BLE001
+            log.exception("text normalisation failed; using the text as typed")
+            return text
 
     def _ref_bounds(self) -> tuple[int, float, float]:
         """Obowiązujące granice nagrań wzorcowych: węższe z limitów aplikacji i wymagań silnika."""
@@ -71,6 +95,7 @@ class Service:
 
     # --- odczyt -------------------------------------------------------------
     def status(self) -> dict[str, Any]:
+        self._ensure_loading()
         info = self.engine.info()
         lim = self.limits
         max_files, min_s, max_s = self._ref_bounds()
@@ -111,9 +136,19 @@ class Service:
             raise VoiceMachineError(
                 E_CONSENT_REQUIRED, "Potrzebne jest potwierdzenie, że osoba, której głos dodajesz, wyraziła na to zgodę."
             )
+        self._ensure_loading()
         name = clean_name(name)
         language = clean_language(language)
         cleaned_transcript = clean_transcript(transcript)
+        if cleaned_transcript is not None:
+            # Transkrypcja nagrania wzorcowego ma być zapisem słów, więc liczby i skróty rozwijamy tak samo jak w tekście
+            # do czytania. Robimy to już tutaj, żeby za długą transkrypcję odrzucić zanim poleci choćby jeden bajt nagrania.
+            cleaned_transcript = self._normalized(cleaned_transcript, language)
+            if len(cleaned_transcript) > MAX_TRANSCRIPT_CHARS:
+                raise VoiceMachineError(
+                    E_BAD_REQUEST,
+                    f"Transkrypcja po rozwinięciu liczb i skrótów ma {len(cleaned_transcript)} znaków; limit to {MAX_TRANSCRIPT_CHARS}. Skróć ją.",
+                )
         policy = self.engine.info().reference
         max_files, _min_s, _max_s = self._ref_bounds()
         if file_count > max_files:
@@ -144,7 +179,18 @@ class Service:
         return {"received": received}
 
     def upload_commit(self, upload_id: str) -> dict[str, Any]:
-        upload = self.uploads.take(upload_id)
+        upload = self.uploads.claim(upload_id)
+        keep = False
+        try:
+            record, warnings = self._store_upload(upload)
+        except OSError:
+            keep = True  # zawiodła pamięć masowa, a nie nagrania: sesję da się ponowić bez wysyłania wszystkiego od nowa
+            raise
+        finally:
+            self.uploads.release(upload_id, keep=keep)
+        return {"voice": record.to_public(), "warnings": sorted(warnings)}
+
+    def _store_upload(self, upload: Upload) -> tuple[VoiceRecord, set[str]]:
         lim = self.limits
         _max_files, min_s, max_s = self._ref_bounds()
         max_frames = int(MAX_SAMPLE_RATE * lim.max_ref_seconds)
@@ -174,12 +220,11 @@ class Service:
             )
         if total < 6.0:
             warnings.add("short")
-        # Transkrypcja nagrania wzorcowego ma być zapisem słów, więc liczby i skróty rozwijamy tak samo jak w tekście do czytania.
-        transcript = normalize_for_speech(upload.transcript, upload.language) if upload.transcript else None
+        # upload.transcript jest już rozwinięty i sprawdzony w upload_begin.
         record = self.voices.create(
-            upload.name, upload.language, prepared, max_voices=lim.max_voices, transcript=transcript
+            upload.name, upload.language, prepared, max_voices=lim.max_voices, transcript=upload.transcript
         )
-        return {"voice": record.to_public(), "warnings": sorted(warnings)}
+        return record, warnings
 
     def upload_abort(self, upload_id: str) -> dict[str, Any]:
         return {"aborted": self.uploads.abort(upload_id)}
@@ -187,7 +232,12 @@ class Service:
     def delete_voice(self, voice_id: str) -> dict[str, Any]:
         if not is_valid_voice_id(voice_id):
             raise VoiceMachineError(E_VOICE_NOT_FOUND, "Nie ma takiego głosu.")
-        self.voices.delete(voice_id)
+        with self._voice_lock:
+            if self.jobs.uses_voice(voice_id):
+                raise VoiceMachineError(
+                    E_VOICE_BUSY, "Ten głos jest teraz używany przez zadanie syntezy. Poczekaj, aż się skończy, albo je anuluj."
+                )
+            self.voices.delete(voice_id)
         return {"deleted": True, "voice_id": voice_id}
 
     # --- synteza ------------------------------------------------------------
@@ -206,7 +256,6 @@ class Service:
             name=record.name,
             fingerprint=record.fingerprint,
             sample_paths=self.voices.sample_paths(record.id),
-            cache_dir=self.voices.cache_dir(record.id),
             transcript=record.transcript,
             language=record.language,
         )
@@ -220,7 +269,7 @@ class Service:
                 E_TEXT_TOO_LONG, f"Tekst ma {len(stripped)} znaków; limit to {self.limits.max_text_chars}."
             )
         code = clean_language(language)
-        spoken = normalize_for_speech(stripped, code) if normalize else stripped
+        spoken = self._normalized(stripped, code) if normalize else stripped
         try:
             chunks = split_text(spoken, self.engine.max_chunk_chars(code)) if spoken else []
         except (VoiceMachineError, ValueError):
@@ -237,6 +286,7 @@ class Service:
         seed: int | None,
         normalize: bool = True,
     ) -> dict[str, Any]:
+        self._ensure_loading()
         info = self.engine.info()
         if info.state is not EngineState.READY:
             detail = info.error or {"idle": "nie uruchomiony", "loading": "ładuje się", "error": "błąd"}[info.state.value]
@@ -255,14 +305,15 @@ class Service:
             raise VoiceMachineError(E_BAD_REQUEST, "Ekspresja musi być liczbą od 0,1 do 1,5.")
         if seed is not None and not (isinstance(seed, int) and not isinstance(seed, bool) and 0 <= seed <= MAX_SEED):
             raise VoiceMachineError(E_BAD_REQUEST, f"Ziarno musi być liczbą całkowitą od 0 do {MAX_SEED}.")
-        voice, label, default_language = self._resolve_voice(voice_id)
-        chosen = language or default_language
-        if not chosen:
-            raise VoiceMachineError(E_BAD_REQUEST, "Wybierz język wypowiedzi.")
-        chosen = self.engine.validate_language(chosen)
-        spoken = normalize_for_speech(stripped, chosen) if normalize else stripped
-        params = SynthParams(speed=float(speed), temperature=float(temperature), seed=seed)
-        snapshot = self.jobs.submit(voice, label, spoken, chosen, params)
+        with self._voice_lock:  # od znalezienia głosu do zakolejkowania zadania nikt go nie usunie
+            voice, label, default_language = self._resolve_voice(voice_id)
+            chosen = language or default_language
+            if not chosen:
+                raise VoiceMachineError(E_BAD_REQUEST, "Wybierz język wypowiedzi.")
+            chosen = self.engine.validate_language(chosen)
+            spoken = self._normalized(stripped, chosen) if normalize else stripped
+            params = SynthParams(speed=float(speed), temperature=float(temperature), seed=seed)
+            snapshot = self.jobs.submit(voice, label, spoken, chosen, params)
         return {
             "job_id": snapshot["job_id"],
             "chunks_total": snapshot["chunks_total"],

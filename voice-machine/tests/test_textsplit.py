@@ -70,4 +70,41 @@ def test_invariants_on_random_text() -> None:
         limit = rng.choice([20, 35, 80, 200])
         chunks = split_text(text, limit)
         assert all(0 < len(c) <= limit for c in chunks)
-        assert _strip("".join(chunks)) == _strip(text)
+        # Niczego nie gubimy; jedyny dodany znak to przecinek między krótkimi liniami z różnych akapitów.
+        joined, original = _strip("".join(chunks)), _strip(text)
+        assert joined.replace(",", "") == original.replace(",", "")
+        assert joined.count(",") >= original.count(",")
+
+
+def test_abbreviations_and_initials_do_not_end_a_sentence() -> None:
+    assert split_sentences("Spotkanie przy ul. Długiej 5 w Warszawie.") == ["Spotkanie przy ul. Długiej 5 w Warszawie."]
+    assert split_sentences("Rozmawiałem z prof. Kowalskim o planach.") == ["Rozmawiałem z prof. Kowalskim o planach."]
+    assert split_sentences("Kościół św. Jana jest stary. Drugie zdanie.") == ["Kościół św. Jana jest stary.", "Drugie zdanie."]
+    assert split_sentences("Autorka, J. K. Rowling, wygrała. Potem wyszła.") == ["Autorka, J. K. Rowling, wygrała.", "Potem wyszła."]
+    # zwykły koniec zdania po słowie, które nie jest skrótem, nadal dzieli
+    assert split_sentences("Poszedł do domu. Następnie spał.") == ["Poszedł do domu.", "Następnie spał."]
+    assert split_sentences("Wrócił dnia 5. Potem spał.") == ["Wrócił dnia 5.", "Potem spał."]
+
+
+def test_invisible_format_characters_inside_words_are_removed_not_turned_into_spaces() -> None:
+    assert normalize_text("Nie\u00adprawdopodobnie wy\u2060raźnie \u200eCześć\u200f!") == ["Nieprawdopodobnie wyraźnie Cześć!"]
+    # spacja zerowej szerokości nadal rozdziela wyrazy
+    assert normalize_text("a\u200bb") == ["a b"]
+
+
+def test_short_lines_from_different_paragraphs_are_joined_with_a_comma_not_run_together() -> None:
+    assert split_text("Lista zakupów:\nmleko\nchleb\nmasło", 200) == ["Lista zakupów: mleko, chleb, masło"]
+    assert split_text("Rozdział pierwszy\nDawno temu żył sobie król, który miał trzech synów.", 200) == [
+        "Rozdział pierwszy, Dawno temu żył sobie król, który miał trzech synów."
+    ]
+    # linia kończąca się kropką albo przecinkiem nie dostaje drugiego znaku
+    assert split_text("Tak.\nNie.\nMoże.", 200) == ["Tak. Nie. Może."]
+    assert split_text("mleko,\nchleb", 200) == ["mleko, chleb"]
+
+
+def test_two_thousand_characters_of_short_sentences_stay_within_the_job_limit() -> None:
+    from voice_machine.config import Limits
+
+    text = "Ala ma kota i psa teraz. " * 80
+    assert len(text) <= 2000
+    assert len(split_text(text, 240)) <= Limits().max_chunks_per_job

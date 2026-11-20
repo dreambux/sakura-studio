@@ -44,24 +44,56 @@ def test_unknown_engine_is_rejected_by_the_parser() -> None:
         build_parser().parse_args(["--engine", "nope"])
 
 
-def test_doctor_runs_end_to_end_with_the_fake_engine(tmp_path: Path) -> None:
-    env = {**os.environ, "SVM_FAKE_LOAD_DELAY": "0.1"}
-    result = subprocess.run(
+def run_doctor_with_fake_engine(tmp_path: Path, **env_extra: str) -> subprocess.CompletedProcess[str]:
+    env = {**os.environ, "SVM_FAKE_LOAD_DELAY": "0.1", **env_extra}
+    return subprocess.run(
         [sys.executable, "-m", "voice_machine", "doctor", "--engine", "fake", "--data-dir", str(tmp_path / "data"), "--load"],
         capture_output=True, text=True, timeout=60, env=env, cwd=tmp_path,
     )
+
+
+def test_doctor_runs_end_to_end_with_the_fake_engine(tmp_path: Path) -> None:
+    result = run_doctor_with_fake_engine(tmp_path)
     assert result.returncode == 0, result.stdout + result.stderr
-    assert "[OK ] Python" in result.stdout and "próbna synteza" in result.stdout and "BRAK" not in result.stdout
-    smoke = tmp_path / "doctor-smoke.wav"
-    assert smoke.is_file() and smoke.read_bytes()[:4] == b"RIFF"
+    assert "[OK ] Python" in result.stdout and "[OK ] próbna synteza" in result.stdout and "BRAK" not in result.stdout
+    # Silnik testowy nie używa transkrypcji, więc doctor sprawdza tylko klonowanie bez niej.
+    assert "[OK ] klonowanie (bez transkrypcji)" in result.stdout and "z transkrypcją" not in result.stdout
+    for name in ("doctor-smoke.wav", "doctor-smoke-clone.wav"):
+        wav = tmp_path / name
+        assert wav.is_file() and wav.read_bytes()[:4] == b"RIFF", name
+
+
+def test_doctor_checks_both_clone_variants_when_the_engine_takes_an_optional_transcript(tmp_path: Path) -> None:
+    result = run_doctor_with_fake_engine(tmp_path, SVM_FAKE_REF_TRANSCRIPT="optional")
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "[OK ] klonowanie (bez transkrypcji)" in result.stdout and "[OK ] klonowanie (z transkrypcją)" in result.stdout
+
+
+def test_doctor_checks_only_the_transcript_variant_when_the_engine_requires_it(tmp_path: Path) -> None:
+    result = run_doctor_with_fake_engine(tmp_path, SVM_FAKE_REF_TRANSCRIPT="required")
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "[OK ] klonowanie (z transkrypcją)" in result.stdout and "bez transkrypcji" not in result.stdout
+
+
+def test_doctor_fails_and_names_the_step_when_cloning_breaks(tmp_path: Path) -> None:
+    # Fraza klonowania zawiera "Sprawdzam"; fraza próbnej syntezy nie, więc głos wbudowany przechodzi, a klonowanie nie.
+    result = run_doctor_with_fake_engine(tmp_path, SVM_FAKE_FAIL_ON="Sprawdzam")
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "Traceback" not in result.stderr
+    assert "[OK ] próbna synteza" in result.stdout and "[BRAK] klonowanie (bez transkrypcji)" in result.stdout
+    assert not (tmp_path / "doctor-smoke-clone.wav").exists()
 
 
 def test_doctor_reports_a_missing_engine_dependency_instead_of_crashing(tmp_path: Path) -> None:
+    # Test nie zależy od tego, co jest zainstalowane: podstawiamy "torch", który przy imporcie zgłasza ImportError.
+    stub = tmp_path / "stub"
+    stub.mkdir()
+    (stub / "torch.py").write_text('raise ImportError("PyTorch niedostępny w tym teście")\n', encoding="utf-8")
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(p for p in (str(stub), os.environ.get("PYTHONPATH", "")) if p)}
     result = subprocess.run(
         [sys.executable, "-m", "voice_machine", "doctor", "--engine", "voxcpm", "--data-dir", str(tmp_path / "data")],
-        capture_output=True, text=True, timeout=60, cwd=tmp_path,
+        capture_output=True, text=True, timeout=60, cwd=tmp_path, env=env,
     )
     assert "Traceback" not in result.stderr
-    # W środowisku testowym nie ma PyTorcha ani voxcpm: doctor ma to nazwać i zakończyć się kodem 1.
     assert result.returncode == 1, result.stdout
-    assert "[BRAK] PyTorch" in result.stdout and "[BRAK] voxcpm" in result.stdout
+    assert "[BRAK] PyTorch" in result.stdout

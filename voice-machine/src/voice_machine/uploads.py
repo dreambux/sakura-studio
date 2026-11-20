@@ -26,6 +26,7 @@ class Upload:
     buffers: list[bytearray]
     touched: float = field(default=0.0)
     transcript: str | None = None
+    claimed: bool = False  # true, gdy trwa zapis głosu (commit): w tym czasie sesja jest zamrożona
 
 
 class UploadManager:
@@ -66,6 +67,8 @@ class UploadManager:
             upload = self._uploads.get(upload_id)
             if upload is None:
                 raise VoiceMachineError(E_UPLOAD_NOT_FOUND, "Sesja wysyłania wygasła lub nie istnieje.")
+            if upload.claimed:
+                raise VoiceMachineError(E_BAD_REQUEST, "Ta wysyłka jest właśnie zapisywana i nie przyjmuje już kawałków.")
             if not 0 <= file_index < len(upload.buffers):
                 raise VoiceMachineError(E_BAD_REQUEST, "Nieprawidłowy numer pliku.")
             buffer = upload.buffers[file_index]
@@ -85,13 +88,29 @@ class UploadManager:
             upload.touched = self._clock()
             return len(buffer)
 
-    def take(self, upload_id: str) -> Upload:
+    def claim(self, upload_id: str) -> Upload:
+        """Zajmuje sesję do zapisu głosu. Druga próba w tym samym czasie dostaje błąd, więc z jednej wysyłki nie powstaną dwa głosy."""
         with self._lock:
             self._sweep_locked()
-            upload = self._uploads.pop(upload_id, None)
-        if upload is None:
-            raise VoiceMachineError(E_UPLOAD_NOT_FOUND, "Sesja wysyłania wygasła lub nie istnieje.")
-        return upload
+            upload = self._uploads.get(upload_id)
+            if upload is None or upload.claimed:
+                raise VoiceMachineError(
+                    E_UPLOAD_NOT_FOUND, "Sesja wysyłania wygasła, nie istnieje albo jest właśnie zapisywana."
+                )
+            upload.claimed = True
+            return upload
+
+    def release(self, upload_id: str, *, keep: bool) -> None:
+        """Kończy zapis. keep=False usuwa sesję (sukces albo dane, które i tak się nie nadają); keep=True zostawia ją
+        do ponowienia, bo zawiodła tylko pamięć masowa, a nie same nagrania."""
+        with self._lock:
+            if not keep:
+                self._uploads.pop(upload_id, None)
+                return
+            upload = self._uploads.get(upload_id)
+            if upload is not None:
+                upload.claimed = False
+                upload.touched = self._clock()
 
     def abort(self, upload_id: str) -> bool:
         with self._lock:
